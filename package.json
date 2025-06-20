@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "vercel-build": "echo hello"
+    "build": "echo hello"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
