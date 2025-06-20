@@ -1,0 +1,30 @@
+{
+  "women": [
+    {
+      "img": "https://via.placeholder.com/400x400?text=Women+1",
+      "name": "Velocity Knit",
+      "price": "$139",
+      "desc": "Lightweight, breathable, and fast."
+    },
+    {
+      "img": "https://via.placeholder.com/400x400?text=Women+2",
+      "name": "Urban Glide",
+      "price": "$129",
+      "desc": "Everyday comfort for city miles."
+    }
+  ],
+  "men": [
+    {
+      "img": "https://via.placeholder.com/400x400?text=Men+1",
+      "name": "Pace Runner",
+      "price": "$135",
+      "desc": "Built for speed and durability."
+    },
+    {
+      "img": "https://via.placeholder.com/400x400?text=Men+2",
+      "name": "Trail Master",
+      "price": "$155",
+      "desc": "Grip and support for any terrain."
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+<%# Product Showcase Section %>
+<section 
+    class="section-base product-showcase-section <%= content.layout %> <%= content.animation %> <%= content.customClass %>"
+    style="
+        --section-bg-color: <%= content.backgroundColor || 'transparent' %>;
+        --section-text-color: <%= content.textColor || 'inherit' %>;
+        --section-padding-top: <%= content.spacing?.paddingTop || '2rem' %>;
+        --section-padding-bottom: <%= content.spacing?.paddingBottom || '2rem' %>;
+        --section-margin-top: <%= content.spacing?.marginTop || '0' %>;
+        --section-margin-bottom: <%= content.spacing?.marginBottom || '0' %>;"
+
+    <% if (content.responsive?.hideOnMobile) { %>data-hide-on-mobile="true"<% } %>
+    <% if (content.responsive?.hideOnTablet) { %>data-hide-on-tablet="true"<% } %>
+    <% if (content.responsive?.hideOnDesktop) { %>data-hide-on-desktop="true"<% } %>>
+    
+    <div class="container">
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-8 text-center">
+                <h2 class="showcase-title"><%= content.title %></h2>
+                <% if (content.subtitle) { %>
+                    <p class="lead showcase-subtitle"><%= content.subtitle %></p>
+                <% } %>
+                <% if (content.description) { %>
+                    <p class="showcase-description"><%= content.description %></p>
+                <% } %>
+            </div>
+        </div>
+
+        <div class="showcase-content">
+            <% if (content.layout === 'carousel' && content.additionalImages?.length > 0) { %>
+                <div id="productCarousel-<%= content._id %>" class="carousel slide product-carousel" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <% content.additionalImages.forEach((image, index) => { %>
+                            <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                                <img src="<%= image %>" class="d-block w-100" alt="Product Image">
+                            </div>
+                        <% }); %>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel-<%= content._id %>" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel-<%= content._id %>" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+                </div>
+            <% } else if (content.layout === 'grid' && content.additionalImages?.length > 0) { %>
+                <div class="row g-4">
+                    <% content.additionalImages.forEach(image => { %>
+                        <div class="col-md-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <img src="<%= image %>" alt="Product Image" class="img-fluid rounded">
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else if (content.image) { %>
+                <div class="text-center">
+                    <img src="<%= content.image %>" alt="Product Image" class="img-fluid rounded">
+                </div>
+            <% } %>
+        </div>
+
+        <% if (content.buttonText && content.buttonLink) { %>
+            <div class="text-center mt-4">
+                <a href="<%= content.buttonLink %>" class="btn btn-primary btn-lg">
+                    <%= content.buttonText %>
+                </a>
+            </div>
+        <% } %>
+    </div>
+</section>

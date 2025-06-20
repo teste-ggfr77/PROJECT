@@ -1,0 +1,78 @@
+<%- include('partials/header') %>
+<link rel="stylesheet" href="/css/order.css">
+
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card order-card">
+        <div class="card-header bg-white border-bottom-0 py-4">
+          <h3 class="text-center mb-0">Your Orders</h3>
+        </div>
+        
+        <div class="card-body px-4">
+          <div class="table-responsive">
+            <table class="table align-middle">
+              <thead>
+                <tr>
+                  <th>Order Number</th>
+                  <th>Date</th>
+                  <th class="text-end">Total</th>
+                  <th class="text-end">Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (orders.length === 0) { %>
+                  <tr>
+                    <td colspan="5" class="text-center py-5">
+                      <p class="mb-3 text-muted">You haven't placed any orders yet.</p>
+                      <a href="/products" class="order-action-btn btn-primary">Start Shopping</a>
+                    </td>
+                  </tr>
+                <% } else { %>
+                  <% orders.forEach(order => { %>                    <tr>
+                      <td class="order-id">#<%= order._id %></td>
+                      <td>
+                        <div class="d-flex flex-column">
+                          <div class="text-muted mb-2"><%= new Date(order.createdAt).toLocaleDateString() %></div>
+                          <div class="d-flex align-items-center gap-2">
+                            <% order.items.slice(0, 3).forEach(item => { %>
+                              <img src="<%= item.product.image || '/images/default-product.png' %>" 
+                                   alt="<%= item.product.name %>"
+                                   style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;"
+                                   title="<%= item.product.name %>">
+                            <% }); %>
+                            <% if (order.items.length > 3) { %>
+                              <span class="badge bg-secondary">+<%= order.items.length - 3 %> more</span>
+                            <% } %>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-end">$<%= order.total.toFixed(2) %></td>
+                      <td class="text-end">
+                        <span class="order-status <%= order.status %>">
+                          <%= order.status.charAt(0).toUpperCase() + order.status.slice(1) %>
+                        </span>
+                      </td>
+                      <td class="text-end">
+                        <a href="/orders/<%= order._id %>" class="btn btn-sm btn-outline-dark">View Details</a>
+                      </td>
+                    </tr>
+                  <% }) %>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <a href="/products" class="order-action-btn btn-primary">
+          Continue Shopping
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

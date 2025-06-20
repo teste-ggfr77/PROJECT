@@ -1,0 +1,458 @@
+<%- include('partials/header') %>
+
+<!-- Hero Section -->
+<section class="journey-hero">
+  <div class="hero-content">
+    <h1 class="hero-title">JOURNEY COLLECTION</h1>
+    <p class="hero-subtitle">FOOTWEAR BUILT FOR PERFORMANCE: IN AND OUT OF THE GYM</p>
+    <p class="hero-description">Every step forward is part of your journey. From your first workout to your personal best, we're with you every step of the way.</p>
+  </div>
+</section>
+
+<!-- Journey Steps Section -->
+<section class="journey-steps">
+  <div class="steps-container">
+    <div class="step-item">
+      <div class="step-number">01</div>
+      <h3>START</h3>
+      <p>Begin your fitness journey with confidence</p>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step-item">
+      <div class="step-number">02</div>
+      <h3>PROGRESS</h3>
+      <p>Push your limits and see real results</p>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step-item">
+      <div class="step-number">03</div>
+      <h3>ACHIEVE</h3>
+      <p>Reach your goals and set new ones</p>
+    </div>
+  </div>
+</section>
+
+<!-- Products Section -->
+<section class="products-section">
+  <div class="section-container">
+    <div class="section-header">
+      <div class="header-content">
+        <h2 class="section-title">YOUR JOURNEY STARTS HERE</h2>
+        <p class="section-subtitle">Choose the footwear that will support every step of your fitness journey</p>
+      </div>
+      <div class="gender-switcher">
+        <button id="menBtn" class="gender-btn <%= gender === 'men' ? 'active' : '' %>">MEN</button>
+        <button id="womenBtn" class="gender-btn <%= gender === 'women' ? 'active' : '' %>">WOMEN</button>
+      </div>
+    </div>
+    
+    <div id="journeyGrid" class="product-grid">
+      <% products.forEach(product => { %>
+      <div class="product-card">
+        <img src="<%= product.image || product.img %>" alt="<%= product.name %>" class="product-img" loading="lazy" />
+        <div class="product-info">
+          <h3 class="product-title"><%= product.name %></h3>
+          <p class="product-desc"><%= product.desc || product.description %></p>
+          <span class="product-price"><%= product.price %></span>
+          <a href="/products/<%= product._id %>" class="product-btn">SHOP NOW</a>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+    
+    <div id="noProductsMsg" class="no-products" style="display:none;">
+      <h3>Coming Soon</h3>
+      <p>New Journey products for this category are in development. Your journey continues...</p>
+    </div>
+  </div>
+</section>
+
+<!-- Motivation Section -->
+<section class="motivation-section">
+  <div class="motivation-content">
+    <h2>EVERY JOURNEY BEGINS WITH A SINGLE STEP</h2>
+    <p>Whether you're starting your fitness journey or pushing to the next level, the right footwear makes all the difference.</p>
+    <div class="motivation-buttons">
+      <a href="/trainers" class="motivation-btn">EXPLORE TRAINERS</a>
+      <a href="/allday" class="motivation-btn secondary">VIEW ALLDAY</a>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+
+<script>
+const menBtn = document.getElementById('menBtn');
+const womenBtn = document.getElementById('womenBtn');
+const journeyGrid = document.getElementById('journeyGrid');
+const noProductsMsg = document.getElementById('noProductsMsg');
+
+function renderProducts(products) {
+  journeyGrid.innerHTML = '';
+  if (!products.length) {
+    journeyGrid.style.display = 'none';
+    noProductsMsg.style.display = 'block';
+    return;
+  }
+  journeyGrid.style.display = 'grid';
+  noProductsMsg.style.display = 'none';
+  products.forEach(product => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.innerHTML = `
+      <img src="${product.image || product.img}" alt="${product.name}" class="product-img" loading="lazy" />
+      <div class="product-info">
+        <h3 class="product-title">${product.name}</h3>
+        <p class="product-desc">${product.desc || product.description || ''}</p>
+        <span class="product-price">${product.price}</span>
+        <a href="/products/${product._id}" class="product-btn">SHOP NOW</a>
+      </div>
+    `;
+    journeyGrid.appendChild(card);
+  });
+}
+
+menBtn.addEventListener('click', async () => {
+  menBtn.classList.add('active');
+  womenBtn.classList.remove('active');
+  const res = await fetch('/api/journey?gender=men');
+  const data = await res.json();
+  renderProducts(data.products);
+  history.replaceState(null, '', '/journey?gender=men');
+});
+
+womenBtn.addEventListener('click', async () => {
+  womenBtn.classList.add('active');
+  menBtn.classList.remove('active');
+  const res = await fetch('/api/journey?gender=women');
+  const data = await res.json();
+  renderProducts(data.products);
+  history.replaceState(null, '', '/journey?gender=women');
+});
+</script>
+
+<style>
+/* Hero Section */
+.journey-hero {
+  background: linear-gradient(135deg, #000 0%, #333 100%);
+  color: #fff;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #ccc;
+}
+
+.hero-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #bbb;
+}
+
+/* Journey Steps Section */
+.journey-steps {
+  background: #f8f8f8;
+  padding: 3rem 2rem;
+}
+
+.steps-container {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.step-item {
+  text-align: center;
+  flex: 1;
+}
+
+.step-number {
+  width: 60px;
+  height: 60px;
+  background: #000;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 auto 1rem;
+}
+
+.step-item h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 0.5rem;
+}
+
+.step-item p {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+.step-connector {
+  flex: 0.5;
+  height: 2px;
+  background: #ddd;
+  margin: 0 1rem;
+}
+
+/* Products Section */
+.products-section {
+  background: #fff;
+  padding: 3rem 2rem;
+}
+
+.section-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header-content {
+  flex: 1;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+.gender-switcher {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.gender-btn {
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.gender-btn:hover,
+.gender-btn.active {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.product-card {
+  background: #fff;
+  border: 1px solid #eee;
+  transition: all 0.3s ease;
+}
+
+.product-card:hover {
+  border-color: #000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.product-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.product-info {
+  padding: 1rem;
+}
+
+.product-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 0.5rem;
+}
+
+.product-desc {
+  color: #666;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+  font-size: 0.9rem;
+}
+
+.product-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #000;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.product-btn {
+  display: inline-block;
+  background: #000;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.3s ease;
+}
+
+.product-btn:hover {
+  background: #333;
+}
+
+/* No Products Message */
+.no-products {
+  text-align: center;
+  padding: 2rem;
+}
+
+.no-products h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 0.5rem;
+}
+
+.no-products p {
+  font-size: 1rem;
+  color: #666;
+}
+
+/* Motivation Section */
+.motivation-section {
+  background: #000;
+  color: #fff;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.motivation-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.motivation-content h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.motivation-content p {
+  font-size: 1rem;
+  color: #ccc;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.motivation-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.motivation-btn {
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.motivation-btn:not(.secondary) {
+  background: #fff;
+  color: #000;
+}
+
+.motivation-btn:not(.secondary):hover {
+  background: #f0f0f0;
+}
+
+.motivation-btn.secondary {
+  background: transparent;
+  color: #fff;
+  border: 1px solid #fff;
+}
+
+.motivation-btn.secondary:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .steps-container {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .step-connector {
+    display: none;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .motivation-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .motivation-btn {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+</style>

@@ -1,0 +1,368 @@
+<%- include('../partials/admin-header', { title: 'Order Management' }) %>
+
+<style>
+    .admin-container {
+        padding: 2rem;
+        background: #f8f9fa;
+        min-height: calc(100vh - 60px);
+    }
+
+    .page-header {
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+        border-radius: 15px;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .page-title {
+        margin: 0;
+        font-size: 1.75rem;
+        font-weight: 600;
+    }
+
+    .content-card {
+        background: white;
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .content-card .card-header {
+        background: white;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 1.25rem 1.5rem;
+        border-radius: 15px 15px 0 0;
+    }
+
+    .content-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .table {
+        margin: 0;
+    }
+
+    .table th {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        color: #6b7280;
+        padding: 1rem;
+        border-bottom: 2px solid #f1f5f9;
+    }
+
+    .table td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #f1f5f9;
+        color: #1f2937;
+    }
+
+    .table tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    .btn {
+        padding: 0.625rem 1.25rem;
+        font-weight: 500;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-back {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    .btn-back:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+
+    .btn-action {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.875rem;
+    }
+
+    .btn-view {
+        color: #4f46e5;
+        background: rgba(79, 70, 229, 0.1);
+        border: none;
+    }
+
+    .btn-view:hover {
+        background: #4f46e5;
+        color: white;
+    }
+
+    .btn-complete {
+        color: #10b981;
+        background: rgba(16, 185, 129, 0.1);
+        border: none;
+    }
+
+    .btn-complete:hover {
+        background: #10b981;
+        color: white;
+    }
+
+    .btn-cancel {
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+        border: none;
+    }
+
+    .btn-cancel:hover {
+        background: #ef4444;
+        color: white;
+    }
+
+    .order-id {
+        font-family: monospace;
+        font-size: 0.875rem;
+        color: #6b7280;
+    }
+
+    .customer-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .customer-name {
+        font-weight: 500;
+        color: #1f2937;
+    }
+
+    .customer-email {
+        font-size: 0.875rem;
+        color: #6b7280;
+    }
+
+    .status-badge {
+        padding: 0.375rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .status-completed {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+    }
+
+    .status-processing {
+        background: rgba(234, 179, 8, 0.1);
+        color: #ca8a04;
+    }
+
+    .status-cancelled {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+    }
+
+    .order-amount {
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    .items-count {
+        font-size: 0.875rem;
+        color: #6b7280;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .stats-badge {
+        background: rgba(79, 70, 229, 0.1);
+        color: #4f46e5;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+</style>
+
+<div class="admin-container">
+    <div class="page-header d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-3">
+            <h2 class="page-title"><i class="fas fa-shopping-cart me-2"></i>Orders</h2>
+            <span class="stats-badge">
+                <i class="fas fa-chart-simple me-1"></i>
+                <%= orders.length %> total
+            </span>
+        </div>
+        <a href="/admin" class="btn btn-back">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="content-card card">
+                <div class="card-body">                    <% if (orders.length > 0) { %>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Order Info</th>
+                                        <th>Customer</th>
+                                        <th>Status</th>
+                                        <th>Amount</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% orders.forEach(order => { %>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex flex-column">
+                                                    <span class="order-id">#<%= order._id.toString().slice(-6) %></span>
+                                                    <small class="text-muted">
+                                                        <%= new Date(order.createdAt).toLocaleDateString('en-US', {
+                                                            month: 'short',
+                                                            day: 'numeric',
+                                                            year: 'numeric'
+                                                        }) %>
+                                                    </small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="customer-info">
+                                                    <span class="customer-name"><%= order.user ? order.user.name : 'Unknown User' %></span>
+                                                    <span class="customer-email"><%= order.user && order.user.email ? order.user.email : '' %></span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="status-badge status-<%= order.status %>">
+                                                    <%= order.status ? (order.status.charAt(0).toUpperCase() + order.status.slice(1)) : 'Unknown' %>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex flex-column">
+                                                    <span class="order-amount">$<%= order.total.toFixed(2) %></span>
+                                                    <span class="items-count">
+                                                        <i class="fas fa-box-open"></i>
+                                                        <%= order.items.length %> items
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="action-buttons justify-content-end">
+                                                    <a href="/admin/view-orders/<%= order._id %>" class="btn btn-action btn-view" title="View Order Details">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <button class="btn btn-action btn-complete" onclick="updateStatus('<%= order._id %>', 'completed')" title="Mark as Completed">
+                                                        <i class="fas fa-check"></i>
+                                                    </button>
+                                                    <button class="btn btn-action btn-cancel" onclick="updateStatus('<%= order._id %>', 'cancelled')" title="Cancel Order">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } else { %>
+                        <div class="empty-state">
+                            <i class="fas fa-shopping-cart d-block mb-3"></i>
+                            <h4>No Orders Yet</h4>
+                            <p class="text-muted">Orders will appear here when customers make purchases</p>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Status Update Modal -->
+<div class="modal fade" id="statusModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">Update Order Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to mark this order as <span id="statusText"></span>?
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmStatus">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let orderToUpdate = null;
+let statusToSet = null;
+const statusModal = new bootstrap.Modal(document.getElementById('statusModal'));
+
+function updateStatus(orderId, status) {
+    orderToUpdate = orderId;
+    statusToSet = status;
+    document.getElementById('statusText').textContent = status;
+    document.getElementById('confirmStatus').className = `btn ${status === 'completed' ? 'btn-complete' : 'btn-cancel'}`;
+    statusModal.show();
+}
+
+document.getElementById('confirmStatus').addEventListener('click', function() {
+    if (orderToUpdate && statusToSet) {
+        fetch(`/admin/orders/${orderToUpdate}/status`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status: statusToSet })
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert('Error updating order status');
+            }
+        });
+    }
+    statusModal.hide();
+});
+</script>
+<script>
+function updateStatus(orderId, status) {
+    if (confirm(`Are you sure you want to mark this order as ${status}?`)) {
+        fetch(`/admin/orders/${orderId}/status`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status })
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert('Error updating order status');
+            }
+        });
+    }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,832 @@
+<%- include('partials/header') %>
+
+<!-- Hero Section -->
+<section class="trainers-hero">
+  <div class="hero-overlay">
+    <div class="max-w-7xl mx-auto px-4 py-32 text-center">
+      <h1 class="hero-title">PROJECT TRAINERS</h1>
+      <p class="hero-subtitle">Footwear Built for Performance: In and Out of the Gym</p>
+      <div class="hero-divider"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Main Content Section -->
+<section class="nobull-section nobull-bg-white py-16 px-4">
+  <div class="max-w-7xl mx-auto nobull-content">
+    <!-- Header with Gender Toggle -->
+    <div class="trainers-header">
+      <div class="section-intro">
+        <h2 class="section-title">PERFORMANCE TRAINERS</h2>
+        <p class="section-description">Engineered for athletes who demand more from their footwear</p>
+      </div>
+      <div class="gender-toggle-container">
+        <div class="gender-toggle">
+          <button id="menBtn" class="gender-btn <%= gender === 'men' ? 'active' : '' %>" data-gender="men">
+            <span class="btn-text">MEN</span>
+          </button>
+          <button id="womenBtn" class="gender-btn <%= gender === 'women' ? 'active' : '' %>" data-gender="women">
+            <span class="btn-text">WOMEN</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loadingState" class="loading-container" style="display:none;">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Loading trainers...</p>
+    </div>
+
+    <!-- Products Grid -->
+    <div id="trainersGrid" class="trainers-grid">
+      <% products.forEach(product => { %>
+      <div class="trainer-card" data-aos="fade-up">
+        <div class="card-image-container">
+          <img src="<%= product.image || product.img %>" alt="<%= product.name %>" class="card-image" loading="lazy" />
+          <div class="card-overlay">
+            <div class="overlay-content">
+              <span class="quick-view">QUICK VIEW</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <h3 class="card-title"><%= product.name %></h3>
+            <div class="card-price"><%= product.price %></div>
+          </div>
+          <p class="card-description"><%= product.desc || product.description %></p>
+          <div class="card-actions">
+            <a href="/products/<%= product._id %>" class="shop-btn">
+              <span>SHOP NOW</span>
+              <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+
+    <!-- No Results Message -->
+    <div id="noTrainersMsg" class="no-results" style="display:none;">
+      <div class="no-results-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+      </div>
+      <h3 class="no-results-title">No Trainers Found</h3>
+      <p class="no-results-text">We couldn't find any trainers for this selection. Try switching categories.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Size Guide CTA Section -->
+<section class="size-guide-cta">
+  <div class="max-w-4xl mx-auto px-4 text-center">
+    <div class="size-guide-content">
+      <div class="size-guide-icon-wrapper">
+        <svg class="size-guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <h2 class="size-guide-title">FIND YOUR PERFECT FIT</h2>
+      <p class="size-guide-description">Get the right size the first time with our comprehensive footwear sizing guide</p>
+      <div class="size-guide-buttons">
+        <a href="/size-guide" class="size-guide-btn primary">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span>Size Guide</span>
+        </a>
+        <a href="/fit-guarantee" class="size-guide-btn secondary">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+          </svg>
+          <span>Fit Guarantee</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+
+<script>
+const menBtn = document.getElementById('menBtn');
+const womenBtn = document.getElementById('womenBtn');
+const trainersGrid = document.getElementById('trainersGrid');
+const noTrainersMsg = document.getElementById('noTrainersMsg');
+const loadingState = document.getElementById('loadingState');
+
+function showLoading() {
+  loadingState.style.display = 'flex';
+  trainersGrid.style.display = 'none';
+  noTrainersMsg.style.display = 'none';
+}
+
+function hideLoading() {
+  loadingState.style.display = 'none';
+}
+
+function renderTrainers(products) {
+  hideLoading();
+  trainersGrid.innerHTML = '';
+  
+  if (!products.length) {
+    trainersGrid.style.display = 'none';
+    noTrainersMsg.style.display = 'flex';
+    return;
+  }
+  
+  trainersGrid.style.display = 'grid';
+  noTrainersMsg.style.display = 'none';
+  
+  products.forEach((product, index) => {
+    const card = document.createElement('div');
+    card.className = 'trainer-card';
+    card.style.animationDelay = `${index * 0.1}s`;
+    card.innerHTML = `
+      <div class="card-image-container">
+        <img src="${product.image || product.img}" alt="${product.name}" class="card-image" loading="lazy" />
+        <div class="card-overlay">
+          <div class="overlay-content">
+            <span class="quick-view">QUICK VIEW</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-header">
+          <h3 class="card-title">${product.name}</h3>
+          <div class="card-price">${product.price} DH</div>
+        </div>
+        <p class="card-description">${product.desc || product.description || ''}</p>
+        <div class="card-actions">
+          <a href="/products/${product._id}" class="shop-btn">
+            <span>SHOP NOW</span>
+            <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    `;
+    trainersGrid.appendChild(card);
+  });
+  
+  // Trigger animation
+  setTimeout(() => {
+    document.querySelectorAll('.trainer-card').forEach(card => {
+      card.classList.add('animate-in');
+    });
+  }, 100);
+}
+
+async function switchGender(gender) {
+  showLoading();
+  
+  try {
+    const res = await fetch(`/api/trainers?gender=${gender}`);
+    const data = await res.json();
+    renderTrainers(data.products);
+    history.replaceState(null, '', `/trainers?gender=${gender}`);
+  } catch (error) {
+    console.error('Error fetching trainers:', error);
+    hideLoading();
+    noTrainersMsg.style.display = 'flex';
+    trainersGrid.style.display = 'none';
+  }
+}
+
+menBtn.addEventListener('click', async () => {
+  if (menBtn.classList.contains('active')) return;
+  
+  menBtn.classList.add('active');
+  womenBtn.classList.remove('active');
+  await switchGender('men');
+});
+
+womenBtn.addEventListener('click', async () => {
+  if (womenBtn.classList.contains('active')) return;
+  
+  womenBtn.classList.add('active');
+  menBtn.classList.remove('active');
+  await switchGender('women');
+});
+
+// Initialize animations on page load
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    document.querySelectorAll('.trainer-card').forEach((card, index) => {
+      card.style.animationDelay = `${index * 0.1}s`;
+      card.classList.add('animate-in');
+    });
+  }, 300);
+});
+</script>
+
+<style>
+/* Hero Section */
+.trainers-hero {
+  position: relative;
+  height: 60vh;
+  min-height: 500px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.trainers-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+  opacity: 0.3;
+}
+
+.hero-overlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.hero-title {
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-subtitle {
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  color: #cccccc;
+  font-weight: 400;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-divider {
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #ff6b35, #f7931e);
+  margin: 0 auto;
+  border-radius: 2px;
+}
+
+/* Main Content Header */
+.trainers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 4rem;
+  gap: 2rem;
+}
+
+.section-intro {
+  flex: 1;
+}
+
+.section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: #1a1a1a;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.5rem;
+}
+
+.section-description {
+  font-size: 1.1rem;
+  color: #666;
+  font-weight: 400;
+  max-width: 500px;
+}
+
+/* Gender Toggle */
+.gender-toggle-container {
+  flex-shrink: 0;
+}
+
+.gender-toggle {
+  display: flex;
+  background: #f8f9fa;
+  border-radius: 50px;
+  padding: 4px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.gender-btn {
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 46px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #666;
+  z-index: 2;
+}
+
+.gender-btn.active {
+  background: #1a1a1a;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.gender-btn:hover:not(.active) {
+  color: #1a1a1a;
+  transform: translateY(-1px);
+}
+
+.btn-text {
+  position: relative;
+  z-index: 1;
+}
+
+/* Loading State */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 0;
+  gap: 1rem;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #1a1a1a;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  color: #666;
+  font-weight: 500;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Products Grid */
+.trainers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+/* Trainer Cards */
+.trainer-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(30px);
+  position: relative;
+}
+
+.trainer-card.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.trainer-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+}
+
+.card-image-container {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background: #f8f9fa;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.trainer-card:hover .card-image {
+  transform: scale(1.05);
+}
+
+.card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.trainer-card:hover .card-overlay {
+  opacity: 1;
+}
+
+.overlay-content {
+  text-align: center;
+}
+
+.quick-view {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  padding: 8px 16px;
+  border: 2px solid #ffffff;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.quick-view:hover {
+  background: #ffffff;
+  color: #1a1a1a;
+}
+
+.card-content {
+  padding: 1.5rem;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  gap: 1rem;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.3;
+  margin: 0;
+  flex: 1;
+}
+
+.card-price {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ff6b35;
+  flex-shrink: 0;
+}
+
+.card-description {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-actions {
+  margin-top: auto;
+}
+
+.shop-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #1a1a1a;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.shop-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.shop-btn:hover::before {
+  left: 100%;
+}
+
+.shop-btn:hover {
+  background: #333;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.btn-arrow {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
+}
+
+.shop-btn:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+/* No Results */
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: #f8f9fa;
+  border-radius: 16px;
+  margin: 2rem 0;
+}
+
+.no-results-icon {
+  width: 64px;
+  height: 64px;
+  color: #ccc;
+  margin-bottom: 1rem;
+}
+
+.no-results-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.no-results-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+}
+
+.no-results-text {
+  color: #666;
+  font-size: 1rem;
+  max-width: 400px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .trainers-hero {
+    height: 50vh;
+    min-height: 400px;
+  }
+  
+  .trainers-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+  
+  .section-description {
+    max-width: none;
+  }
+  
+  .trainers-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .card-content {
+    padding: 1.25rem;
+  }
+  
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .card-price {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .trainers-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .gender-toggle {
+    width: 100%;
+  }
+  
+  .gender-btn {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+/* Animation Keyframes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.trainer-card {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+/* Size Guide CTA Section */
+.size-guide-cta {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 4rem 0;
+  margin-top: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.size-guide-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(0,0,0,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+  opacity: 0.5;
+}
+
+.size-guide-content {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.size-guide-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  background: #1a1a1a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2rem;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.size-guide-icon {
+  width: 40px;
+  height: 40px;
+  color: #ffffff;
+  stroke-width: 2.5;
+}
+
+.size-guide-title {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: #1a1a1a;
+  letter-spacing: 0.02em;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.size-guide-description {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.size-guide-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.size-guide-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  min-width: 160px;
+  justify-content: center;
+}
+
+.size-guide-btn.primary {
+  background: #1a1a1a;
+  color: #ffffff;
+  border: 2px solid #1a1a1a;
+}
+
+.size-guide-btn.secondary {
+  background: transparent;
+  color: #1a1a1a;
+  border: 2px solid #1a1a1a;
+}
+
+.size-guide-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.size-guide-btn:hover::before {
+  left: 100%;
+}
+
+.size-guide-btn.primary:hover {
+  background: #333;
+  border-color: #333;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.size-guide-btn.secondary:hover {
+  background: #1a1a1a;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.btn-icon {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.5;
+  transition: transform 0.3s ease;
+}
+
+.size-guide-btn:hover .btn-icon {
+  transform: scale(1.1);
+}
+
+@media (max-width: 640px) {
+  .size-guide-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .size-guide-btn {
+    width: 100%;
+    max-width: 280px;
+  }
+  
+  .size-guide-cta {
+    padding: 3rem 0;
+  }
+}
+</style>

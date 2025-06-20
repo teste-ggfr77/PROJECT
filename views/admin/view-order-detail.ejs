@@ -1,0 +1,296 @@
+<%- include('../partials/admin-header', { title: 'Order Details' }) %>
+
+<style>
+    .admin-container {
+        padding: 2rem;
+        background: #f8f9fa;
+        min-height: calc(100vh - 60px);
+    }
+
+    .page-header {
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+        border-radius: 15px;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .page-title {
+        margin: 0;
+        font-size: 1.75rem;
+        font-weight: 600;
+    }
+
+    .content-card {
+        background: white;
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .content-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .info-section {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 1.5rem;
+        height: 100%;
+    }
+
+    .section-title {
+        color: #4f46e5;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .info-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .info-item {
+        display: flex;
+        margin-bottom: 1rem;
+        align-items: baseline;
+    }
+
+    .info-label {
+        font-weight: 500;
+        color: #6b7280;
+        width: 140px;
+        flex-shrink: 0;
+    }
+
+    .info-value {
+        color: #1f2937;
+    }
+
+    .table {
+        margin: 0;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .table th {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        color: #6b7280;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-bottom: 2px solid #f1f5f9;
+    }
+
+    .table td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #f1f5f9;
+        color: #1f2937;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    .table-footer {
+        background: #f8f9fa;
+        font-weight: 600;
+    }
+
+    .btn {
+        padding: 0.625rem 1.25rem;
+        font-weight: 500;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-back {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    .btn-back:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+
+    .status-badge {
+        padding: 0.375rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+    }
+
+    .order-id {
+        font-family: monospace;
+        font-size: 0.875rem;
+        color: white;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+    }
+
+    .price {
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    .total-row {
+        background: #f8f9fa;
+        font-weight: 600;
+    }
+
+    .product-name {
+        font-weight: 500;
+        color: #4f46e5;
+    }
+</style>
+
+<div class="admin-container">
+    <div class="page-header d-flex justify-content-between align-items-center">
+        <div class="d-flex flex-column">
+            <div class="d-flex align-items-center gap-3 mb-2">
+                <h2 class="page-title"><i class="fas fa-file-invoice me-2"></i>Order Details</h2>
+                <span class="order-id">#<%= order._id.toString().slice(-6) %></span>
+            </div>
+            <div class="status-badge">
+                <%= order.status ? (order.status.charAt(0).toUpperCase() + order.status.slice(1)) : 'Processing' %>
+            </div>
+        </div>
+        <a href="/admin/view-orders" class="btn btn-back">
+            <i class="fas fa-arrow-left"></i> Back to Orders
+        </a>
+    </div>
+
+    <div class="content-card card">
+        <div class="card-body">            <div class="row mb-4 g-4">
+                <div class="col-md-6">
+                    <div class="info-section">
+                        <h5 class="section-title">
+                            <i class="fas fa-user me-2"></i>Customer Information
+                        </h5>
+                        <ul class="info-list">
+                            <li class="info-item">
+                                <span class="info-label">Customer Name</span>
+                                <span class="info-value"><%= order.user ? order.user.name : 'Unknown User' %></span>
+                            </li>
+                            <li class="info-item">
+                                <span class="info-label">Phone Number</span>
+                                <span class="info-value"><%= order.phone || 'Not provided' %></span>
+                            </li>
+                            <li class="info-item">
+                                <span class="info-label">Email</span>
+                                <span class="info-value"><%= order.user && order.user.email ? order.user.email : '' %></span>
+                            </li>
+                            <li class="info-item align-items-start">
+                                <span class="info-label">Shipping Address</span>
+                                <span class="info-value">
+                                    <%= order.shippingAddress || 'Not provided' %>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-section">
+                        <h5 class="section-title">
+                            <i class="fas fa-info-circle me-2"></i>Order Summary
+                        </h5>
+                        <ul class="info-list">
+                            <li class="info-item">
+                                <span class="info-label">Order Date</span>
+                                <span class="info-value">
+                                    <%= new Date(order.createdAt).toLocaleDateString('en-US', {
+                                        month: 'long',
+                                        day: 'numeric',
+                                        year: 'numeric'
+                                    }) %>
+                                </span>
+                            </li>
+                            <li class="info-item">
+                                <span class="info-label">Status</span>
+                                <span class="info-value">
+                                    <span class="status-badge">
+                                        <%= order.status ? (order.status.charAt(0).toUpperCase() + order.status.slice(1)) : 'Processing' %>
+                                    </span>
+                                </span>
+                            </li>
+                            <li class="info-item">
+                                <span class="info-label">Total Amount</span>
+                                <span class="info-value price">$<%= order.total.toFixed(2) %></span>
+                            </li>
+                            <li class="info-item">
+                                <span class="info-label">Items Count</span>
+                                <span class="info-value">
+                                    <%= order.items.length %> <%= order.items.length === 1 ? 'item' : 'items' %>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive mt-4">
+                <h5 class="section-title">
+                    <i class="fas fa-shopping-cart me-2"></i>Order Items
+                </h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Specifications</th>
+                            <th class="text-center">Quantity</th>
+                            <th class="text-end">Price</th>
+                            <th class="text-end">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% order.items.forEach(item => { %>
+                            <tr>
+                                <td>
+                                    <span class="product-name"><%= item.product.name %></span>
+                                </td>
+                                <td>
+                                    <% if (item.color || item.size) { %>
+                                        <small class="text-muted">
+                                            <%= [item.color, item.size].filter(Boolean).join(' / ') %>
+                                        </small>
+                                    <% } %>
+                                </td>
+                                <td class="text-center"><%= item.quantity %></td>
+                                <td class="text-end">$<%= item.price.toFixed(2) %></td>
+                                <td class="text-end price">$<%= (item.price * item.quantity).toFixed(2) %></td>
+                            </tr>
+                        <% }) %>
+                        <tr class="total-row">
+                            <td colspan="4" class="text-end">Total Amount:</td>
+                            <td class="text-end price">$<%= order.total.toFixed(2) %></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/admin-footer') %>

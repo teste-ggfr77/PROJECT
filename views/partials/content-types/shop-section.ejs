@@ -1,0 +1,25 @@
+<%
+const bgClass = content.backgroundColor === '#000000' ? 'nobull-bg-black' : 'nobull-bg-white';
+%>
+<section class="nobull-section <%= bgClass %> nobull-text"
+    data-bg-color="<%= content.backgroundColor || 'transparent' %>"
+    data-text-color="<%= content.textColor || 'inherit' %>"
+    style="--section-bg-color: <%= content.backgroundColor || 'transparent' %>; --section-text-color: <%= content.textColor || 'inherit' %>">
+    <div class="nobull-content nobull-fade-in">
+        <h2 class="nobull-heading"><%= content.title %></h2>
+        <% if (content.subtitle) { %>
+        <div class="nobull-subheading mt-4"><%= content.subtitle %></div>
+        <% } %>
+        <% if (content.additionalImages && content.additionalImages.length > 0) { %>
+        <div class="mt-5 row justify-content-center">            <% content.additionalImages.forEach((img, index) => { %>
+                <div class="col-md-4 mb-4 text-center">
+                    <img src="<%= img %>" alt="Product <%= index + 1 %>" class="img-fluid mb-3" style="max-width: 100%; height: auto;">
+                    <% if (content.buttonText && content.buttonLink) { %>
+                    <a href="<%= content.buttonLink %>" class="nobull-button"><%= content.buttonText %></a>
+                    <% } %>
+                </div>
+            <% }); %>
+        </div>
+        <% } %>
+    </div>
+</section>

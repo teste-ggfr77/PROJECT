@@ -1,0 +1,742 @@
+<%- include('partials/header') %>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: #ffffff;
+        padding-top: 80px;
+    }
+
+    .affiliate-hero {
+        position: relative;
+        height: 60vh;
+        background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .affiliate-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="affiliate-pattern" width="30" height="30" patternUnits="userSpaceOnUse"><polygon points="15,5 25,15 15,25 5,15" fill="rgba(255,255,255,0.08)"/></pattern></defs><rect width="100" height="100" fill="url(%23affiliate-pattern)"/></svg>');
+        opacity: 0.4;
+    }
+
+    .affiliate-hero-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        color: white;
+        max-width: 800px;
+        padding: 0 2rem;
+    }
+
+    .affiliate-hero-title {
+        font-size: clamp(3rem, 8vw, 6rem);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .affiliate-hero-subtitle {
+        font-size: clamp(1.25rem, 3vw, 1.5rem);
+        font-weight: 400;
+        letter-spacing: 0.05em;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+    }
+
+    .affiliate-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 5rem 2rem;
+    }
+
+    .affiliate-benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 3rem;
+        margin-top: 3rem;
+    }
+
+    .affiliate-card {
+        background: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        border: 3px solid transparent;
+    }
+
+    .affiliate-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        border-color: #0891b2;
+    }
+
+    .affiliate-card-header {
+        height: 200px;
+        background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .affiliate-card-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 25px,
+            rgba(255, 255, 255, 0.1) 25px,
+            rgba(255, 255, 255, 0.1) 50px
+        );
+        animation: affiliate-flow 5s linear infinite;
+    }
+
+    @keyframes affiliate-flow {
+        0% { transform: translateX(-50%) translateY(-50%) rotate(0deg); }
+        100% { transform: translateX(-50%) translateY(-50%) rotate(360deg); }
+    }
+
+    .affiliate-icon {
+        width: 5rem;
+        height: 5rem;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+    }
+
+    .affiliate-icon i {
+        font-size: 2rem;
+        color: white;
+    }
+
+    .affiliate-card-content {
+        padding: 2.5rem;
+    }
+
+    .affiliate-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+        color: #000000;
+    }
+
+    .affiliate-description {
+        color: #666666;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        font-size: 1rem;
+    }
+
+    .affiliate-features {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .affiliate-features li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        color: #333333;
+        font-weight: 500;
+    }
+
+    .affiliate-features li::before {
+        content: '✓';
+        background: #0891b2;
+        color: white;
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    .section-intro {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .section-title {
+        font-size: clamp(2.5rem, 5vw, 3.5rem);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+        color: #000000;
+    }
+
+    .section-description {
+        font-size: 1.25rem;
+        color: #666666;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    .brand-highlight {
+        color: #0891b2;
+        font-weight: 700;
+    }
+
+    .commission-tiers {
+        background: #f8f9fa;
+        border-radius: 16px;
+        padding: 3rem;
+        margin: 4rem 0;
+    }
+
+    .tiers-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .tier-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+    .tier-card:hover {
+        transform: translateY(-5px);
+        border-color: #0891b2;
+    }
+
+    .tier-name {
+        font-size: 1.25rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+        color: #0891b2;
+    }
+
+    .tier-commission {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #000;
+        margin-bottom: 0.5rem;
+    }
+
+    .tier-requirement {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .tier-benefits {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        text-align: left;
+    }
+
+    .tier-benefits li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.75rem;
+        color: #333;
+        font-size: 0.9rem;
+    }
+
+    .tier-benefits li::before {
+        content: '•';
+        color: #0891b2;
+        font-weight: 700;
+        margin-right: 0.5rem;
+    }
+
+    .signup-form {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 3rem;
+        margin-top: 4rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
+    }
+
+    .simple-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .simple-header h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 0.5rem;
+    }
+
+    .simple-header p {
+        font-size: 1rem;
+        color: #6b7280;
+        line-height: 1.6;
+    }
+
+    .simple-form {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-field {
+        flex: 1;
+    }
+
+    .form-field.full-width {
+        flex: 1 1 100%;
+    }
+
+    .form-field label {
+        display: block;
+        font-weight: 500;
+        color: #374151;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 1rem;
+        background: #ffffff;
+        color: #111827;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        box-sizing: border-box;
+    }
+
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+        outline: none;
+        border-color: #0891b2;
+        box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1);
+    }
+
+    .form-field textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .form-field input::placeholder,
+    .form-field textarea::placeholder {
+        color: #9ca3af;
+    }
+
+    .submit-btn {
+        background: #0891b2;
+        color: white;
+        padding: 0.875rem 2rem;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .submit-btn:hover {
+        background: #0e7490;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(8, 145, 178, 0.3);
+    }
+
+    .submit-btn:active {
+        transform: translateY(0);
+    }
+
+    @media (max-width: 640px) {
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+        
+        .signup-form {
+            padding: 2rem;
+        }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .affiliate-container {
+            padding: 3rem 1rem;
+        }
+
+        .affiliate-benefits-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .affiliate-card-content {
+            padding: 2rem;
+        }
+
+        .affiliate-hero-content {
+            padding: 0 1rem;
+        }
+
+        .commission-tiers,
+        .signup-form {
+            padding: 2rem;
+        }
+
+        .form-grid,
+        .tiers-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .affiliate-benefits-grid {
+            gap: 1.5rem;
+        }
+
+        .affiliate-card-content {
+            padding: 1.5rem;
+        }
+
+        .commission-tiers,
+        .signup-form {
+            padding: 1.5rem;
+        }
+    }
+
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+        .affiliate-card,
+        .tier-card,
+        .affiliate-card-header::before {
+            animation: none;
+            transition: none;
+        }
+
+        .affiliate-card:hover,
+        .tier-card:hover {
+            transform: none;
+        }
+    }
+
+    .affiliate-card:focus-within {
+        outline: 3px solid #0891b2;
+        outline-offset: 2px;
+    }
+</style>
+
+<main>
+    <!-- Hero Section -->
+    <section class="affiliate-hero">
+        <div class="affiliate-hero-content">
+            <h1 class="affiliate-hero-title">Affiliate Program</h1>
+            <p class="affiliate-hero-subtitle">Earn While You Inspire with <span class="brand-highlight">PROJECT</span></p>
+        </div>
+    </section>
+
+    <!-- Affiliate Program Section -->
+    <section class="affiliate-container">
+        <div class="section-intro">
+            <h2 class="section-title">Turn Your Passion Into Profit</h2>
+            <p class="section-description">
+                Join the <span class="brand-highlight">PROJECT</span> affiliate program and earn commissions while sharing premium gym apparel you believe in. 
+                Perfect for fitness influencers, trainers, and gym enthusiasts.
+            </p>
+        </div>
+
+        <div class="affiliate-benefits-grid">
+            <!-- High Commissions -->
+            <article class="affiliate-card">
+                <div class="affiliate-card-header">
+                    <div class="affiliate-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                </div>
+                <div class="affiliate-card-content">
+                    <h3 class="affiliate-title">High Commissions</h3>
+                    <p class="affiliate-description">
+                        Earn up to 8% commission on every sale you generate. Our tiered commission structure rewards top performers with higher rates and exclusive bonuses.
+                    </p>
+                    <ul class="affiliate-features">
+                        <li>Starting commission rate of 5%</li>
+                        <li>Earn up to 8% for top performers</li>
+                        <li>Monthly performance bonuses</li>
+                        <li>Quarterly incentive programs</li>
+                        <li>No cap on earnings potential</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- Real-Time Tracking -->
+            <article class="affiliate-card">
+                <div class="affiliate-card-header">
+                    <div class="affiliate-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                </div>
+                <div class="affiliate-card-content">
+                    <h3 class="affiliate-title">Real-Time Tracking</h3>
+                    <p class="affiliate-description">
+                        Monitor your performance with our advanced affiliate dashboard. Track clicks, conversions, and earnings in real-time with detailed analytics.
+                    </p>
+                    <ul class="affiliate-features">
+                        <li>Live sales and commission tracking</li>
+                        <li>Detailed performance analytics</li>
+                        <li>Click-through rate monitoring</li>
+                        <li>Conversion optimization insights</li>
+                        <li>Mobile-friendly dashboard</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- Marketing Materials -->
+            <article class="affiliate-card">
+                <div class="affiliate-card-header">
+                    <div class="affiliate-icon">
+                        <i class="fas fa-images"></i>
+                    </div>
+                </div>
+                <div class="affiliate-card-content">
+                    <h3 class="affiliate-title">Marketing Materials</h3>
+                    <p class="affiliate-description">
+                        Access professional marketing materials designed to convert. From high-quality product images to proven ad copy, we provide everything you need to succeed.
+                    </p>
+                    <ul class="affiliate-features">
+                        <li>High-resolution product photography</li>
+                        <li>Proven ad copy and headlines</li>
+                        <li>Social media templates</li>
+                        <li>Email marketing templates</li>
+                        <li>Video content and tutorials</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- Dedicated Support -->
+            <article class="affiliate-card">
+                <div class="affiliate-card-header">
+                    <div class="affiliate-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                </div>
+                <div class="affiliate-card-content">
+                    <h3 class="affiliate-title">Dedicated Support</h3>
+                    <p class="affiliate-description">
+                        Get the support you need to maximize your earnings. Our affiliate success team is here to help you optimize your campaigns and grow your income.
+                    </p>
+                    <ul class="affiliate-features">
+                        <li>Dedicated affiliate success manager</li>
+                        <li>One-on-one strategy sessions</li>
+                        <li>Priority email and chat support</li>
+                        <li>Weekly group training calls</li>
+                        <li>Exclusive affiliate community access</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- Fast Payments -->
+            <article class="affiliate-card">
+                <div class="affiliate-card-header">
+                    <div class="affiliate-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                </div>
+                <div class="affiliate-card-content">
+                    <h3 class="affiliate-title">Fast Payments</h3>
+                    <p class="affiliate-description">
+                        Get paid quickly and reliably. We process affiliate payments twice monthly with multiple payment options to suit your preferences.
+                    </p>
+                    <ul class="affiliate-features">
+                        <li>Bi-monthly payment schedule</li>
+                        <li>Multiple payment methods available</li>
+                        <li>Low minimum payout threshold</li>
+                        <li>Automatic payment processing</li>
+                        <li>Detailed payment statements</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- Exclusive Access -->
+            <article class="affiliate-card">
+                <div class="affiliate-card-header">
+                    <div class="affiliate-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                </div>
+                <div class="affiliate-card-content">
+                    <h3 class="affiliate-title">Exclusive Access</h3>
+                    <p class="affiliate-description">
+                        Get early access to new products, exclusive discount codes, and special promotions. Stay ahead of the competition with insider access.
+                    </p>
+                    <ul class="affiliate-features">
+                        <li>Early access to new collections</li>
+                        <li>Exclusive affiliate discount codes</li>
+                        <li>Special promotional campaigns</li>
+                        <li>Product samples for content creation</li>
+                        <li>VIP event invitations</li>
+                    </ul>
+                </div>
+            </article>
+        </div>
+
+        <!-- Commission Tiers -->
+        <div class="commission-tiers">
+            <div class="section-intro">
+                <h2 class="section-title">Commission Tiers</h2>
+                <p class="section-description">
+                    Our tiered commission structure rewards performance. The more you sell, the more you earn per sale.
+                </p>
+            </div>
+
+            <div class="tiers-grid">
+                <div class="tier-card">
+                    <div class="tier-name">Starter</div>
+                    <div class="tier-commission">5%</div>
+                    <div class="tier-requirement">$0 - $2,499 monthly sales</div>
+                    <ul class="tier-benefits">
+                        <li>5% commission on all sales</li>
+                        <li>Basic marketing materials</li>
+                        <li>Email support</li>
+                        <li>Monthly payment</li>
+                    </ul>
+                </div>
+
+                <div class="tier-card">
+                    <div class="tier-name">Pro</div>
+                    <div class="tier-commission">6%</div>
+                    <div class="tier-requirement">$2,500 - $4,999 monthly sales</div>
+                    <ul class="tier-benefits">
+                        <li>6% commission on all sales</li>
+                        <li>Premium marketing materials</li>
+                        <li>Priority support</li>
+                        <li>Bi-monthly payments</li>
+                        <li>Performance bonuses</li>
+                    </ul>
+                </div>
+
+                <div class="tier-card">
+                    <div class="tier-name">Elite</div>
+                    <div class="tier-commission">8%</div>
+                    <div class="tier-requirement">$5,000+ monthly sales</div>
+                    <ul class="tier-benefits">
+                        <li>8% commission on all sales</li>
+                        <li>Exclusive marketing materials</li>
+                        <li>Dedicated account manager</li>
+                        <li>Weekly payments available</li>
+                        <li>Quarterly bonuses</li>
+                        <li>Product samples</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signup Form -->
+        <div class="signup-form">
+            <div class="simple-header">
+                <h2>Join Our Affiliate Program</h2>
+                <p>Ready to start earning with <strong>PROJECT</strong>? Complete the application below and start promoting premium gym apparel today.</p>
+            </div>
+
+            <form class="simple-form">
+                <div class="form-row">
+                    <div class="form-field">
+                        <label for="full-name">Full Name *</label>
+                        <input type="text" id="full-name" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-field">
+                        <label for="website">Website/Social Media *</label>
+                        <input type="url" id="website" placeholder="https://your-website.com" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="audience-size">Audience Size *</label>
+                        <select id="audience-size" required>
+                            <option value="">Select Audience Size</option>
+                            <option value="1k-5k">1K - 5K followers</option>
+                            <option value="5k-10k">5K - 10K followers</option>
+                            <option value="10k-50k">10K - 50K followers</option>
+                            <option value="50k-100k">50K - 100K followers</option>
+                            <option value="100k+">100K+ followers</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-field full-width">
+                        <label for="niche">Primary Niche *</label>
+                        <select id="niche" required>
+                            <option value="">Select Your Niche</option>
+                            <option value="fitness">Fitness/Bodybuilding</option>
+                            <option value="crossfit">CrossFit</option>
+                            <option value="yoga">Yoga/Wellness</option>
+                            <option value="running">Running/Cardio</option>
+                            <option value="lifestyle">Lifestyle/Fashion</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-field full-width">
+                        <label for="experience">Tell us about your experience (optional)</label>
+                        <textarea id="experience" placeholder="Describe your experience with affiliate marketing, brands you've worked with, and why you want to promote PROJECT gym apparel..."></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Apply Now</button>
+            </form>
+        </div>
+    </section>
+</main>
+
+<%- include('partials/footer') %>

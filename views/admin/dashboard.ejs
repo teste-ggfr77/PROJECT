@@ -1,0 +1,599 @@
+<%- include('../partials/admin-header', { title: 'Dashboard' }) %>
+
+<style>
+    .dashboard-container {
+        padding: 2rem;
+        background: #f8f9fa;
+        min-height: calc(100vh - 60px);
+    }
+
+    .dashboard-header {
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+        border-radius: 15px;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard-header h2 {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 600;
+    }
+
+    .dashboard-card {
+        height: 100%;
+        background: white;
+        border: none;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .dashboard-card .card-title {
+        color: #4f46e5;
+        font-weight: 600;
+        margin-bottom: 1.25rem;
+        font-size: 1.25rem;
+    }
+
+    .dashboard-card .list-group {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .dashboard-card .list-group-item {
+        border: none;
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.5rem;
+        border-radius: 8px !important;
+        background: #f8f9fa;
+        transition: all 0.2s ease;
+    }
+
+    .dashboard-card .list-group-item:hover {
+        background: #4f46e5;
+        color: white;
+        transform: translateX(5px);
+    }
+
+    .dashboard-card .list-group-item i {
+        width: 24px;
+        text-align: center;
+        margin-right: 8px;
+    }
+
+    .dashboard-stats {
+        padding: 1.5rem;
+        background: white;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .stat-item {
+        text-align: center;
+        padding: 1.25rem;
+        background: #f8f9fa;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .stat-item:hover {
+        background: #4f46e5;
+        color: white;
+    }
+
+    .stat-item .stat-value {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-item .stat-label {
+        color: #6b7280;
+    }
+
+    .stat-item:hover .stat-label {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Table Styles */
+    .table-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2rem;
+    }
+
+    .table-card .card-header {
+        background: white;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 1.25rem 1.5rem;
+    }
+
+    .table-card .card-header h5 {
+        color: #4f46e5;
+        font-weight: 600;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .table-responsive {
+        margin: 0;
+        padding: 0.5rem;
+    }
+
+    .table {
+        margin: 0;
+        --bs-table-hover-bg: #f8f9fa;
+    }
+
+    .table th {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        color: #6b7280;
+        padding: 1rem;
+        border-bottom: 2px solid #f1f5f9;
+    }
+
+    .table td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #f1f5f9;
+        color: #1f2937;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .user-details {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .user-name {
+        font-weight: 600;
+        color: #1f2937;
+        margin: 0;
+    }
+
+    .user-contact {
+        font-size: 0.875rem;
+        color: #6b7280;
+    }
+
+    .badge {
+        padding: 0.5em 1em;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 0.75rem;
+    }
+
+    .badge.bg-success {
+        background: #10b981 !important;
+    }
+
+    .badge.bg-primary {
+        background: #4f46e5 !important;
+    }
+
+    .badge.bg-secondary {
+        background: #6b7280 !important;
+    }
+
+    .btn-action {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.875rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+    }
+
+    .btn-action i {
+        font-size: 0.875rem;
+    }
+
+    .btn-view {
+        color: #4f46e5;
+        background: rgba(79, 70, 229, 0.1);
+        border: none;
+    }
+
+    .btn-view:hover {
+        background: #4f46e5;
+        color: white;
+    }
+
+    .btn-edit {
+        color: #0ea5e9;
+        background: rgba(14, 165, 233, 0.1);
+        border: none;
+    }
+
+    .btn-edit:hover {
+        background: #0ea5e9;
+        color: white;
+    }
+
+    .btn-delete {
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+        border: none;
+    }
+
+    .btn-delete:hover {
+        background: #ef4444;
+        color: white;
+    }
+
+    .recent-section {
+        margin-top: 2rem;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .small-stats {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #6b7280;
+        font-size: 0.875rem;
+    }
+
+    .small-stats i {
+        color: #4f46e5;
+    }
+</style>
+
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h2><i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard</h2>
+    </div>
+
+    <div class="dashboard-stats">
+        <div class="stats-grid">            <div class="stat-item">
+                <div class="stat-value"><%= totalOrders || 0 %></div>
+                <div class="stat-label">Total Orders</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value"><%= totalProducts || 0 %></div>
+                <div class="stat-label">Products</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value"><%= totalUsers || 0 %></div>
+                <div class="stat-label">Users</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">$<%= totalRevenue || '0.00' %></div>
+                <div class="stat-label">Revenue</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">        <div class="col-md-4 col-lg-3">
+            <div class="dashboard-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-box me-2"></i>Products</h5>
+                    <div class="list-group">
+                        <a href="/admin/add-product" class="list-group-item list-group-item-action">
+                            <i class="fas fa-plus"></i> Add New Product
+                        </a>
+                        <a href="/admin/categories" class="list-group-item list-group-item-action">
+                            <i class="fas fa-tags"></i> Manage Categories
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-lg-3">
+            <div class="dashboard-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-shopping-bag me-2"></i>Orders</h5>
+                    <div class="list-group">
+                        <a href="/admin/view-orders" class="list-group-item list-group-item-action">
+                            <i class="fas fa-shopping-cart"></i> View All Orders
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-lg-3">
+            <div class="dashboard-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-comments me-2"></i>Communication</h5>
+                    <div class="list-group">
+                        <a href="/admin/contacts/" class="list-group-item list-group-item-action">
+                            <i class="fas fa-envelope"></i> Manage Contacts
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-lg-3">
+            <div class="dashboard-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-gift me-2"></i>Promotions</h5>
+                    <div class="list-group">
+                        <a href="/admin/promo-codes" class="list-group-item list-group-item-action">
+                            <i class="fas fa-percent"></i> View Promo Codes
+                        </a>
+                        <a href="/admin/add-promo" class="list-group-item list-group-item-action">
+                            <i class="fas fa-plus"></i> Add Promo Code
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-lg-3">
+            <div class="dashboard-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-chart-pie me-2"></i>Analytics</h5>
+                    <div class="list-group">
+                        <a href="/admin/analytics" class="list-group-item list-group-item-action">
+                            <i class="fas fa-chart-line"></i> View Analytics
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-lg-3">
+            <div class="dashboard-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-user-shield me-2"></i>User Management</h5>
+                    <div class="list-group">
+                        <a href="/admin/users" class="list-group-item list-group-item-action">
+                            <i class="fas fa-users"></i> Manage Users
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-lg-3">
+            <div class="dashboard-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-globe me-2"></i>Website Content</h5>
+                    <div class="list-group">
+                        <a href="/admin/dashboard/edit-homepage" class="list-group-item list-group-item-action">
+                            <i class="fas fa-home"></i> Edit Homepage
+                        </a>
+                        <a href="/admin/page-contents" class="list-group-item list-group-item-action">
+                            <i class="fas fa-file-alt"></i> Page Contents
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    <div class="row mt-4">
+        <div class="col-12">
+            <div class="dashboard-card">
+                <div class="card-header d-flex justify-content-between align-items-center py-3">
+                    <h5 class="mb-0"><i class="fas fa-users me-2"></i>Recent Users</h5>
+                    <a href="/admin/users" class="btn btn-primary btn-sm px-4">
+                        <i class="fas fa-eye me-1"></i> View All
+                    </a>
+                </div>                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Joined</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% users.slice(0, 5).forEach(user => { %>
+                                    <tr>
+                                        <td>
+                                            <div class="user-info">
+                                                <img src="<%= user.profilePicture || '/images/default-profile.png' %>" 
+                                                     class="user-avatar"
+                                                     alt="<%= user.name %>">
+                                                <div class="user-details">
+                                                    <div class="user-name"><%= user.name %></div>
+                                                    <div class="user-contact">
+                                                        <%= user.contactNumber || 'No phone' %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex flex-column">
+                                                <span><%= user.email %></span>
+                                                <small class="text-muted">ID: <%= user._id.toString().slice(-6) %></small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge <%= user.isAdmin ? 'bg-primary' : 'bg-secondary' %>">
+                                                <%= user.isAdmin ? 'Admin' : 'Customer' %>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex flex-column">
+                                                <span><%= new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></span>
+                                                <small class="text-muted"><%= new Date(user.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) %></small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-circle me-1" style="font-size: 8px;"></i>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="action-buttons justify-content-end">
+                                                <a href="/admin/users/<%= user._id %>" class="btn btn-action btn-view" title="View Details">
+                                                    <i class="fas fa-eye"></i> View
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="table-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-box me-2"></i>Recent Products
+                        <span class="small-stats ms-2">
+                            <i class="fas fa-arrow-up"></i>
+                            <span><%- typeof totalProducts !== 'undefined' ? totalProducts : '0' %> total</span>
+                        </span>
+                    </h5>
+                    <a href="/admin/add-product" class="btn btn-action btn-view">
+                        <i class="fas fa-plus"></i> Add Product
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% products.forEach(p => { %>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="product-info">
+                                                    <div class="fw-semibold"><%= p.name %></div>
+                                                    <small class="text-muted">ID: <%= p._id.toString().slice(-6) %></small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="action-buttons justify-content-end">
+                                                <a href="/admin/edit-product/<%= p._id %>" class="btn btn-action btn-edit">
+                                                    <i class="fas fa-edit"></i> Edit
+                                                </a>
+                                                <form class="d-inline" method="POST" action="/admin/product/<%= p._id %>?_method=DELETE" onsubmit="return confirm('Are you sure you want to delete this product?')">
+                                                    <button type="submit" class="btn btn-action btn-delete">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="table-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-shopping-bag me-2"></i>Recent Orders
+                        <span class="small-stats ms-2">
+                            <i class="fas fa-arrow-up"></i>
+                            <span><%- typeof totalOrders !== 'undefined' ? totalOrders : '0' %> total</span>
+                        </span>
+                    </h5>
+                    <a href="/admin/view-orders" class="btn btn-action btn-view">
+                        <i class="fas fa-list"></i> All Orders
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Customer</th>
+                                    <th>Total</th>
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% orders.forEach(order => { %>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="user-info">
+                                                    <div class="fw-semibold"><%= order.user ? order.user.name : 'Unknown User' %></div>
+                                                    <small class="text-muted">Order #<%= order._id.toString().slice(-6) %></small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="fw-semibold">$<%= order.total.toFixed(2) %></span>
+                                        </td>
+                                        <td>
+                                            <div class="action-buttons justify-content-end">
+                                                <a href="/admin/view-orders/<%= order._id %>" class="btn btn-action btn-view">
+                                                    <i class="fas fa-eye"></i> Details
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/admin-footer') %>

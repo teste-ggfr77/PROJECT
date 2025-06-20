@@ -1,0 +1,197 @@
+/* Women's Lifestyle Page Styles */
+.hero-section {
+    position: relative;
+    height: 90vh;
+    background-attachment: fixed;
+}
+
+.hero-content {
+    animation: fadeInUp 1.2s ease-out;
+}
+
+.hero-subtitle {
+    opacity: 0;
+    animation: slideInRight 0.8s ease-out 0.5s forwards;
+}
+
+.hero-button {
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.hero-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Collection Grid */
+.collection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+    padding: 0;
+}
+
+.collection-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.25rem;
+    transition: box-shadow 0.2s, transform 0.2s;
+    border: 1px solid #f3f3f3;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+
+.collection-item:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 32px rgba(255, 107, 107, 0.12);
+}
+
+.collection-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.collection-item:hover .collection-image {
+    transform: scale(1.1);
+}
+
+.collection-overlay {
+    position: static;
+    padding: 1.5rem 1rem;
+    background: none;
+    color: #222;
+    text-align: center;
+    transform: none;
+}
+
+/* Animated Section Headers */
+.section-header {
+    position: relative;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #222;
+    letter-spacing: -0.01em;
+}
+
+.section-header::after {
+    content: '';
+    display: block;
+    margin: 0.5rem auto 0 auto;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(to right, #ff6b6b, #ffa0a0);
+    border-radius: 2px;
+}
+
+/* Product Cards Animation */
+.fancy-card {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.fancy-card:nth-child(2n) {
+    animation-delay: 0.2s;
+}
+
+.fancy-card:nth-child(3n) {
+    animation-delay: 0.4s;
+}
+
+/* Featured Section */
+.featured-section {
+    background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%);
+    padding: 4rem 0;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Newsletter Section */
+.newsletter-section {
+    background: linear-gradient(135deg, #f6e5f5 0%, #f8f0ff 100%);
+    padding: 2.5rem 0;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.newsletter-form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.newsletter-input {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.newsletter-input:focus {
+    border-color: #ff6b6b;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.2);
+}
+
+.newsletter-button {
+    background: linear-gradient(to right, #ff6b6b, #ffa0a0);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 999px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.newsletter-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+}
+
+/* Fix SVG icon sizing in technology section */
+.tech-card svg, .technology-section svg {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    max-width: 64px;
+    max-height: 64px;
+    display: inline-block;
+}
+
+/* Reduce vertical whitespace between sections */
+.hero-section, .featured-section, .newsletter-section, .brand-story-section, .technology-section, .performance-stats-section {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+    margin-bottom: 0 !important;
+}
+
+section {
+    margin-bottom: 0 !important;
+}

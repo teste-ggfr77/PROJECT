@@ -1,0 +1,318 @@
+<%- include('partials/header') %>
+
+<!-- Hero Section -->
+<section class="relative w-full h-[70vh] overflow-hidden">
+  <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Athletes" class="absolute inset-0 w-full h-full object-cover z-0" />
+  <div class="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
+  <div class="relative z-20 flex flex-col items-center justify-center text-center h-full px-4">
+    <h1 class="text-white text-5xl md:text-7xl font-bold uppercase drop-shadow-lg tracking-wider mb-4">ATHLETES</h1>
+    <p class="text-white/90 tracking-wide text-xl md:text-2xl drop-shadow-sm font-medium mb-8">Elite Performers. Proven Results.</p>
+    <a href="#join-team" class="bg-white text-black font-bold py-4 px-8 uppercase tracking-wider hover:bg-gray-200 transition-all duration-300">Join Our Team</a>
+  </div>
+</section>
+
+<!-- Featured Athletes -->
+<section class="w-full py-20 px-4 bg-white">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold uppercase mb-6 tracking-wide">FEATURED ATHLETES</h2>
+      <p class="text-xl text-gray-600">Meet the champions who trust PROJECT</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Athlete 1 -->
+      <div class="bg-gray-50 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+        <div class="relative">
+          <img src="https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Marcus Johnson" class="w-full h-64 object-cover" />
+          <div class="absolute top-4 left-4">
+            <span class="bg-red-500 text-white px-3 py-1 text-sm font-bold uppercase rounded">Olympic</span>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-2xl font-bold mb-2">MARCUS JOHNSON</h3>
+          <p class="text-gray-600 mb-3">Olympic Sprinter • 100m World Record Holder</p>
+          <p class="text-gray-700 mb-4">"PROJECT gear gives me the edge I need to perform at the highest level. The comfort and performance are unmatched."</p>
+          <div class="flex items-center gap-4">
+            <span class="text-sm font-bold text-gray-500">ACHIEVEMENTS:</span>
+            <div class="flex gap-2">
+              <span class="bg-yellow-400 text-black px-2 py-1 text-xs font-bold rounded">3x GOLD</span>
+              <span class="bg-gray-300 text-black px-2 py-1 text-xs font-bold rounded">WR</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Athlete 2 -->
+      <div class="bg-gray-50 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+        <div class="relative">
+          <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Sarah Chen" class="w-full h-64 object-cover" />
+          <div class="absolute top-4 left-4">
+            <span class="bg-blue-500 text-white px-3 py-1 text-sm font-bold uppercase rounded">Pro</span>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-2xl font-bold mb-2">SARAH CHEN</h3>
+          <p class="text-gray-600 mb-3">Professional Marathon Runner • Boston Marathon Champion</p>
+          <p class="text-gray-700 mb-4">"The moisture-wicking technology in PROJECT gear keeps me comfortable through 26.2 miles. It's a game-changer."</p>
+          <div class="flex items-center gap-4">
+            <span class="text-sm font-bold text-gray-500">ACHIEVEMENTS:</span>
+            <div class="flex gap-2">
+              <span class="bg-green-500 text-white px-2 py-1 text-xs font-bold rounded">BOSTON</span>
+              <span class="bg-purple-500 text-white px-2 py-1 text-xs font-bold rounded">NYC</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Athlete 3 -->
+      <div class="bg-gray-50 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+        <div class="relative">
+          <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Jake Rodriguez" class="w-full h-64 object-cover" />
+          <div class="absolute top-4 left-4">
+            <span class="bg-green-500 text-white px-3 py-1 text-sm font-bold uppercase rounded">CrossFit</span>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-2xl font-bold mb-2">JAKE RODRIGUEZ</h3>
+          <p class="text-gray-600 mb-3">CrossFit Games Champion • Fitness Influencer</p>
+          <p class="text-gray-700 mb-4">"PROJECT understands what athletes need. The durability and flexibility of their gear is perfect for high-intensity training."</p>
+          <div class="flex items-center gap-4">
+            <span class="text-sm font-bold text-gray-500">ACHIEVEMENTS:</span>
+            <div class="flex gap-2">
+              <span class="bg-orange-500 text-white px-2 py-1 text-xs font-bold rounded">GAMES</span>
+              <span class="bg-red-500 text-white px-2 py-1 text-xs font-bold rounded">REGIONALS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Athlete 4 -->
+      <div class="bg-gray-50 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+        <div class="relative">
+          <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Emma Thompson" class="w-full h-64 object-cover" />
+          <div class="absolute top-4 left-4">
+            <span class="bg-purple-500 text-white px-3 py-1 text-sm font-bold uppercase rounded">Tennis</span>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-2xl font-bold mb-2">EMMA THOMPSON</h3>
+          <p class="text-gray-600 mb-3">Professional Tennis Player • WTA Top 10</p>
+          <p class="text-gray-700 mb-4">"The freedom of movement in PROJECT apparel allows me to play my best tennis. It's like a second skin."</p>
+          <div class="flex items-center gap-4">
+            <span class="text-sm font-bold text-gray-500">ACHIEVEMENTS:</span>
+            <div class="flex gap-2">
+              <span class="bg-blue-500 text-white px-2 py-1 text-xs font-bold rounded">WTA</span>
+              <span class="bg-green-500 text-white px-2 py-1 text-xs font-bold rounded">GRAND SLAM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Athlete 5 -->
+      <div class="bg-gray-50 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+        <div class="relative">
+          <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="David Kim" class="w-full h-64 object-cover" />
+          <div class="absolute top-4 left-4">
+            <span class="bg-indigo-500 text-white px-3 py-1 text-sm font-bold uppercase rounded">Cycling</span>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-2xl font-bold mb-2">DAVID KIM</h3>
+          <p class="text-gray-600 mb-3">Professional Cyclist • Tour de France Competitor</p>
+          <p class="text-gray-700 mb-4">"PROJECT's aerodynamic designs and comfort technology help me maintain peak performance through grueling stages."</p>
+          <div class="flex items-center gap-4">
+            <span class="text-sm font-bold text-gray-500">ACHIEVEMENTS:</span>
+            <div class="flex gap-2">
+              <span class="bg-yellow-400 text-black px-2 py-1 text-xs font-bold rounded">TDF</span>
+              <span class="bg-pink-500 text-white px-2 py-1 text-xs font-bold rounded">GIRO</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Athlete 6 -->
+      <div class="bg-gray-50 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+        <div class="relative">
+          <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Lisa Martinez" class="w-full h-64 object-cover" />
+          <div class="absolute top-4 left-4">
+            <span class="bg-teal-500 text-white px-3 py-1 text-sm font-bold uppercase rounded">Swimming</span>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-2xl font-bold mb-2">LISA MARTINEZ</h3>
+          <p class="text-gray-600 mb-3">Olympic Swimmer • World Championship Medalist</p>
+          <p class="text-gray-700 mb-4">"PROJECT's training gear is essential for my pool sessions. The quick-dry technology is incredible."</p>
+          <div class="flex items-center gap-4">
+            <span class="text-sm font-bold text-gray-500">ACHIEVEMENTS:</span>
+            <div class="flex gap-2">
+              <span class="bg-gold text-black px-2 py-1 text-xs font-bold rounded">OLYMPIC</span>
+              <span class="bg-silver text-black px-2 py-1 text-xs font-bold rounded">WORLDS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Athlete Stories -->
+<section class="w-full py-20 px-4 bg-gray-50">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold uppercase mb-6 tracking-wide">ATHLETE STORIES</h2>
+      <p class="text-xl text-gray-600">Behind the scenes with PROJECT athletes</p>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div class="bg-white p-8 rounded-lg shadow-sm">
+        <div class="flex items-center mb-6">
+          <img src="https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Marcus Johnson" class="w-16 h-16 rounded-full object-cover" />
+          <div class="ml-4">
+            <h3 class="text-xl font-bold">MARCUS JOHNSON</h3>
+            <p class="text-gray-600">Olympic Sprinter</p>
+          </div>
+        </div>
+        <h4 class="text-lg font-bold mb-4">"Breaking Barriers"</h4>
+        <p class="text-gray-700 mb-4">Growing up in inner-city Detroit, I never imagined I'd compete on the world's biggest stage. PROJECT has been with me since my college days, providing gear that performs when it matters most.</p>
+        <p class="text-gray-700 mb-6">The 2024 Olympics were the culmination of years of hard work, and having PROJECT gear that I could trust completely made all the difference in those crucial moments.</p>
+        <a href="/athletes/marcus-johnson" class="text-black font-bold uppercase tracking-wider hover:underline">Read Full Story →</a>
+      </div>
+      
+      <div class="bg-white p-8 rounded-lg shadow-sm">
+        <div class="flex items-center mb-6">
+          <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Sarah Chen" class="w-16 h-16 rounded-full object-cover" />
+          <div class="ml-4">
+            <h3 class="text-xl font-bold">SARAH CHEN</h3>
+            <p class="text-gray-600">Marathon Runner</p>
+          </div>
+        </div>
+        <h4 class="text-lg font-bold mb-4">"26.2 Miles of Trust"</h4>
+        <p class="text-gray-700 mb-4">Every marathon is a test of endurance, but the Boston Marathon is special. The weather, the course, the competition - everything has to be perfect, including your gear.</p>
+        <p class="text-gray-700 mb-6">PROJECT's moisture-wicking technology kept me comfortable through every mile, allowing me to focus on what matters most - crossing that finish line first.</p>
+        <a href="/athletes/sarah-chen" class="text-black font-bold uppercase tracking-wider hover:underline">Read Full Story →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Ambassador Program -->
+<section id="join-team" class="w-full py-20 px-4 bg-black">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold uppercase text-white mb-6 tracking-wide">AMBASSADOR PROGRAM</h2>
+      <p class="text-xl text-gray-300">Join the PROJECT family</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div>
+        <h3 class="text-2xl font-bold uppercase text-white mb-6">WHAT WE OFFER</h3>
+        <div class="space-y-6">
+          <div class="border-l-4 border-white pl-6">
+            <h4 class="text-lg font-bold text-white mb-2">EXCLUSIVE GEAR</h4>
+            <p class="text-gray-300">Access to our latest products before they hit the market, plus custom gear designed specifically for you.</p>
+          </div>
+          
+          <div class="border-l-4 border-white pl-6">
+            <h4 class="text-lg font-bold text-white mb-2">PERFORMANCE SUPPORT</h4>
+            <p class="text-gray-300">Dedicated support team to help optimize your training and competition performance.</p>
+          </div>
+          
+          <div class="border-l-4 border-white pl-6">
+            <h4 class="text-lg font-bold text-white mb-2">FINANCIAL BACKING</h4>
+            <p class="text-gray-300">Competitive sponsorship packages tailored to your level and achievements.</p>
+          </div>
+          
+          <div class="border-l-4 border-white pl-6">
+            <h4 class="text-lg font-bold text-white mb-2">COMMUNITY ACCESS</h4>
+            <p class="text-gray-300">Connect with other PROJECT athletes and access exclusive training camps and events.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div>
+        <h3 class="text-2xl font-bold uppercase text-white mb-6">WHAT WE LOOK FOR</h3>
+        <div class="space-y-4">
+          <div class="bg-gray-800 p-4 rounded-lg">
+            <h4 class="text-lg font-bold text-white mb-2">COMPETITIVE EXCELLENCE</h4>
+            <p class="text-gray-300">Proven track record in your sport at regional, national, or international level.</p>
+          </div>
+          
+          <div class="bg-gray-800 p-4 rounded-lg">
+            <h4 class="text-lg font-bold text-white mb-2">BRAND ALIGNMENT</h4>
+            <p class="text-gray-300">Values that align with PROJECT's commitment to performance, innovation, and integrity.</p>
+          </div>
+          
+          <div class="bg-gray-800 p-4 rounded-lg">
+            <h4 class="text-lg font-bold text-white mb-2">SOCIAL PRESENCE</h4>
+            <p class="text-gray-300">Active engagement with fans and followers across social media platforms.</p>
+          </div>
+          
+          <div class="bg-gray-800 p-4 rounded-lg">
+            <h4 class="text-lg font-bold text-white mb-2">GROWTH POTENTIAL</h4>
+            <p class="text-gray-300">Demonstrated potential for continued improvement and achievement in your sport.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="text-center mt-16">
+      <a href="/athletes/apply" class="bg-white text-black font-bold py-4 px-8 uppercase tracking-wider hover:bg-gray-200 transition-all duration-300">Apply Now</a>
+    </div>
+  </div>
+</section>
+
+<!-- Performance Stats -->
+<section class="w-full py-20 px-4 bg-white">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold uppercase mb-6 tracking-wide">PERFORMANCE RESULTS</h2>
+      <p class="text-xl text-gray-600">PROJECT athletes achieve extraordinary results</p>
+    </div>
+    
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div class="text-center">
+        <div class="text-4xl font-bold text-black mb-2">150+</div>
+        <p class="text-gray-600 uppercase tracking-wide">Sponsored Athletes</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="text-4xl font-bold text-black mb-2">45</div>
+        <p class="text-gray-600 uppercase tracking-wide">Olympic Medals</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="text-4xl font-bold text-black mb-2">200+</div>
+        <p class="text-gray-600 uppercase tracking-wide">World Records</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="text-4xl font-bold text-black mb-2">25</div>
+        <p class="text-gray-600 uppercase tracking-wide">Sports Represented</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="text-4xl font-bold text-black mb-2">95%</div>
+        <p class="text-gray-600 uppercase tracking-wide">Performance Improvement</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="text-4xl font-bold text-black mb-2">100%</div>
+        <p class="text-gray-600 uppercase tracking-wide">Athlete Satisfaction</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="text-4xl font-bold text-black mb-2">5</div>
+        <p class="text-gray-600 uppercase tracking-wide">Years Average Partnership</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="text-4xl font-bold text-black mb-2">50+</div>
+        <p class="text-gray-600 uppercase tracking-wide">Countries Represented</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<%- include('partials/footer') %>

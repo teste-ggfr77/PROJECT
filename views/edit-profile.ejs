@@ -1,0 +1,628 @@
+<%- include('partials/header') %>
+
+<style>
+/* Custom modern black theme */
+:root {
+    --bs-white: #ffffff;
+    --bs-gray-100: #f8f9fa;
+    --bs-gray-200: #edf2f7;
+    --bs-gray-300: #e2e8f0;
+    --bs-gray-400: #cbd5e0;
+    --bs-gray-500: #a0aec0;
+    --bs-gray-600: #718096;
+    --bs-gray-700: #4a5568;
+    --bs-gray-800: #2d3748;
+    --bs-gray-900: #1a202c;
+    --bs-dark: #000000;
+    --bs-primary: #000000;
+    --bs-primary-dark: #1a1a1a;
+    --bs-secondary: #4a5568;
+    --bs-success: #38a169;
+    --bs-info: #4299e1;
+    --bs-warning: #ecc94b;
+    --bs-danger: #e53e3e;
+    
+    /* Custom shadows */
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+    
+    /* Custom transitions */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+}
+
+.edit-profile-container {
+    max-width: 800px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+}
+
+.edit-profile-section {
+    background: var(--bs-white);
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--bs-gray-200);
+}
+
+.edit-profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--bs-gray-200);
+}
+
+.edit-profile-title {
+    font-size: 1.75rem;
+    color: var(--bs-dark);
+    margin: 0;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+}
+
+.profile-picture-edit-section {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.profile-picture-preview {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    border: 3px solid var(--bs-dark);
+    box-shadow: var(--shadow-md);
+    transition: transform var(--transition-normal);
+}
+
+.profile-picture-preview:hover {
+    transform: scale(1.02);
+}
+
+.form-group {
+    margin-bottom: 2rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--bs-gray-800);
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.text-muted {
+    color: var(--bs-gray-700) !important;  /* Darker muted text for better contrast */
+}
+
+.form-control {
+    border: 2px solid var(--bs-gray-200);
+    border-radius: 8px;
+    padding: 0.875rem 1rem;
+    width: 100%;
+    transition: all var(--transition-normal);
+    color: var(--bs-gray-900);
+    background-color: var(--bs-white);
+    font-size: 1rem;
+}
+
+.form-control:hover {
+    border-color: var(--bs-gray-400);
+}
+
+.form-control:focus {
+    border-color: var(--bs-dark);
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 16px 12px;
+    padding-right: 2.5rem;
+}
+
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.btn-edit-profile {
+    background: var(--bs-dark);
+    color: var(--bs-white);
+    border: none;
+    padding: 0.875rem 2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.btn-edit-profile:hover {
+    background: var(--bs-gray-800);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-cancel {
+    background: var(--bs-white);
+    color: var(--bs-dark);
+    border: 2px solid var(--bs-gray-200);
+    margin-left: 1rem;
+}
+
+.btn-cancel:hover {
+    background: var(--bs-gray-100);
+    color: var(--bs-dark);
+    border-color: var(--bs-gray-300);
+}
+
+/* Style the file input button */
+.profile-picture-edit-section button {
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--bs-white);
+    box-shadow: var(--shadow-md);
+    background: var(--bs-dark);
+    color: var(--bs-white);
+    transition: all var(--transition-normal);
+    z-index: 10;
+}
+
+.profile-picture-edit-section button:hover {
+    background: var(--bs-gray-800);
+    transform: scale(1.1);
+}
+
+/* Fancy horizontal rule */
+hr {
+    margin: 2.5rem 0;
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, var(--bs-gray-200), var(--bs-gray-300), var(--bs-gray-200));
+}
+
+/* Alert styles */
+.alert {
+    display: none; /* Hide by default */
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 2rem;
+    border: 1px solid transparent;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.alert.show {
+    display: block;
+    opacity: 1;
+}
+
+.alert-success {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: var(--bs-dark);
+}
+
+.alert-danger {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: var(--bs-dark);
+}
+
+/* Additional validation and form styles */
+.was-validated .form-control:invalid {
+    border-color: var(--bs-danger);
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.was-validated .form-control:valid {
+    border-color: var(--bs-success);
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M2.3 6.73.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.invalid-feedback {
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+    color: var(--bs-danger);
+    font-weight: 500;  /* Make error messages more visible */
+}
+
+.form-control.is-invalid ~ .invalid-feedback {
+    display: block;
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+    background-color: var(--bs-gray-100);
+    opacity: 1;
+}
+
+hr {
+    margin: 2rem 0;
+    border-color: var(--bs-gray-200);
+    opacity: 1;
+}
+
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.achievement-card {
+    background: var(--bs-white);
+    border: 1px solid var(--bs-gray-200);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.achievement-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.achievement-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--bs-gray-900);
+    color: var(--bs-white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+.achievement-card h5 {
+    margin-bottom: 0.5rem;
+    color: var(--bs-gray-900);
+}
+
+.achievement-card p {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .edit-profile-container {
+        padding: 1rem;
+        margin: 1.5rem auto;
+    }
+    
+    .edit-profile-section {
+        padding: 1.5rem;
+        border-radius: 12px;
+    }
+    
+    .edit-profile-title {
+        font-size: 1.5rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+}
+</style>
+
+<div class="edit-profile-container">
+    <div class="edit-profile-section">
+        <div class="edit-profile-header">
+            <h3 class="edit-profile-title">Edit Profile</h3>
+            <a href="/profile" class="btn-edit-profile btn-cancel">Back</a>
+        </div>
+          <% if (messages && messages.success && messages.success.length > 0) { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <%= messages.success %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <% } %>
+        
+        <% if (messages && messages.error && messages.error.length > 0) { %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <%= messages.error %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <% } %>
+        
+        <form action="/profile/update" method="POST" enctype="multipart/form-data" id="profileForm" novalidate>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            
+            <div class="profile-picture-edit-section">
+                <div class="position-relative d-inline-block">
+                    <img src="<%= user.profilePicture || '/images/default-profile.png' %>" 
+                         alt="Profile Picture" 
+                         id="profilePreview"
+                         class="profile-picture-preview">
+                    <button type="button" 
+                            class="btn btn-sm btn-primary position-absolute" 
+                            style="left: 0; bottom: 15%;"
+                            onclick="document.getElementById('profilePicture').click()">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                </div>
+                <div class="form-group">
+                    <input type="file" 
+                           class="form-control d-none" 
+                           id="profilePicture" 
+                           name="profilePicture" 
+                           accept="image/jpeg,image/png,image/gif"
+                           onchange="previewImage(this, document.getElementById('profilePreview'))">
+                    <small class="text-muted">Click the camera icon to change your profile picture. Max size: 5MB</small>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label" for="name">Full Name</label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="name" 
+                               name="name" 
+                               value="<%= user.name %>" 
+                               required
+                               minlength="2"
+                               pattern="[A-Za-z ]*"
+                               title="Please enter a valid name (letters and spaces only)">
+                        <div class="invalid-feedback">Please enter a valid name (minimum 2 characters, letters only)</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email Address</label>
+                        <input type="email" 
+                               class="form-control" 
+                               id="email" 
+                               name="email" 
+                               value="<%= user.email %>" 
+                               required>
+                        <div class="invalid-feedback">Please enter a valid email address</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label" for="contactNumber">Contact Number</label>
+                        <input type="tel" 
+                               class="form-control" 
+                               id="contactNumber" 
+                               name="contactNumber" 
+                               value="<%= user.contactNumber || '' %>"
+                               pattern="[0-9+\-\(\) ]*">
+                        <div class="invalid-feedback">Please enter a valid phone number</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label" for="preferredPaymentMethod">Preferred Payment Method</label>
+                        <select class="form-control" id="preferredPaymentMethod" name="preferredPaymentMethod">
+                            <option value="">Select payment method</option>
+                            <option value="credit_card" <%= user.preferredPaymentMethod === 'credit_card' ? 'selected' : '' %>>Credit Card</option>
+                            <option value="debit_card" <%= user.preferredPaymentMethod === 'debit_card' ? 'selected' : '' %>>Debit Card</option>
+                            <option value="paypal" <%= user.preferredPaymentMethod === 'paypal' ? 'selected' : '' %>>PayPal</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="shippingAddress">Shipping Address</label>
+                <textarea class="form-control" 
+                          id="shippingAddress" 
+                          name="shippingAddress" 
+                          rows="3"><%= user.shippingAddress || '' %></textarea>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h4 class="mb-3">Achievements & Challenges</h4>
+                    <div class="achievements-grid">
+                        <% if (user.challenges && user.challenges.length > 0) { %>
+                            <% user.challenges.forEach(challenge => { %>
+                                <div class="achievement-card">
+                                    <div class="achievement-icon">
+                                        <% if (challenge.type === 'purchase') { %>
+                                            <i class="fas fa-shopping-bag"></i>
+                                        <% } else if (challenge.type === 'review') { %>
+                                            <i class="fas fa-star"></i>
+                                        <% } else if (challenge.type === 'profile') { %>
+                                            <i class="fas fa-user-check"></i>
+                                        <% } else if (challenge.type === 'referral') { %>
+                                            <i class="fas fa-users"></i>
+                                        <% } %>
+                                    </div>
+                                    <h5><%= challenge.name %></h5>
+                                    <p class="text-muted"><%= challenge.description %></p>
+                                    <small class="text-success">
+                                        Completed on <%= new Date(challenge.completedAt).toLocaleDateString() %>
+                                    </small>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <p class="text-muted">No challenges completed yet. Start shopping and reviewing products to earn achievements!</p>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="form-label" for="currentPassword">Current Password</label>
+                        <input type="password" 
+                               class="form-control"                               id="currentPassword" 
+                               name="currentPassword" 
+                               placeholder="Required for changing email or password">
+                        <div class="invalid-feedback">Password required to change email or password</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="form-label" for="newPassword">New Password (Optional)</label>
+                        <input type="password" 
+                               class="form-control" 
+                               id="newPassword" 
+                               name="newPassword" 
+                               minlength="6"
+                               placeholder="Leave blank to keep current">
+                        <div class="invalid-feedback">Password must be at least 6 characters</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="form-label" for="confirmPassword">Confirm New Password</label>
+                        <input type="password" 
+                               class="form-control" 
+                               id="confirmPassword" 
+                               name="confirmPassword" 
+                               placeholder="Confirm new password">
+                        <div class="invalid-feedback">Passwords do not match</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-end mt-4">
+                <button type="submit" class="btn-edit-profile">Save Changes</button>
+                <a href="/profile" class="btn-edit-profile btn-cancel">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function previewImage(input, previewElement) {
+    if (input.files && input.files[0]) {
+        // Validate file size
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        if (input.files[0].size > maxSize) {
+            alert('File size cannot exceed 5MB');
+            input.value = '';
+            return;
+        }
+
+        // Validate file type
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        if (!allowedTypes.includes(input.files[0].type)) {
+            alert('Only JPEG, PNG and GIF images are allowed');
+            input.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewElement.src = e.target.result;
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// Form validation
+const form = document.getElementById('profileForm');
+const password = document.getElementById('newPassword');
+const confirmPassword = document.getElementById('confirmPassword');
+const currentPassword = document.getElementById('currentPassword');
+const emailInput = document.getElementById('email');
+const initialEmail = emailInput.value.trim();
+
+form.addEventListener('submit', function(e) {
+    let isValid = true;
+
+    // Reset previous validation state
+    form.classList.remove('was-validated');
+    
+    // Validate name
+    const name = document.getElementById('name');
+    if (!name.value.trim() || name.value.length < 2 || !/^[A-Za-z ]*$/.test(name.value)) {
+        isValid = false;
+        name.classList.add('is-invalid');
+    }
+
+    // Validate email
+    if (!emailInput.value.trim() || !/^[\w+.-]+@[\w.-]+\.\w{2,}$/.test(emailInput.value)) {
+        isValid = false;
+        emailInput.classList.add('is-invalid');
+    }
+
+    // Validate phone number if provided
+    const phone = document.getElementById('contactNumber');
+    if (phone.value && !/^[0-9+\-\(\) ]*$/.test(phone.value)) {
+        isValid = false;
+        phone.classList.add('is-invalid');
+    }
+
+    // Password validation
+    if (password.value || confirmPassword.value) {
+        if (password.value !== confirmPassword.value) {
+            isValid = false;
+            confirmPassword.classList.add('is-invalid');
+        } else if (password.value.length < 6) {
+            isValid = false;
+            password.classList.add('is-invalid');
+        }
+    }
+    
+    // Current password is only required when changing email or password
+    const isEmailChanged = emailInput.value.trim() !== initialEmail;
+    const isChangingPassword = password.value || confirmPassword.value;
+    
+    if ((isEmailChanged || isChangingPassword) && !currentPassword.value) {
+        isValid = false;
+        currentPassword.classList.add('is-invalid');
+        currentPassword.nextElementSibling.textContent = 'Password required to change email or password';
+    } else {
+        currentPassword.classList.remove('is-invalid');
+        currentPassword.nextElementSibling.textContent = 'Please enter your current password';
+    }
+
+    if (!isValid) {
+        e.preventDefault();
+        form.classList.add('was-validated');
+    }
+});
+
+// Real-time password match validation
+confirmPassword.addEventListener('input', function() {
+    if (password.value !== this.value) {
+        this.setCustomValidity('Passwords do not match');
+        this.classList.add('is-invalid');
+    } else {
+        this.setCustomValidity('');
+        this.classList.remove('is-invalid');
+    }
+});
+</script>
+
+<%- include('partials/footer') %>

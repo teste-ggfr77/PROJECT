@@ -1,0 +1,172 @@
+<%- include('partials/header') %>
+
+<!-- Hero Section -->
+<section class="relative w-full h-96 overflow-hidden">
+  <!-- Background Image -->
+  <img src="/img/coming.png" alt="<%= title %>" class="absolute w-full h-full object-cover z-0" />
+  <!-- Dark Overlay -->
+  <div class="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
+  <!-- Content -->
+  <div class="relative z-20 flex flex-col items-center justify-center text-center h-full px-4">
+    <h1 class="text-white text-4xl md:text-6xl font-bold uppercase drop-shadow-lg tracking-wider mb-4"><%= title %></h1>
+    <p class="text-white/80 tracking-wide text-base md:text-lg drop-shadow-sm mb-8">Built for Performance</p>
+  </div>
+</section>
+
+<!-- Products Grid -->
+<section class="w-full bg-white py-20 px-4">
+  <div class="max-w-7xl mx-auto">
+    <% if (products && products.length > 0) { %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <% products.forEach(product => { %>
+        <div class="group cursor-pointer">
+          <div class="relative overflow-hidden mb-4">
+            <img src="/img/coming.png" alt="<%= product.name %>" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+          </div>
+          <div class="text-center">
+            <p class="text-sm text-gray-500 uppercase tracking-wider mb-1"><%= product.category %></p>
+            <h3 class="text-lg font-bold uppercase tracking-wide mb-2"><%= product.name %></h3>
+            <p class="text-xl font-semibold"><%= product.price %> DH</p>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <!-- Default Products based on category -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <% 
+        let defaultProducts = [];
+        if (category === 'tops') {
+          defaultProducts = gender === 'women' ? [
+            {img: '/img/coming.png', name: 'PERFORMANCE TANK', price: '42', category: 'Women\'s Tops'},
+            {img: '/img/coming.png', name: 'CROP TOP', price: '35', category: 'Women\'s Tops'},
+            {img: '/img/coming.png', name: 'LONG SLEEVE TEE', price: '52', category: 'Women\'s Tops'},
+            {img: '/img/coming.png', name: 'MUSCLE TEE', price: '38', category: 'Women\'s Tops'},
+          ] : [
+            {img: '/img/coming.png', name: 'PERFORMANCE TEE', price: '45', category: 'Men\'s Tops'},
+            {img: '/img/coming.png', name: 'TANK TOP', price: '38', category: 'Men\'s Tops'},
+            {img: '/img/coming.png', name: 'LONG SLEEVE TEE', price: '52', category: 'Men\'s Tops'},
+            {img: '/img/coming.png', name: 'MUSCLE TEE', price: '42', category: 'Men\'s Tops'},
+          ];
+        } else if (category === 'shorts') {
+          defaultProducts = gender === 'women' ? [
+            {img: '/img/coming.png', name: 'TRAINING SHORTS', price: '48', category: 'Women\'s Shorts'},
+            {img: '/img/coming.png', name: 'BIKE SHORTS', price: '45', category: 'Women\'s Shorts'},
+            {img: '/img/coming.png', name: 'HIGH-WAIST SHORTS', price: '52', category: 'Women\'s Shorts'},
+            {img: '/img/coming.png', name: 'COMPRESSION SHORTS', price: '48', category: 'Women\'s Shorts'},
+          ] : [
+            {img: '/img/coming.png', name: 'TRAINING SHORTS', price: '55', category: 'Men\'s Shorts'},
+            {img: '/img/coming.png', name: 'COMPRESSION SHORTS', price: '48', category: 'Men\'s Shorts'},
+            {img: '/img/coming.png', name: 'MESH SHORTS', price: '52', category: 'Men\'s Shorts'},
+            {img: '/img/coming.png', name: 'BOARD SHORTS', price: '58', category: 'Men\'s Shorts'},
+          ];
+        } else if (category === 'pants') {
+          defaultProducts = [
+            {img: '/img/coming.png', name: 'JOGGER PANTS', price: '75', category: 'Men\'s Pants'},
+            {img: '/img/coming.png', name: 'TRACK PANTS', price: '68', category: 'Men\'s Pants'},
+            {img: '/img/coming.png', name: 'SWEATPANTS', price: '65', category: 'Men\'s Pants'},
+            {img: '/img/coming.png', name: 'PERFORMANCE PANTS', price: '78', category: 'Men\'s Pants'},
+          ];
+        } else if (category === 'leggings') {
+          defaultProducts = [
+            {img: '/img/coming.png', name: 'HIGH-WAIST LEGGINGS', price: '65', category: 'Women\'s Leggings'},
+            {img: '/img/coming.png', name: 'COMPRESSION LEGGINGS', price: '68', category: 'Women\'s Leggings'},
+            {img: '/img/coming.png', name: 'CAPRI LEGGINGS', price: '58', category: 'Women\'s Leggings'},
+            {img: '/img/coming.png', name: 'SEAMLESS LEGGINGS', price: '72', category: 'Women\'s Leggings'},
+          ];
+        } else if (category === 'sports-bras') {
+          defaultProducts = [
+            {img: '/img/coming.png', name: 'SPORTS BRA', price: '38', category: 'Women\'s Sports Bras'},
+            {img: '/img/coming.png', name: 'HIGH SUPPORT BRA', price: '45', category: 'Women\'s Sports Bras'},
+            {img: '/img/coming.png', name: 'SEAMLESS BRA', price: '42', category: 'Women\'s Sports Bras'},
+            {img: '/img/coming.png', name: 'LONGLINE BRA', price: '48', category: 'Women\'s Sports Bras'},
+          ];
+        } else if (category === 'hoodies') {
+          defaultProducts = gender === 'women' ? [
+            {img: '/img/coming.png', name: 'PERFORMANCE HOODIE', price: '75', category: 'Women\'s Hoodies'},
+            {img: '/img/coming.png', name: 'ZIP-UP HOODIE', price: '82', category: 'Women\'s Hoodies'},
+            {img: '/img/coming.png', name: 'CROP HOODIE', price: '68', category: 'Women\'s Hoodies'},
+            {img: '/img/coming.png', name: 'OVERSIZED HOODIE', price: '78', category: 'Women\'s Hoodies'},
+          ] : [
+            {img: '/img/coming.png', name: 'PERFORMANCE HOODIE', price: '85', category: 'Men\'s Hoodies'},
+            {img: '/img/coming.png', name: 'ZIP-UP HOODIE', price: '88', category: 'Men\'s Hoodies'},
+            {img: '/img/coming.png', name: 'PULLOVER HOODIE', price: '82', category: 'Men\'s Hoodies'},
+            {img: '/img/coming.png', name: 'TECH HOODIE', price: '95', category: 'Men\'s Hoodies'},
+          ];
+        }
+        %>
+        <% defaultProducts.forEach(product => { %>
+        <div class="group cursor-pointer">
+          <div class="relative overflow-hidden mb-4">
+            <img src="/img/coming.png" alt="<%= product.name %>" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+          </div>
+          <div class="text-center">
+            <p class="text-sm text-gray-500 uppercase tracking-wider mb-1"><%= product.category %></p>
+            <h3 class="text-lg font-bold uppercase tracking-wide mb-2"><%= product.name %></h3>
+            <p class="text-xl font-semibold"><%= product.price %> DH</p>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<!-- Technology Section -->
+<section class="relative w-full py-20 px-4 bg-gray-900">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-white text-4xl md:text-5xl font-bold uppercase mb-6 tracking-wide">PERFORMANCE TECHNOLOGY</h2>
+      <p class="text-white/80 text-xl">Built with cutting-edge materials and construction</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <div class="text-center">
+        <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6">
+          <i class="fas fa-tint text-2xl text-gray-900"></i>
+        </div>
+        <h3 class="text-white text-xl font-bold uppercase mb-4 tracking-wide">MOISTURE-WICKING</h3>
+        <p class="text-white/70 leading-relaxed">Advanced fabric technology pulls sweat away from your skin, keeping you dry and comfortable during intense workouts.</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6">
+          <i class="fas fa-shield-alt text-2xl text-gray-900"></i>
+        </div>
+        <h3 class="text-white text-xl font-bold uppercase mb-4 tracking-wide">ANTI-ODOR</h3>
+        <p class="text-white/70 leading-relaxed">Built-in antimicrobial treatment prevents odor-causing bacteria, so your gear stays fresh workout after workout.</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6">
+          <i class="fas fa-expand-arrows-alt text-2xl text-gray-900"></i>
+        </div>
+        <h3 class="text-white text-xl font-bold uppercase mb-4 tracking-wide">4-WAY STRETCH</h3>
+        <p class="text-white/70 leading-relaxed">Engineered for unrestricted movement in all directions, giving you the freedom to perform at your best.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Styles -->
+<style>
+/* Custom font styling to match NOBULL */
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+/* Button hover effects */
+.transition-all {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+</style>
+
+<!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<%- include('partials/footer') %>

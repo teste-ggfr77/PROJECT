@@ -1,0 +1,567 @@
+<%- include('partials/header') %>
+
+<style>
+/* Black and White Checkout Design */
+.checkout-page {
+    max-width: 1000px;
+    margin: 120px auto 60px;
+    padding: 0 20px;
+    font-family: Helvetica, Arial, sans-serif;
+    background: #fff;
+}
+
+.checkout-header {
+    text-align: center;
+    margin-bottom: 50px;
+    border-bottom: 3px solid #000;
+    padding-bottom: 25px;
+}
+
+.checkout-title {
+    font-size: 36px;
+    font-weight: 800;
+    color: #000;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.checkout-container {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 40px;
+    align-items: start;
+}
+
+.checkout-form {
+    background: #fff;
+    border: 3px solid #000;
+    padding: 40px;
+}
+
+.form-section {
+    margin-bottom: 40px;
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #000;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #000;
+    padding-bottom: 10px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid #000;
+    background: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    background: #f8f8f8;
+    border-color: #000;
+}
+
+.form-textarea {
+    min-height: 120px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.order-summary {
+    background: #fff;
+    border: 3px solid #000;
+    padding: 30px;
+    position: sticky;
+    top: 140px;
+}
+
+.summary-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #000;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #000;
+    padding-bottom: 10px;
+}
+
+.order-items {
+    margin-bottom: 25px;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.item-info {
+    flex: 1;
+}
+
+.item-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 5px;
+}
+
+.item-details {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+}
+
+.item-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    font-weight: 600;
+    color: #000;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.summary-row:last-child {
+    border-bottom: none;
+}
+
+.summary-row.total {
+    border-top: 3px solid #000;
+    margin-top: 20px;
+    padding-top: 20px;
+    font-weight: 800;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.place-order-btn {
+    width: 100%;
+    background: #000;
+    color: #fff;
+    border: 3px solid #000;
+    padding: 20px;
+    font-size: 18px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 30px;
+}
+
+.place-order-btn:hover {
+    background: #fff;
+    color: #000;
+}
+
+.place-order-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.error-alert {
+    background: #000;
+    color: #fff;
+    border: 3px solid #000;
+    padding: 25px;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+.error-title {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.error-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.error-list li {
+    padding: 5px 0;
+    border-bottom: 1px solid #333;
+}
+
+.error-list li:last-child {
+    border-bottom: none;
+}
+
+.return-btn {
+    background: #fff;
+    color: #000;
+    border: 2px solid #fff;
+    padding: 12px 24px;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.return-btn:hover {
+    background: transparent;
+    color: #fff;
+    text-decoration: none;
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 80px 20px;
+    background: #fff;
+    border: 3px solid #000;
+}
+
+.empty-message {
+    font-size: 20px;
+    color: #000;
+    margin-bottom: 30px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.continue-btn {
+    background: #000;
+    color: #fff;
+    border: 3px solid #000;
+    padding: 15px 30px;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.continue-btn:hover {
+    background: #fff;
+    color: #000;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .checkout-page {
+        margin: 100px auto 40px;
+        padding: 0 15px;
+    }
+
+    .checkout-title {
+        font-size: 28px;
+    }
+
+    .checkout-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .checkout-form,
+    .order-summary {
+        padding: 25px;
+    }
+
+    .order-summary {
+        position: static;
+    }
+
+    .section-title {
+        font-size: 18px;
+    }
+
+    .form-input {
+        padding: 12px 15px;
+        font-size: 14px;
+    }
+
+    .place-order-btn {
+        padding: 18px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .checkout-form,
+    .order-summary {
+        padding: 20px;
+    }
+
+    .item-name {
+        font-size: 14px;
+    }
+
+    .item-details {
+        font-size: 12px;
+    }
+
+    .item-price {
+        font-size: 14px;
+    }
+
+    .summary-row {
+        font-size: 14px;
+    }
+
+    .summary-row.total {
+        font-size: 18px;
+    }
+}
+</style>
+
+<div class="checkout-page">
+    <div class="checkout-header">
+        <h1 class="checkout-title">Checkout</h1>
+    </div>
+
+    <% if (cart && cart.items && cart.items.length > 0) { %>
+        <% if (typeof stockErrors !== 'undefined' && stockErrors.length > 0) { %>
+            <div class="error-alert">
+                <div class="error-title">Cannot proceed with checkout:</div>
+                <ul class="error-list">
+                    <% stockErrors.forEach(error => { %>
+                        <li><%= error %></li>
+                    <% }); %>
+                </ul>
+                <a href="/cart" class="return-btn">Return to Cart</a>
+            </div>
+        <% } %>
+
+        <div class="checkout-container">
+            <div class="checkout-form">
+                <% if (typeof stockErrors === 'undefined' || stockErrors.length === 0) { %>
+                    <form action="/cart/checkout" method="POST" id="checkout-form">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        
+                        <div class="form-section">
+                            <h2 class="section-title">Shipping Information</h2>
+                            
+                            <div class="form-group">
+                                <label for="address" class="form-label">Shipping Address *</label>
+                                <textarea class="form-input form-textarea" id="address" name="address" required placeholder="Enter your complete shipping address..."></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone" class="form-label">Phone Number *</label>
+                                <input type="tel" class="form-input" id="phone" name="phone" required placeholder="Enter your phone number">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="place-order-btn" id="place-order">
+                            Place Order
+                        </button>
+                    </form>
+                <% } %>
+            </div>
+
+            <div class="order-summary">
+                <h2 class="summary-title">Order Summary</h2>
+                
+                <div class="order-items">
+                    <% cart.items.forEach(item => { %>
+                        <div class="order-item">
+                            <div class="item-info">
+                                <div class="item-name"><%= item.name %></div>
+                                <div class="item-details">
+                                    Qty: <%= item.qty %> 
+                                    <% if (item.color) { %>| Color: <%= item.color %><% } %>
+                                    <% if (item.size) { %>| Size: <%= item.size %><% } %>
+                                </div>
+                            </div>
+                            <div class="item-price">$<%= (item.price * item.qty).toLocaleString() %></div>
+                        </div>
+                    <% }) %>
+                </div>
+
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>$<%= subtotal.toLocaleString() %></span>
+                </div>
+                
+                <% if (cart.discount > 0) { %>
+                    <div class="summary-row">
+                        <span>Discount</span>
+                        <span>-$<%= cart.discount.toLocaleString() %></span>
+                    </div>
+                <% } %>
+                
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span>Free</span>
+                </div>
+                
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span>$<%= total.toLocaleString() %></span>
+                </div>
+            </div>
+        </div>
+    <% } else { %>
+        <div class="empty-cart">
+            <p class="empty-message">Your cart is empty</p>
+            <a href="/products" class="continue-btn">Continue Shopping</a>
+        </div>
+    <% } %>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('checkout-form');
+    const placeOrderBtn = document.getElementById('place-order');
+    
+    if (form && placeOrderBtn) {
+        form.addEventListener('submit', function(e) {
+            // Validate form
+            const address = document.getElementById('address').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            
+            if (!address || !phone) {
+                e.preventDefault();
+                showNotification('Please fill in all required fields.', 'error');
+                return;
+            }
+            
+            // Show loading state
+            placeOrderBtn.disabled = true;
+            placeOrderBtn.textContent = 'Processing Order...';
+            placeOrderBtn.style.opacity = '0.7';
+            
+            // Show processing notification
+            showNotification('Processing your order...', 'info');
+        });
+    }
+    
+    // Form validation
+    const inputs = document.querySelectorAll('.form-input');
+    inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.hasAttribute('required') && !this.value.trim()) {
+                this.style.borderColor = '#ff0000';
+            } else {
+                this.style.borderColor = '#000';
+            }
+        });
+        
+        input.addEventListener('input', function() {
+            if (this.style.borderColor === 'rgb(255, 0, 0)') {
+                this.style.borderColor = '#000';
+            }
+        });
+    });
+});
+
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <span>${message}</span>
+            <button onclick="this.parentElement.parentElement.remove()">&times;</button>
+        </div>
+    `;
+    
+    const bgColor = type === 'error' ? '#ff0000' : type === 'info' ? '#666' : '#000';
+    
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${bgColor};
+        color: white;
+        padding: 15px 20px;
+        z-index: 10000;
+        font-weight: 600;
+        border: 2px solid ${bgColor};
+        animation: slideInRight 0.3s ease-out;
+        max-width: 350px;
+    `;
+    
+    const content = notification.querySelector('.notification-content');
+    content.style.cssText = `
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+    `;
+    
+    const button = notification.querySelector('button');
+    button.style.cssText = `
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 0;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+    `;
+    
+    if (!document.querySelector('#notification-styles')) {
+        const style = document.createElement('style');
+        style.id = 'notification-styles';
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.style.animation = 'slideInRight 0.3s ease-out reverse';
+            setTimeout(() => notification.remove(), 300);
+        }
+    }, type === 'info' ? 2000 : 4000);
+}
+</script>
+
+<%- include('partials/footer') %>

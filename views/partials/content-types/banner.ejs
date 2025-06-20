@@ -1,0 +1,33 @@
+<%# Banner Section %>
+<section 
+    class="section-base banner-section <%= content.layout %> <%= content.animation %> <%= content.customClass %>"
+    style="
+        --section-bg-color: <%= content.backgroundColor || 'transparent' %>;
+        --section-text-color: <%= content.textColor || 'inherit' %>;
+        --section-padding-top: <%= content.spacing?.paddingTop || '1rem' %>;
+        --section-padding-bottom: <%= content.spacing?.paddingBottom || '1rem' %>;
+        --section-margin-top: <%= content.spacing?.marginTop || '0' %>;
+        --section-margin-bottom: <%= content.spacing?.marginBottom || '0' %>;"
+
+    <% if (content.responsive?.hideOnMobile) { %>data-hide-on-mobile="true"<% } %>
+    <% if (content.responsive?.hideOnTablet) { %>data-hide-on-tablet="true"<% } %>
+    <% if (content.responsive?.hideOnDesktop) { %>data-hide-on-desktop="true"<% } %>>
+
+    <div class="banner-background" <% if (content.image) { %>style="background-image: url('<%= content.image %>');"<% } %>>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 text-center py-4">
+                    <h3 class="banner-title mb-2"><%= content.title %></h3>
+                    <% if (content.subtitle) { %>
+                        <p class="banner-subtitle mb-3"><%= content.subtitle %></p>
+                    <% } %>
+                    <% if (content.buttonText && content.buttonLink) { %>
+                        <a href="<%= content.buttonLink %>" class="btn btn-light">
+                            <%= content.buttonText %>
+                        </a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

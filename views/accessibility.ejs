@@ -1,0 +1,489 @@
+<%- include('partials/header') %>
+
+<!-- Hero Section -->
+<section class="relative w-full h-[50vh] overflow-hidden">
+  <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Accessibility" class="absolute inset-0 w-full h-full object-cover z-0" />
+  <div class="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
+  <div class="relative z-20 flex flex-col items-center justify-center text-center h-full px-4">
+    <h1 class="text-white text-5xl md:text-6xl font-bold uppercase drop-shadow-lg tracking-wider mb-4">ACCESSIBILITY</h1>
+    <p class="text-white/90 tracking-wide text-xl drop-shadow-sm font-medium">Inclusive Design for Everyone</p>
+  </div>
+</section>
+
+<!-- Accessibility Content -->
+<section class="w-full py-20 px-4 bg-white">
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-12">
+      <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
+        <p class="text-gray-700 leading-relaxed">
+          <strong>Last Updated:</strong> December 15, 2023<br>
+          PROJECT is committed to ensuring digital accessibility for people with disabilities. We are continually improving the user experience for everyone and applying the relevant accessibility standards.
+        </p>
+      </div>
+    </div>
+
+    <div class="space-y-12">
+      <!-- Our Commitment -->
+      <div>
+        <h2 class="text-3xl font-bold uppercase mb-6 tracking-wide">OUR COMMITMENT</h2>
+        
+        <p class="text-gray-700 mb-6">At PROJECT, we believe that everyone should have equal access to information and functionality. We are committed to providing a website that is accessible to the widest possible audience, regardless of technology or ability.</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-green-50 p-6 rounded-lg text-center">
+            <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold mb-3">VISUAL ACCESSIBILITY</h3>
+            <p class="text-gray-600 text-sm">High contrast, scalable text, and screen reader compatibility</p>
+          </div>
+          
+          <div class="bg-blue-50 p-6 rounded-lg text-center">
+            <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold mb-3">COGNITIVE SUPPORT</h3>
+            <p class="text-gray-600 text-sm">Clear navigation, consistent layout, and helpful error messages</p>
+          </div>
+          
+          <div class="bg-purple-50 p-6 rounded-lg text-center">
+            <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold mb-3">MOTOR ACCESSIBILITY</h3>
+            <p class="text-gray-600 text-sm">Keyboard navigation and large clickable areas</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Standards Compliance -->
+      <div>
+        <h2 class="text-3xl font-bold uppercase mb-6 tracking-wide">STANDARDS COMPLIANCE</h2>
+        
+        <p class="text-gray-700 mb-6">We strive to conform to the Web Content Accessibility Guidelines (WCAG) 2.1 Level AA standards. These guidelines explain how to make web content more accessible for people with disabilities.</p>
+        
+        <div class="space-y-6">
+          <div class="bg-gray-50 p-6 rounded-lg">
+            <h3 class="text-xl font-bold mb-4">WCAG 2.1 Level AA Compliance</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="text-lg font-bold mb-3">Perceivable</h4>
+                <ul class="list-disc list-inside text-gray-700 space-y-1 text-sm">
+                  <li>Text alternatives for images</li>
+                  <li>Captions for videos</li>
+                  <li>Sufficient color contrast</li>
+                  <li>Resizable text up to 200%</li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 class="text-lg font-bold mb-3">Operable</h4>
+                <ul class="list-disc list-inside text-gray-700 space-y-1 text-sm">
+                  <li>Keyboard accessible</li>
+                  <li>No seizure-inducing content</li>
+                  <li>Sufficient time limits</li>
+                  <li>Clear navigation</li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 class="text-lg font-bold mb-3">Understandable</h4>
+                <ul class="list-disc list-inside text-gray-700 space-y-1 text-sm">
+                  <li>Readable text</li>
+                  <li>Predictable functionality</li>
+                  <li>Input assistance</li>
+                  <li>Error identification</li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 class="text-lg font-bold mb-3">Robust</h4>
+                <ul class="list-disc list-inside text-gray-700 space-y-1 text-sm">
+                  <li>Compatible with assistive technologies</li>
+                  <li>Valid HTML markup</li>
+                  <li>Future-proof design</li>
+                  <li>Cross-platform support</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accessibility Features -->
+      <div>
+        <h2 class="text-3xl font-bold uppercase mb-6 tracking-wide">ACCESSIBILITY FEATURES</h2>
+        
+        <div class="space-y-8">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div>
+              <h3 class="text-xl font-bold mb-4">Visual Accessibility</h3>
+              <div class="space-y-4">
+                <div class="border-l-4 border-green-500 pl-4">
+                  <h4 class="font-bold">High Contrast Design</h4>
+                  <p class="text-gray-700 text-sm">Color combinations meet WCAG AA contrast ratios (4.5:1 for normal text, 3:1 for large text)</p>
+                </div>
+                
+                <div class="border-l-4 border-green-500 pl-4">
+                  <h4 class="font-bold">Scalable Text</h4>
+                  <p class="text-gray-700 text-sm">Text can be resized up to 200% without loss of functionality</p>
+                </div>
+                
+                <div class="border-l-4 border-green-500 pl-4">
+                  <h4 class="font-bold">Alternative Text</h4>
+                  <p class="text-gray-700 text-sm">All images include descriptive alt text for screen readers</p>
+                </div>
+                
+                <div class="border-l-4 border-green-500 pl-4">
+                  <h4 class="font-bold">Focus Indicators</h4>
+                  <p class="text-gray-700 text-sm">Clear visual focus indicators for keyboard navigation</p>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h3 class="text-xl font-bold mb-4">Navigation & Interaction</h3>
+              <div class="space-y-4">
+                <div class="border-l-4 border-blue-500 pl-4">
+                  <h4 class="font-bold">Keyboard Navigation</h4>
+                  <p class="text-gray-700 text-sm">Full site functionality available via keyboard</p>
+                </div>
+                
+                <div class="border-l-4 border-blue-500 pl-4">
+                  <h4 class="font-bold">Skip Links</h4>
+                  <p class="text-gray-700 text-sm">Skip to main content links for efficient navigation</p>
+                </div>
+                
+                <div class="border-l-4 border-blue-500 pl-4">
+                  <h4 class="font-bold">Consistent Layout</h4>
+                  <p class="text-gray-700 text-sm">Predictable page structure and navigation patterns</p>
+                </div>
+                
+                <div class="border-l-4 border-blue-500 pl-4">
+                  <h4 class="font-bold">Clear Headings</h4>
+                  <p class="text-gray-700 text-sm">Logical heading structure for screen reader navigation</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div>
+              <h3 class="text-xl font-bold mb-4">Forms & Input</h3>
+              <div class="space-y-4">
+                <div class="border-l-4 border-purple-500 pl-4">
+                  <h4 class="font-bold">Form Labels</h4>
+                  <p class="text-gray-700 text-sm">All form fields have clear, descriptive labels</p>
+                </div>
+                
+                <div class="border-l-4 border-purple-500 pl-4">
+                  <h4 class="font-bold">Error Messages</h4>
+                  <p class="text-gray-700 text-sm">Clear, specific error messages with correction guidance</p>
+                </div>
+                
+                <div class="border-l-4 border-purple-500 pl-4">
+                  <h4 class="font-bold">Required Fields</h4>
+                  <p class="text-gray-700 text-sm">Required form fields are clearly marked</p>
+                </div>
+                
+                <div class="border-l-4 border-purple-500 pl-4">
+                  <h4 class="font-bold">Input Assistance</h4>
+                  <p class="text-gray-700 text-sm">Help text and format examples provided</p>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h3 class="text-xl font-bold mb-4">Technical Implementation</h3>
+              <div class="space-y-4">
+                <div class="border-l-4 border-orange-500 pl-4">
+                  <h4 class="font-bold">Semantic HTML</h4>
+                  <p class="text-gray-700 text-sm">Proper HTML structure and ARIA labels</p>
+                </div>
+                
+                <div class="border-l-4 border-orange-500 pl-4">
+                  <h4 class="font-bold">Screen Reader Support</h4>
+                  <p class="text-gray-700 text-sm">Compatible with JAWS, NVDA, and VoiceOver</p>
+                </div>
+                
+                <div class="border-l-4 border-orange-500 pl-4">
+                  <h4 class="font-bold">Mobile Accessibility</h4>
+                  <p class="text-gray-700 text-sm">Touch-friendly design with adequate target sizes</p>
+                </div>
+                
+                <div class="border-l-4 border-orange-500 pl-4">
+                  <h4 class="font-bold">Browser Compatibility</h4>
+                  <p class="text-gray-700 text-sm">Works across modern browsers and assistive technologies</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Assistive Technologies -->
+      <div>
+        <h2 class="text-3xl font-bold uppercase mb-6 tracking-wide">SUPPORTED ASSISTIVE TECHNOLOGIES</h2>
+        
+        <p class="text-gray-700 mb-6">Our website is designed to work with the following assistive technologies:</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="bg-gray-50 p-6 rounded-lg text-center">
+            <h3 class="text-lg font-bold mb-3">SCREEN READERS</h3>
+            <ul class="text-gray-600 text-sm space-y-1">
+              <li>JAWS</li>
+              <li>NVDA</li>
+              <li>VoiceOver</li>
+              <li>TalkBack</li>
+            </ul>
+          </div>
+          
+          <div class="bg-gray-50 p-6 rounded-lg text-center">
+            <h3 class="text-lg font-bold mb-3">VOICE CONTROL</h3>
+            <ul class="text-gray-600 text-sm space-y-1">
+              <li>Dragon NaturallySpeaking</li>
+              <li>Voice Control (iOS/macOS)</li>
+              <li>Voice Access (Android)</li>
+              <li>Windows Speech Recognition</li>
+            </ul>
+          </div>
+          
+          <div class="bg-gray-50 p-6 rounded-lg text-center">
+            <h3 class="text-lg font-bold mb-3">MAGNIFICATION</h3>
+            <ul class="text-gray-600 text-sm space-y-1">
+              <li>ZoomText</li>
+              <li>MAGic</li>
+              <li>Built-in browser zoom</li>
+              <li>Operating system magnifiers</li>
+            </ul>
+          </div>
+          
+          <div class="bg-gray-50 p-6 rounded-lg text-center">
+            <h3 class="text-lg font-bold mb-3">ALTERNATIVE INPUT</h3>
+            <ul class="text-gray-600 text-sm space-y-1">
+              <li>Switch devices</li>
+              <li>Eye-tracking systems</li>
+              <li>Head pointers</li>
+              <li>Keyboard alternatives</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testing & Validation -->
+      <div>
+        <h2 class="text-3xl font-bold uppercase mb-6 tracking-wide">TESTING & VALIDATION</h2>
+        
+        <p class="text-gray-700 mb-6">We regularly test our website to ensure accessibility compliance:</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h3 class="text-xl font-bold mb-4">Automated Testing</h3>
+            <div class="space-y-3">
+              <div class="bg-green-50 p-4 rounded-lg">
+                <h4 class="font-bold">WAVE Web Accessibility Evaluator</h4>
+                <p class="text-gray-700 text-sm">Regular automated scans for accessibility issues</p>
+              </div>
+              
+              <div class="bg-green-50 p-4 rounded-lg">
+                <h4 class="font-bold">axe DevTools</h4>
+                <p class="text-gray-700 text-sm">Integrated accessibility testing in development</p>
+              </div>
+              
+              <div class="bg-green-50 p-4 rounded-lg">
+                <h4 class="font-bold">Lighthouse Accessibility Audit</h4>
+                <p class="text-gray-700 text-sm">Google's accessibility scoring and recommendations</p>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <h3 class="text-xl font-bold mb-4">Manual Testing</h3>
+            <div class="space-y-3">
+              <div class="bg-blue-50 p-4 rounded-lg">
+                <h4 class="font-bold">Screen Reader Testing</h4>
+                <p class="text-gray-700 text-sm">Regular testing with NVDA, JAWS, and VoiceOver</p>
+              </div>
+              
+              <div class="bg-blue-50 p-4 rounded-lg">
+                <h4 class="font-bold">Keyboard Navigation</h4>
+                <p class="text-gray-700 text-sm">Complete site navigation using only keyboard</p>
+              </div>
+              
+              <div class="bg-blue-50 p-4 rounded-lg">
+                <h4 class="font-bold">User Testing</h4>
+                <p class="text-gray-700 text-sm">Testing with users who have disabilities</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Known Issues -->
+      <div>
+        <h2 class="text-3xl font-bold uppercase mb-6 tracking-wide">KNOWN ISSUES & LIMITATIONS</h2>
+        
+        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-lg mb-6">
+          <p class="text-gray-700 mb-4">We are continuously working to improve accessibility. Currently known issues include:</p>
+        </div>
+        
+        <div class="space-y-4">
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <h3 class="text-lg font-bold mb-2">Third-Party Content</h3>
+            <p class="text-gray-700 text-sm">Some embedded content from third parties may not meet our accessibility standards. We are working with vendors to address these issues.</p>
+          </div>
+          
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <h3 class="text-lg font-bold mb-2">Legacy Browser Support</h3>
+            <p class="text-gray-700 text-sm">Some accessibility features may not work optimally in older browsers. We recommend using current versions of major browsers.</p>
+          </div>
+          
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <h3 class="text-lg font-bold mb-2">Complex Interactions</h3>
+            <p class="text-gray-700 text-sm">Some advanced interactive features are being enhanced for better accessibility support.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feedback & Support -->
+      <div>
+        <h2 class="text-3xl font-bold uppercase mb-6 tracking-wide">FEEDBACK & SUPPORT</h2>
+        
+        <p class="text-gray-700 mb-6">We welcome your feedback on the accessibility of our website. If you encounter any accessibility barriers, please let us know:</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="bg-blue-50 p-6 rounded-lg">
+            <h3 class="text-lg font-bold mb-4">Report Accessibility Issues</h3>
+            <div class="space-y-3">
+              <div class="flex items-center gap-3">
+                <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                </svg>
+                <p class="text-gray-700">accessibility@project.com</p>
+              </div>
+              
+              <div class="flex items-center gap-3">
+                <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                </svg>
+                <p class="text-gray-700">1-800-PROJECT (Accessibility Line)</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-green-50 p-6 rounded-lg">
+            <h3 class="text-lg font-bold mb-4">What to Include</h3>
+            <ul class="list-disc list-inside text-gray-700 space-y-1 text-sm">
+              <li>Description of the accessibility barrier</li>
+              <li>Page URL where the issue occurred</li>
+              <li>Browser and assistive technology used</li>
+              <li>Your contact information (optional)</li>
+              <li>Suggested improvements (if any)</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="mt-8 p-6 bg-gray-50 rounded-lg">
+          <h3 class="text-lg font-bold mb-3">Response Time</h3>
+          <p class="text-gray-700">We aim to respond to accessibility feedback within 2 business days and will work to address issues as quickly as possible. For urgent accessibility needs, please call our accessibility line.</p>
+        </div>
+      </div>
+
+      <!-- Ongoing Efforts -->
+      <div>
+        <h2 class="text-3xl font-bold uppercase mb-6 tracking-wide">ONGOING EFFORTS</h2>
+        
+        <p class="text-gray-700 mb-6">Accessibility is an ongoing commitment. Our current initiatives include:</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <div class="border-l-4 border-green-500 pl-4">
+              <h4 class="font-bold">Staff Training</h4>
+              <p class="text-gray-700 text-sm">Regular accessibility training for all team members</p>
+            </div>
+            
+            <div class="border-l-4 border-green-500 pl-4">
+              <h4 class="font-bold">Design System Updates</h4>
+              <p class="text-gray-700 text-sm">Incorporating accessibility into our design components</p>
+            </div>
+            
+            <div class="border-l-4 border-green-500 pl-4">
+              <h4 class="font-bold">User Research</h4>
+              <p class="text-gray-700 text-sm">Ongoing research with users who have disabilities</p>
+            </div>
+          </div>
+          
+          <div class="space-y-4">
+            <div class="border-l-4 border-blue-500 pl-4">
+              <h4 class="font-bold">Third-Party Audits</h4>
+              <p class="text-gray-700 text-sm">Regular professional accessibility audits</p>
+            </div>
+            
+            <div class="border-l-4 border-blue-500 pl-4">
+              <h4 class="font-bold">Technology Updates</h4>
+              <p class="text-gray-700 text-sm">Staying current with accessibility best practices</p>
+            </div>
+            
+            <div class="border-l-4 border-blue-500 pl-4">
+              <h4 class="font-bold">Community Engagement</h4>
+              <p class="text-gray-700 text-sm">Active participation in accessibility communities</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="bg-black text-white p-8 rounded-lg">
+        <h2 class="text-3xl font-bold uppercase mb-6 tracking-wide">ACCESSIBILITY CONTACT</h2>
+        
+        <p class="text-gray-300 mb-6">For accessibility-related questions, feedback, or assistance:</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="text-center">
+            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-3">
+              <svg class="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+              </svg>
+            </div>
+            <p class="font-bold">EMAIL</p>
+            <p class="text-gray-300">accessibility@project.com</p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-3">
+              <svg class="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+              </svg>
+            </div>
+            <p class="font-bold">PHONE</p>
+            <p class="text-gray-300">1-800-PROJECT</p>
+            <p class="text-gray-400 text-sm">TTY: 1-800-PROJECT-TTY</p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-3">
+              <svg class="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <p class="font-bold">MAIL</p>
+            <p class="text-gray-300">PROJECT Accessibility Team<br>123 Performance Ave<br>Boston, MA 02101</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Promo Codes Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+<%- include('../partials/admin-header', { title: 'Promo Codes Management' }) %>
+
+<style>
+    .gradient-header {
+        background: linear-gradient(to right, #6d28d9, #4c1d95);
+        color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card {
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        border-radius: 10px;
+        margin-bottom: 2rem;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .table th {
+        border-top: none;
+        font-weight: 600;
+        color: #2c3e50;
+        background-color: #f8f9fa;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .promo-code {
+        background-color: #f3e8ff;
+        border-radius: 6px;
+        padding: 0.4rem 0.8rem;
+        font-family: monospace;
+        font-size: 0.9rem;
+        color: #6d28d9;
+        border: 1px solid #e9d5ff;
+    }
+
+    .status-badge {
+        padding: 0.5em 1em;
+        border-radius: 20px;
+        font-size: 0.85em;
+        font-weight: 500;
+    }
+
+    .status-active {
+        background-color: #f3e8ff;
+        color: #6d28d9;
+    }
+
+    .status-expired {
+        background-color: #ede9fe;
+        color: #5b21b6;
+    }
+
+    .status-used {
+        background-color: #e9d5ff;
+        color: #7c3aed;
+    }
+
+    .btn-action {
+        border-radius: 6px;
+        padding: 0.4rem 0.8rem;
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-add {
+        background-color: #6d28d9;
+        border: none;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-add:hover {
+        background-color: #5b21b6;
+        transform: translateY(-1px);
+        color: white;
+    }
+
+    .btn-delete {
+        background-color: #f3e8ff;
+        color: #6d28d9;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-delete:hover {
+        background-color: #e9d5ff;
+        color: #5b21b6;
+    }
+
+    .usage-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .usage-bar {
+        height: 6px;
+        width: 60px;
+        background-color: #f3e8ff;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .usage-progress {
+        height: 100%;
+        background-color: #6d28d9;
+        border-radius: 3px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #6b7280;
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: #e9d5ff;
+    }
+
+    .discount-value {
+        font-weight: 600;
+        color: #6d28d9;
+    }
+
+    .expiry-date {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+</style>
+
+<div class="container-fluid px-4">
+    <div class="gradient-header d-flex justify-content-between align-items-center">
+        <div>
+            <h2 class="m-0">Promo Codes</h2>
+            <p class="text-light mb-0 mt-2">Manage promotional codes and discounts</p>
+        </div>
+        <a href="/admin/add-promo" class="btn btn-add">
+            <i class="fas fa-plus"></i> Add New Promo Code
+        </a>
+    </div>
+
+    <% if (messages && messages.success) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <%= messages.success %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+
+    <% if (messages && messages.error) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <%= messages.error %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Type</th>
+                        <th>Value</th>
+                        <th>Expiry</th>
+                        <th>Usage</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (promos && promos.length > 0) { %>
+                        <% promos.forEach(promo => { %>
+                            <% 
+                                const expiry = promo.expiryDate ? new Date(promo.expiryDate) : null;
+                                const now = new Date();
+                                const isExpired = expiry && expiry < now;
+                                const usedCount = promo.usedCount || 0;
+                                const usageLimit = promo.usageLimit || 1;
+                                const usagePercentage = (usedCount / usageLimit) * 100;
+                            %>
+                            <tr>
+                                <td><span class="promo-code"><%= promo.code %></span></td>
+                                <td>
+                                    <i class="<%= promo.discountType === 'percentage' ? 'fas fa-percent' : 'fas fa-dollar-sign' %> me-1"></i>
+                                    <%= promo.discountType === 'percentage' ? 'Percentage' : 'Fixed Amount' %>
+                                </td>
+                                <td>
+                                    <span class="discount-value">
+                                        <%= promo.discountType === 'percentage' ? promo.discountValue + '%' : '$' + promo.discountValue %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="expiry-date">
+                                        <% if (expiry) { %>
+                                            <i class="<%= isExpired ? 'fas fa-calendar-times text-danger' : 'fas fa-calendar-check text-success' %>"></i>
+                                            <span class="<%= isExpired ? 'text-danger' : 'text-success' %>">
+                                                <%= expiry.toLocaleDateString('en-US', { 
+                                                    year: 'numeric', 
+                                                    month: 'short', 
+                                                    day: 'numeric' 
+                                                }) %>
+                                            </span>
+                                        <% } else { %>
+                                            <i class="fas fa-infinity text-muted"></i>
+                                            <span class="text-muted">No expiry</span>
+                                        <% } %>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="usage-indicator">
+                                        <span><%= usedCount %>/<%= usageLimit %></span>
+                                        <div class="usage-bar">
+                                            <div class="usage-progress" style="width: <%= Math.min(usagePercentage, 100) %>%;"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <% if (isExpired) { %>
+                                        <span class="status-badge status-expired">Expired</span>
+                                    <% } else if (usedCount >= usageLimit) { %>
+                                        <span class="status-badge status-used">Fully Used</span>
+                                    <% } else { %>
+                                        <span class="status-badge status-active">Active</span>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <button class="btn btn-delete btn-sm" onclick="deletePromo('<%= promo._id %>', '<%= promo.code %>')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="7">
+                                <div class="empty-state">
+                                    <i class="fas fa-ticket-alt"></i>
+                                    <h4>No Promo Codes Found</h4>
+                                    <p>Create your first promotional code to start offering discounts.</p>
+                                    <a href="/admin/add-promo" class="btn btn-add mt-3">
+                                        <i class="fas fa-plus"></i> Add Promo Code
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Remove alert messages after 5 seconds
+    setTimeout(function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        });
+    }, 5000);
+});
+
+function deletePromo(id, code) {
+    const result = confirm(`Are you sure you want to delete the promo code "${code}"? This action cannot be undone.`);
+    if (result) {
+        window.location.href = `/admin/delete-promo/${id}`;
+    }
+}
+</script>
+
+<%- include('../partials/admin-footer') %>

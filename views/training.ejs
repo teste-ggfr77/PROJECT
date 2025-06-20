@@ -1,0 +1,467 @@
+<%- include('partials/header') %>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: #ffffff;
+        padding-top: 80px;
+    }
+
+    .training-hero {
+        position: relative;
+        height: 60vh;
+        background: linear-gradient(135deg, #000000 0%, #333333 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .training-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        opacity: 0.3;
+    }
+
+    .training-hero-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        color: white;
+        max-width: 800px;
+        padding: 0 2rem;
+    }
+
+    .training-hero-title {
+        font-size: clamp(3rem, 8vw, 6rem);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .training-hero-subtitle {
+        font-size: clamp(1.25rem, 3vw, 1.5rem);
+        font-weight: 400;
+        letter-spacing: 0.05em;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+    }
+
+    .training-programs-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 5rem 2rem;
+    }
+
+    .programs-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 3rem;
+        margin-top: 3rem;
+    }
+
+    .program-card {
+        background: #ffffff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        border: 2px solid transparent;
+    }
+
+    .program-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        border-color: #000000;
+    }
+
+    .program-card-header {
+        background: linear-gradient(135deg, #000000 0%, #333333 100%);
+        color: white;
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .program-card-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(255, 255, 255, 0.05) 10px,
+            rgba(255, 255, 255, 0.05) 20px
+        );
+        animation: slide 20s linear infinite;
+    }
+
+    @keyframes slide {
+        0% { transform: translateX(-50%) translateY(-50%) rotate(0deg); }
+        100% { transform: translateX(-50%) translateY(-50%) rotate(360deg); }
+    }
+
+    .program-icon {
+        width: 4rem;
+        height: 4rem;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    .program-icon i {
+        font-size: 1.5rem;
+        color: white;
+    }
+
+    .program-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.5rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    .program-subtitle {
+        font-size: 0.9rem;
+        opacity: 0.8;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        position: relative;
+        z-index: 2;
+    }
+
+    .program-card-body {
+        padding: 2rem;
+    }
+
+    .program-description {
+        color: #666666;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        font-size: 1rem;
+    }
+
+    .program-features {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 2rem 0;
+    }
+
+    .program-features li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.75rem;
+        color: #333333;
+        font-weight: 500;
+    }
+
+    .program-features li::before {
+        content: '✓';
+        background: #000000;
+        color: white;
+        width: 1.25rem;
+        height: 1.25rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.75rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+
+    .program-cta {
+        display: inline-block;
+        background: #000000;
+        color: white;
+        padding: 1rem 2rem;
+        text-decoration: none;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        border: 2px solid #000000;
+        text-align: center;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .program-cta:hover {
+        background: white;
+        color: #000000;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .section-intro {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .section-title {
+        font-size: clamp(2.5rem, 5vw, 3.5rem);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+        color: #000000;
+    }
+
+    .section-description {
+        font-size: 1.25rem;
+        color: #666666;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    .brand-highlight {
+        color: #000000;
+        font-weight: 700;
+    }
+
+    /* Special styling for different program types */
+    .program-card.student .program-card-header {
+        background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    }
+
+    .program-card.military .program-card-header {
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    }
+
+    .program-card.gift .program-card-header {
+        background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    }
+
+    .program-card.wholesale .program-card-header {
+        background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+    }
+
+    .program-card.affiliate .program-card-header {
+        background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .training-programs-container {
+            padding: 3rem 1rem;
+        }
+
+        .programs-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .program-card-header,
+        .program-card-body {
+            padding: 1.5rem;
+        }
+
+        .training-hero-content {
+            padding: 0 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .programs-grid {
+            gap: 1.5rem;
+        }
+
+        .program-card-header,
+        .program-card-body {
+            padding: 1.25rem;
+        }
+    }
+
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+        .program-card,
+        .program-cta,
+        .program-card-header::before {
+            animation: none;
+            transition: none;
+        }
+
+        .program-card:hover {
+            transform: none;
+        }
+
+        .program-cta:hover {
+            transform: none;
+        }
+    }
+
+    .program-card:focus-within {
+        outline: 3px solid #000000;
+        outline-offset: 2px;
+    }
+</style>
+
+<main>
+    <!-- Hero Section -->
+    <section class="training-hero">
+        <div class="training-hero-content">
+            <h1 class="training-hero-title">Training Programs</h1>
+            <p class="training-hero-subtitle">Unlock Your Potential with <span class="brand-highlight">PROJECT</span></p>
+        </div>
+    </section>
+
+    <!-- Training Programs Section -->
+    <section class="training-programs-container">
+        <div class="section-intro">
+            <h2 class="section-title">Training Programs</h2>
+            <p class="section-description">
+                Maximize your workout potential with <span class="brand-highlight">PROJECT</span> training programs. 
+                Designed for serious athletes who demand performance-driven gym apparel and expert guidance.
+            </p>
+        </div>
+
+        <div class="programs-grid">
+            <!-- Strength Training Program -->
+            <article class="program-card student">
+                <header class="program-card-header">
+                    <div class="program-icon">
+                        <i class="fas fa-dumbbell"></i>
+                    </div>
+                    <h3 class="program-title">Strength Training</h3>
+                    <p class="program-subtitle">Build Raw Power</p>
+                </header>
+                <div class="program-card-body">
+                    <p class="program-description">
+                        Dominate the weight room with <span class="brand-highlight">PROJECT</span> strength-focused gear. Built for heavy lifts, maximum power, and unstoppable performance.
+                    </p>
+                    <ul class="program-features">
+                        <li>Heavy-duty lifting shorts & tanks</li>
+                        <li>Grip-enhanced training gloves</li>
+                        <li>Supportive compression wear</li>
+                        <li>Sweat-wicking performance fabrics</li>
+                        <li>Reinforced seams for durability</li>
+                    </ul>
+                    <a href="/strength-training" class="program-cta">Shop Strength Gear</a>
+                </div>
+            </article>
+
+            <!-- HIIT Training Program -->
+            <article class="program-card military">
+                <header class="program-card-header">
+                    <div class="program-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="program-title">HIIT Training</h3>
+                    <p class="program-subtitle">High Intensity Performance</p>
+                </header>
+                <div class="program-card-body">
+                    <p class="program-description">
+                        Push your limits with <span class="brand-highlight">PROJECT</span> HIIT-optimized apparel. Engineered for explosive movements, rapid transitions, and maximum intensity.
+                    </p>
+                    <ul class="program-features">
+                        <li>Ultra-lightweight breathable fabrics</li>
+                        <li>4-way stretch mobility shorts</li>
+                        <li>Quick-dry performance tees</li>
+                        <li>Anti-chafe seamless construction</li>
+                        <li>Reflective details for visibility</li>
+                    </ul>
+                    <a href="/hiit-training" class="program-cta">Shop HIIT Gear</a>
+                </div>
+            </article>
+
+            <!-- CrossFit Training Program -->
+            <article class="program-card gift">
+                <header class="program-card-header">
+                    <div class="program-icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <h3 class="program-title">CrossFit Training</h3>
+                    <p class="program-subtitle">Forge Elite Fitness</p>
+                </header>
+                <div class="program-card-body">
+                    <p class="program-description">
+                        Conquer every WOD with <span class="brand-highlight">PROJECT</span> CrossFit essentials. Versatile gear built to handle everything from Olympic lifts to box jumps.
+                    </p>
+                    <ul class="program-features">
+                        <li>Multi-functional training shoes</li>
+                        <li>Flexible yet supportive leggings</li>
+                        <li>Moisture-wicking performance tops</li>
+                        <li>Knee sleeves and wrist wraps</li>
+                        <li>Durable gym bags and accessories</li>
+                    </ul>
+                    <a href="/crossfit-training" class="program-cta">Shop CrossFit Gear</a>
+                </div>
+            </article>
+
+            <!-- Cardio Training Program -->
+            <article class="program-card wholesale">
+                <header class="program-card-header">
+                    <div class="program-icon">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <h3 class="program-title">Cardio Training</h3>
+                    <p class="program-subtitle">Endurance Excellence</p>
+                </header>
+                <div class="program-card-body">
+                    <p class="program-description">
+                        Go the distance with <span class="brand-highlight">PROJECT</span> cardio-optimized apparel. Lightweight, breathable gear designed for sustained performance and comfort.
+                    </p>
+                    <ul class="program-features">
+                        <li>Ultra-light running shorts</li>
+                        <li>Breathable mesh panel tops</li>
+                        <li>Cushioned performance socks</li>
+                        <li>Reflective safety elements</li>
+                        <li>Sweat-resistant phone pockets</li>
+                    </ul>
+                    <a href="/cardio-training" class="program-cta">Shop Cardio Gear</a>
+                </div>
+            </article>
+
+            <!-- Yoga & Recovery Program -->
+            <article class="program-card affiliate">
+                <header class="program-card-header">
+                    <div class="program-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3 class="program-title">Yoga & Recovery</h3>
+                    <p class="program-subtitle">Restore & Rebuild</p>
+                </header>
+                <div class="program-card-body">
+                    <p class="program-description">
+                        Enhance your recovery with <span class="brand-highlight">PROJECT</span> yoga and wellness gear. Soft, flexible apparel designed for movement, meditation, and muscle recovery.
+                    </p>
+                    <ul class="program-features">
+                        <li>Buttery-soft yoga leggings</li>
+                        <li>Seamless sports bras</li>
+                        <li>Bamboo fiber recovery wear</li>
+                        <li>Non-slip yoga mats</li>
+                        <li>Meditation and wellness accessories</li>
+                    </ul>
+                    <a href="/yoga-recovery" class="program-cta">Shop Recovery Gear</a>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+
+<%- include('partials/footer') %>

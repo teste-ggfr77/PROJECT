@@ -1,0 +1,34 @@
+<%
+const bgClass = content.backgroundColor === '#000000' ? 'nobull-bg-black' : 'nobull-bg-white';
+%>
+<section class="nobull-section <%= bgClass %> nobull-text <%= content.customClass || '' %>"
+    data-bg-color="<%= content.backgroundColor || 'transparent' %>"
+    data-text-color="<%= content.textColor || 'inherit' %>"
+    style="--section-bg-color: <%= content.backgroundColor || 'transparent' %>; --section-text-color: <%= content.textColor || 'inherit' %>"
+    <% if (content.responsive?.hideOnMobile) { %>data-hide-on-mobile="true"<% } %>
+    <% if (content.responsive?.hideOnTablet) { %>data-hide-on-tablet="true"<% } %>
+    <% if (content.responsive?.hideOnDesktop) { %>data-hide-on-desktop="true"<% } %>>
+      <% if (content.videoUrl) { %>
+    <div class="nobull-video-container">
+        <video class="nobull-video" autoplay loop muted playsinline>
+            <source src="<%= content.videoUrl %>" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <% } %>
+    
+    <div class="nobull-content nobull-fade-in">
+        <h2 class="nobull-heading"><%= content.title %></h2>
+        <% if (content.subtitle) { %>
+        <div class="nobull-subheading mt-4"><%= content.subtitle %></div>
+        <% } %>
+        <% if (content.description) { %>
+        <div class="mt-4 h4"><%= content.description %></div>
+        <% } %>
+        <% if (content.buttonText && content.buttonLink) { %>
+        <div class="mt-5">
+            <a href="<%= content.buttonLink %>" class="nobull-button"><%= content.buttonText %></a>
+        </div>
+        <% } %>
+    </div>
+</section>

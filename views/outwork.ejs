@@ -1,0 +1,835 @@
+<%- include('partials/header') %>
+
+<!-- Hero Section -->
+<section class="outwork-hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">NOBULL</div>
+    <h1 class="hero-title">OUTWORK</h1>
+    <h2 class="hero-subtitle">FOOTWEAR BUILT FOR PERFORMANCE</h2>
+    <p class="hero-tagline">In and Out of the Gym</p>
+    <div class="hero-description">
+      <p>When the gym closes, your training doesn't stop. Our Outwork Collection is engineered for athletes who refuse to settle, designed to perform whether you're crushing PRs or conquering the streets.</p>
+    </div>
+  </div>
+  <div class="hero-scroll-indicator">
+    <span>Scroll to explore</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- Performance Features Section -->
+<section class="performance-features">
+  <div class="container">
+    <h2 class="section-title">BUILT TO OUTWORK</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🏋️</div>
+        <h3>GYM READY</h3>
+        <p>Zero-drop platform and stable base for heavy lifts, rope climbs, and high-intensity training</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏃</div>
+        <h3>STREET TOUGH</h3>
+        <p>Durable outsole and reinforced construction built to handle any terrain outside the gym</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💪</div>
+        <h3>ALL-DAY COMFORT</h3>
+        <p>Breathable materials and ergonomic design for extended wear from workout to workday</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>NO COMPROMISE</h3>
+        <p>Performance-first design with no unnecessary bells and whistles - just pure functionality</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Product Collection Section -->
+<section class="product-collection">
+  <div class="container">
+    <div class="collection-header">
+      <div class="collection-info">
+        <h2 class="collection-title">OUTWORK COLLECTION</h2>
+        <p class="collection-subtitle">Performance-driven footwear for those who outwork yesterday</p>
+      </div>
+      <div class="gender-selector">
+        <button id="menBtn" class="gender-btn <%= gender === 'men' ? 'active' : '' %>">
+          <span>MEN</span>
+        </button>
+        <button id="womenBtn" class="gender-btn <%= gender === 'women' ? 'active' : '' %>">
+          <span>WOMEN</span>
+        </button>
+      </div>
+    </div>
+    
+    <div id="outworkGrid" class="product-grid">
+      <% products.forEach(product => { %>
+      <div class="product-card">
+        <div class="product-image-container">
+          <img src="<%= product.image || product.img %>" alt="<%= product.name %>" class="product-image" loading="lazy" />
+          <div class="product-overlay">
+            <div class="product-badges">
+              <span class="badge performance">PERFORMANCE</span>
+              <span class="badge versatile">VERSATILE</span>
+            </div>
+          </div>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name"><%= product.name %></h3>
+          <p class="product-description"><%= product.desc || product.description %></p>
+          <div class="product-features">
+            <span class="feature-tag">Zero-Drop</span>
+            <span class="feature-tag">Durable</span>
+            <span class="feature-tag">Versatile</span>
+          </div>
+          <div class="product-footer">
+            <span class="product-price"><%= product.price %></span>
+            <a href="/products/<%= product._id %>" class="shop-btn">
+              <span>SHOP NOW</span>
+              <div class="btn-arrow">→</div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+    
+    <div id="noProductsMsg" class="no-products-message" style="display:none;">
+      <div class="no-products-content">
+        <h3>No Outwork products found</h3>
+        <p>Check back soon for new arrivals in this category</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Philosophy Section -->
+<section class="philosophy-section">
+  <div class="container">
+    <div class="philosophy-content">
+      <div class="philosophy-text">
+        <h2>THE OUTWORK PHILOSOPHY</h2>
+        <p class="philosophy-quote">"Success isn't given. It's earned in the gym and on the streets, in the moments when no one is watching."</p>
+        <p>The Outwork Collection embodies the PROJECT mentality: no shortcuts, no excuses, just relentless pursuit of excellence. Every shoe is crafted for athletes who understand that true performance comes from consistency, dedication, and the willingness to outwork everyone else.</p>
+        <div class="philosophy-stats">
+          <div class="stat">
+            <span class="stat-number">24/7</span>
+            <span class="stat-label">Performance Ready</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">0</span>
+            <span class="stat-label">Compromises Made</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">Functional Design</span>
+          </div>
+        </div>
+      </div>
+      <div class="philosophy-visual">
+        <div class="visual-element"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+
+<script>
+const menBtn = document.getElementById('menBtn');
+const womenBtn = document.getElementById('womenBtn');
+const outworkGrid = document.getElementById('outworkGrid');
+const noProductsMsg = document.getElementById('noProductsMsg');
+
+// Smooth scroll animation for hero section
+document.addEventListener('DOMContentLoaded', () => {
+  const scrollIndicator = document.querySelector('.hero-scroll-indicator');
+  if (scrollIndicator) {
+    scrollIndicator.addEventListener('click', () => {
+      document.querySelector('.performance-features').scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  }
+
+  // Animate elements on scroll
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-in');
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.feature-card, .product-card, .philosophy-content').forEach(el => {
+    observer.observe(el);
+  });
+});
+
+function renderProducts(products) {
+  outworkGrid.innerHTML = '';
+  if (!products.length) {
+    outworkGrid.style.display = 'none';
+    noProductsMsg.style.display = 'flex';
+    return;
+  }
+  outworkGrid.style.display = 'grid';
+  noProductsMsg.style.display = 'none';
+  
+  products.forEach(product => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.innerHTML = `
+      <div class="product-image-container">
+        <img src="${product.image || product.img}" alt="${product.name}" class="product-image" loading="lazy" />
+        <div class="product-overlay">
+          <div class="product-badges">
+            <span class="badge performance">PERFORMANCE</span>
+            <span class="badge versatile">VERSATILE</span>
+          </div>
+        </div>
+      </div>
+      <div class="product-info">
+        <h3 class="product-name">${product.name}</h3>
+        <p class="product-description">${product.desc || product.description || ''}</p>
+        <div class="product-features">
+          <span class="feature-tag">Zero-Drop</span>
+          <span class="feature-tag">Durable</span>
+          <span class="feature-tag">Versatile</span>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">${product.price}</span>
+          <a href="/products/${product._id}" class="shop-btn">
+            <span>SHOP NOW</span>
+            <div class="btn-arrow">→</div>
+          </a>
+        </div>
+      </div>
+    `;
+    outworkGrid.appendChild(card);
+  });
+}
+
+menBtn.addEventListener('click', async () => {
+  menBtn.classList.add('active');
+  womenBtn.classList.remove('active');
+  try {
+    const res = await fetch('/api/outwork?gender=men');
+    const data = await res.json();
+    renderProducts(data.products);
+    history.replaceState(null, '', '/outwork?gender=men');
+  } catch (error) {
+    console.error('Error fetching men products:', error);
+  }
+});
+
+womenBtn.addEventListener('click', async () => {
+  womenBtn.classList.add('active');
+  menBtn.classList.remove('active');
+  try {
+    const res = await fetch('/api/outwork?gender=women');
+    const data = await res.json();
+    renderProducts(data.products);
+    history.replaceState(null, '', '/outwork?gender=women');
+  } catch (error) {
+    console.error('Error fetching women products:', error);
+  }
+});
+</script>
+
+<style>
+/* Reset and Base Styles */
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Hero Section */
+.outwork-hero {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  overflow: hidden;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(255, 69, 0, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 140, 0, 0.1) 0%, transparent 50%);
+}
+
+.hero-content {
+  text-align: center;
+  z-index: 2;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 8px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.hero-title {
+  font-size: clamp(4rem, 8vw, 8rem);
+  font-weight: 900;
+  letter-spacing: -2px;
+  margin: 0;
+  line-height: 0.9;
+  background: linear-gradient(45deg, #fff, #ff4500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin: 20px 0 10px;
+  color: #fff;
+}
+
+.hero-tagline {
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: 400;
+  color: #ff4500;
+  margin-bottom: 30px;
+  letter-spacing: 0.5px;
+}
+
+.hero-description {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.hero-description p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.7);
+  transition: color 0.3s ease;
+}
+
+.hero-scroll-indicator:hover {
+  color: #ff4500;
+}
+
+.hero-scroll-indicator span {
+  display: block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.scroll-arrow {
+  width: 20px;
+  height: 20px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  margin: 0 auto;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: rotate(45deg) translateY(0); }
+  40% { transform: rotate(45deg) translateY(-10px); }
+  60% { transform: rotate(45deg) translateY(-5px); }
+}
+
+/* Performance Features Section */
+.performance-features {
+  padding: 100px 0;
+  background: #f8f8f8;
+}
+
+.section-title {
+  text-align: center;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  color: #1a1a1a;
+  margin-bottom: 80px;
+  letter-spacing: -1px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: white;
+  padding: 40px 30px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.feature-card.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.feature-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.feature-card h3 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 15px;
+  letter-spacing: 0.5px;
+}
+
+.feature-card p {
+  color: #666;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+/* Product Collection Section */
+.product-collection {
+  padding: 100px 0;
+  background: white;
+}
+
+.collection-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 60px;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.collection-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  color: #1a1a1a;
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+.collection-subtitle {
+  font-size: 18px;
+  color: #666;
+  margin: 10px 0 0;
+  max-width: 500px;
+}
+
+.gender-selector {
+  display: flex;
+  gap: 0;
+  border: 2px solid #1a1a1a;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.gender-btn {
+  background: transparent;
+  border: none;
+  padding: 15px 30px;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #1a1a1a;
+  position: relative;
+}
+
+.gender-btn:not(:last-child) {
+  border-right: 2px solid #1a1a1a;
+}
+
+.gender-btn.active,
+.gender-btn:hover {
+  background: #1a1a1a;
+  color: white;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 40px;
+}
+
+.product-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.product-card.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+.product-image-container {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+.product-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.product-card:hover .product-overlay {
+  opacity: 1;
+}
+
+.product-badges {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.badge.performance {
+  background: #ff4500;
+  color: white;
+}
+
+.badge.versatile {
+  background: rgba(255, 255, 255, 0.9);
+  color: #1a1a1a;
+}
+
+.product-info {
+  padding: 30px;
+}
+
+.product-name {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin: 0 0 10px;
+  letter-spacing: -0.5px;
+}
+
+.product-description {
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.product-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 25px;
+}
+
+.feature-tag {
+  padding: 4px 12px;
+  background: #f0f0f0;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+}
+
+.product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-price {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1a1a1a;
+}
+
+.shop-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #1a1a1a;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.shop-btn:hover {
+  background: #ff4500;
+  transform: translateX(5px);
+}
+
+.btn-arrow {
+  transition: transform 0.3s ease;
+}
+
+.shop-btn:hover .btn-arrow {
+  transform: translateX(5px);
+}
+
+/* No Products Message */
+.no-products-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  text-align: center;
+}
+
+.no-products-content h3 {
+  font-size: 1.5rem;
+  color: #1a1a1a;
+  margin-bottom: 10px;
+}
+
+.no-products-content p {
+  color: #666;
+}
+
+/* Philosophy Section */
+.philosophy-section {
+  padding: 100px 0;
+  background: #1a1a1a;
+  color: white;
+}
+
+.philosophy-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 80px;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.philosophy-content.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.philosophy-text h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  margin-bottom: 30px;
+  letter-spacing: -1px;
+}
+
+.philosophy-quote {
+  font-size: 1.5rem;
+  font-style: italic;
+  color: #ff4500;
+  margin-bottom: 30px;
+  line-height: 1.4;
+}
+
+.philosophy-text > p:last-of-type {
+  font-size: 18px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 40px;
+}
+
+.philosophy-stats {
+  display: flex;
+  gap: 40px;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #ff4500;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.philosophy-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.visual-element {
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(45deg, #ff4500, #ff8c00);
+  border-radius: 50%;
+  position: relative;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.visual-element::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 60%;
+  background: #1a1a1a;
+  border-radius: 50%;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .collection-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .gender-selector {
+    width: 100%;
+  }
+  
+  .gender-btn {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .philosophy-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+  
+  .philosophy-stats {
+    justify-content: center;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 15px;
+  }
+  
+  .product-info {
+    padding: 20px;
+  }
+  
+  .philosophy-stats {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+</style>

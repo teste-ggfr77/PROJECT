@@ -1,0 +1,58 @@
+<%# Info Cards Section %>
+<section 
+    class="section-base info-cards-section <%= content.layout %> <%= content.animation %> <%= content.customClass %>"
+    style="
+        --section-bg-color: <%= content.backgroundColor || 'transparent' %>;
+        --section-text-color: <%= content.textColor || 'inherit' %>;
+        --section-padding-top: <%= content.spacing?.paddingTop || '2rem' %>;
+        --section-padding-bottom: <%= content.spacing?.paddingBottom || '2rem' %>;
+        --section-margin-top: <%= content.spacing?.marginTop || '0' %>;
+        --section-margin-bottom: <%= content.spacing?.marginBottom || '0' %>;"
+
+    <% if (content.responsive?.hideOnMobile) { %>data-hide-on-mobile="true"<% } %>
+    <% if (content.responsive?.hideOnTablet) { %>data-hide-on-tablet="true"<% } %>
+    <% if (content.responsive?.hideOnDesktop) { %>data-hide-on-desktop="true"<% } %>>
+    
+    <div class="container">
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-8 text-center">
+                <h2 class="section-title"><%= content.title %></h2>
+                <% if (content.subtitle) { %>
+                    <p class="section-subtitle lead"><%= content.subtitle %></p>
+                <% } %>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <% if (content.additionalImages?.length > 0) { %>
+                <% content.additionalImages.forEach((image, index) => { %>
+                    <div class="col-md-4">
+                        <div class="info-card h-100">
+                            <div class="info-card-inner">
+                                <div class="info-card-icon">
+                                    <img src="<%= image %>" alt="Info Icon" class="info-icon">
+                                </div>
+                                <% if (content.description) { %>
+                                    <% const cards = content.description.split('|'); %>
+                                    <% if (cards[index]) { %>
+                                        <% const [title, text] = cards[index].split(':').map(s => s.trim()); %>
+                                        <h4 class="info-card-title"><%= title %></h4>
+                                        <p class="info-card-text"><%= text %></p>
+                                    <% } %>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } %>
+        </div>
+
+        <% if (content.buttonText && content.buttonLink) { %>
+            <div class="text-center mt-5">
+                <a href="<%= content.buttonLink %>" class="btn btn-primary">
+                    <%= content.buttonText %>
+                </a>
+            </div>
+        <% } %>
+    </div>
+</section>

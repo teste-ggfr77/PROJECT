@@ -1,0 +1,178 @@
+<%- include('partials/header') %>
+
+<!-- Hero Section -->
+<section class="relative w-full h-96 overflow-hidden">
+  <!-- Background Image -->
+  <img src="<%= gender === 'women' ? 'https://images.unsplash.com/photo-1506629905607-d9b0b1a9e1e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80' : 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80' %>" alt="<%= title %>" class="absolute w-full h-full object-cover z-0" />
+  
+  <!-- Dark Overlay -->
+  <div class="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
+
+  <!-- Content -->
+  <div class="relative z-20 flex flex-col items-center justify-center text-center h-full px-4">
+    <h1 class="text-white text-4xl md:text-6xl font-bold uppercase drop-shadow-lg tracking-wider mb-4"><%= title %></h1>
+    <p class="text-white/80 tracking-wide text-base md:text-lg drop-shadow-sm mb-8"><%= subtitle %></p>
+  </div>
+</section>
+
+<!-- Products Grid -->
+<section class="w-full bg-white py-20 px-4">
+  <div class="max-w-7xl mx-auto">
+    <% if (products && products.length > 0) { %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <% products.forEach(product => { %>
+        <div class="group cursor-pointer">
+          <div class="relative overflow-hidden mb-4">
+            <img src="<%= product.image || 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80' %>" alt="<%= product.name %>" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+          </div>
+          <div class="text-center">
+            <p class="text-sm text-gray-500 uppercase tracking-wider mb-1"><%= product.category %></p>
+            <h3 class="text-lg font-bold uppercase tracking-wide mb-2"><%= product.name %></h3>
+            <p class="text-xl font-semibold"><%= product.price %> dh</p>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <!-- Default Products when no database products -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <% const defaultProducts = gender === 'women' ? [
+          {img: 'https://images.unsplash.com/photo-1506629905607-d9b0b1a9e1e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'PERFORMANCE TANK', price: '42', category: 'Women\'s Tops'},
+          {img: 'https://images.unsplash.com/photo-1506629905607-d9b0b1a9e1e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'HIGH-WAIST LEGGINGS', price: '65', category: 'Women\'s Leggings'},
+          {img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'TRAINING SHORTS', price: '48', category: 'Women\'s Shorts'},
+          {img: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'SPORTS BRA', price: '38', category: 'Women\'s Sports Bras'},
+          {img: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'PERFORMANCE HOODIE', price: '75', category: 'Women\'s Hoodies'},
+          {img: 'https://images.unsplash.com/photo-1506629905607-d9b0b1a9e1e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'CROP TOP', price: '35', category: 'Women\'s Tops'},
+          {img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'BIKE SHORTS', price: '45', category: 'Women\'s Shorts'},
+          {img: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'LONG SLEEVE TEE', price: '52', category: 'Women\'s Tops'},
+        ] : [
+          {img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'PERFORMANCE TEE', price: '45', category: 'Men\'s Tops'},
+          {img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'TRAINING SHORTS', price: '55', category: 'Men\'s Shorts'},
+          {img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'JOGGER PANTS', price: '75', category: 'Men\'s Pants'},
+          {img: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'PERFORMANCE HOODIE', price: '85', category: 'Men\'s Hoodies'},
+          {img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'TANK TOP', price: '38', category: 'Men\'s Tops'},
+          {img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'COMPRESSION SHORTS', price: '48', category: 'Men\'s Shorts'},
+          {img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'TRACK PANTS', price: '68', category: 'Men\'s Pants'},
+          {img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'LONG SLEEVE TEE', price: '52', category: 'Men\'s Tops'},
+        ]; %>
+        <% defaultProducts.forEach(product => { %>
+        <div class="group cursor-pointer">
+          <div class="relative overflow-hidden mb-4">
+            <img src="<%= product.img %>" alt="<%= product.name %>" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+          </div>
+          <div class="text-center">
+            <p class="text-sm text-gray-500 uppercase tracking-wider mb-1"><%= product.category %></p>
+            <h3 class="text-lg font-bold uppercase tracking-wide mb-2"><%= product.name %></h3>
+            <p class="text-xl font-semibold">$<%= product.price %></p>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<!-- Categories Section -->
+<section class="w-full bg-gray-50 py-20 px-4">
+  <div class="max-w-7xl mx-auto">
+    <h2 class="text-4xl md:text-5xl font-bold uppercase text-center mb-12 tracking-wide">SHOP BY CATEGORY</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <% if (gender === 'women') { %>
+        <a href="/women/tops" class="group block relative overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1506629905607-d9b0b1a9e1e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Tops" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+          <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition duration-300"></div>
+          <div class="absolute bottom-8 left-8">
+            <h3 class="text-white text-2xl font-bold uppercase tracking-wider">TOPS</h3>
+            <p class="text-white/80 mt-2">Performance Tees & Tanks</p>
+          </div>
+        </a>
+        
+        <a href="/women/leggings" class="group block relative overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1506629905607-d9b0b1a9e1e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Leggings" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+          <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition duration-300"></div>
+          <div class="absolute bottom-8 left-8">
+            <h3 class="text-white text-2xl font-bold uppercase tracking-wider">LEGGINGS</h3>
+            <p class="text-white/80 mt-2">High-Performance Fit</p>
+          </div>
+        </a>
+        
+        <a href="/women/shorts" class="group block relative overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Shorts" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+          <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition duration-300"></div>
+          <div class="absolute bottom-8 left-8">
+            <h3 class="text-white text-2xl font-bold uppercase tracking-wider">SHORTS</h3>
+            <p class="text-white/80 mt-2">Training & Lifestyle</p>
+          </div>
+        </a>
+        
+        <a href="/women/sports-bras" class="group block relative overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Sports Bras" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+          <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition duration-300"></div>
+          <div class="absolute bottom-8 left-8">
+            <h3 class="text-white text-2xl font-bold uppercase tracking-wider">SPORTS BRAS</h3>
+            <p class="text-white/80 mt-2">Support & Performance</p>
+          </div>
+        </a>
+      <% } else { %>
+        <a href="/men/tops" class="group block relative overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Tops" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+          <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition duration-300"></div>
+          <div class="absolute bottom-8 left-8">
+            <h3 class="text-white text-2xl font-bold uppercase tracking-wider">TOPS</h3>
+            <p class="text-white/80 mt-2">Performance Tees & Tanks</p>
+          </div>
+        </a>
+        
+        <a href="/men/shorts" class="group block relative overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Shorts" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+          <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition duration-300"></div>
+          <div class="absolute bottom-8 left-8">
+            <h3 class="text-white text-2xl font-bold uppercase tracking-wider">SHORTS</h3>
+            <p class="text-white/80 mt-2">Training & Performance</p>
+          </div>
+        </a>
+        
+        <a href="/men/pants" class="group block relative overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Pants" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+          <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition duration-300"></div>
+          <div class="absolute bottom-8 left-8">
+            <h3 class="text-white text-2xl font-bold uppercase tracking-wider">PANTS</h3>
+            <p class="text-white/80 mt-2">Joggers & Track Pants</p>
+          </div>
+        </a>
+        
+        <a href="/men/hoodies" class="group block relative overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Hoodies" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+          <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition duration-300"></div>
+          <div class="absolute bottom-8 left-8">
+            <h3 class="text-white text-2xl font-bold uppercase tracking-wider">HOODIES</h3>
+            <p class="text-white/80 mt-2">Performance Outerwear</p>
+          </div>
+        </a>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<!-- Styles -->
+<style>
+/* Custom font styling to match NOBULL */
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+/* Button hover effects */
+.transition-all {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+</style>
+
+<!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<%- include('partials/footer') %>

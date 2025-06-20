@@ -1,0 +1,440 @@
+/* NOBULL Theme Styles */
+
+:root {
+  --nobull-black: #000000;
+  --nobull-white: #ffffff;
+  --nobull-gray-light: #f5f5f5;
+  --nobull-gray-medium: #666666;
+  --nobull-gray-dark: #333333;
+  --nobull-red: #dc2626;
+  --nobull-yellow: #fbbf24;
+  --nobull-green: #10b981;
+}
+
+/* Typography */
+.nobull-font {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.nobull-heading {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.nobull-text {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* Buttons */
+.nobull-btn {
+  display: inline-block;
+  padding: 1rem 2rem;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  border: 2px solid;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  text-align: center;
+}
+
+.nobull-btn-primary {
+  background-color: var(--nobull-black);
+  color: var(--nobull-white);
+  border-color: var(--nobull-black);
+}
+
+.nobull-btn-primary:hover {
+  background-color: var(--nobull-white);
+  color: var(--nobull-black);
+}
+
+.nobull-btn-secondary {
+  background-color: transparent;
+  color: var(--nobull-black);
+  border-color: var(--nobull-black);
+}
+
+.nobull-btn-secondary:hover {
+  background-color: var(--nobull-black);
+  color: var(--nobull-white);
+}
+
+.nobull-btn-white {
+  background-color: var(--nobull-white);
+  color: var(--nobull-black);
+  border-color: var(--nobull-white);
+}
+
+.nobull-btn-white:hover {
+  background-color: transparent;
+  color: var(--nobull-white);
+}
+
+/* Cards */
+.nobull-card {
+  background: var(--nobull-white);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.nobull-card:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.nobull-card-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.nobull-card:hover .nobull-card-image {
+  transform: scale(1.05);
+}
+
+/* Product Grid */
+.nobull-product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
+/* Hero Sections */
+.nobull-hero {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.nobull-hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.nobull-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.nobull-hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: var(--nobull-white);
+  max-width: 800px;
+  padding: 0 1rem;
+}
+
+.nobull-hero-title {
+  font-size: clamp(3rem, 8vw, 8rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.nobull-hero-subtitle {
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 0.5rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.nobull-hero-description {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  margin-bottom: 2rem;
+  opacity: 0.9;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Sections */
+.nobull-section {
+  padding: 5rem 1rem;
+}
+
+.nobull-section-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.nobull-section-subtitle {
+  font-size: 1.25rem;
+  color: var(--nobull-gray-medium);
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+/* Features */
+.nobull-feature {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.nobull-feature-icon {
+  width: 4rem;
+  height: 4rem;
+  background: var(--nobull-black);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+
+.nobull-feature-icon i {
+  color: var(--nobull-white);
+  font-size: 1.5rem;
+}
+
+.nobull-feature-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.nobull-feature-description {
+  color: var(--nobull-gray-medium);
+  line-height: 1.6;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nobull-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.nobull-slide-in-left {
+  animation: slideInLeft 0.6s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.nobull-slide-in-right {
+  animation: slideInRight 0.6s ease-out;
+}
+
+/* Marquee Animation */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.nobull-marquee {
+  display: inline-block;
+  min-width: 200%;
+  animation: marquee 20s linear infinite;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .nobull-section {
+    padding: 3rem 1rem;
+  }
+  
+  .nobull-hero-content {
+    padding: 0 1rem;
+  }
+  
+  .nobull-product-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .nobull-btn {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nobull-section {
+    padding: 2rem 1rem;
+  }
+  
+  .nobull-product-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .nobull-btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Utility Classes */
+.nobull-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.nobull-container-wide {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.nobull-text-center {
+  text-align: center;
+}
+
+.nobull-text-left {
+  text-align: left;
+}
+
+.nobull-text-right {
+  text-align: right;
+}
+
+.nobull-mb-small {
+  margin-bottom: 1rem;
+}
+
+.nobull-mb-medium {
+  margin-bottom: 2rem;
+}
+
+.nobull-mb-large {
+  margin-bottom: 3rem;
+}
+
+.nobull-mt-small {
+  margin-top: 1rem;
+}
+
+.nobull-mt-medium {
+  margin-top: 2rem;
+}
+
+.nobull-mt-large {
+  margin-top: 3rem;
+}
+
+/* Loading States */
+.nobull-loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.nobull-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid var(--nobull-black);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Focus States for Accessibility */
+.nobull-btn:focus,
+.nobull-card:focus {
+  outline: 2px solid var(--nobull-black);
+  outline-offset: 2px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .nobull-btn-primary {
+    border-width: 3px;
+  }
+  
+  .nobull-btn-secondary {
+    border-width: 3px;
+  }
+  
+  .nobull-card {
+    border: 2px solid var(--nobull-black);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .nobull-card,
+  .nobull-card-image,
+  .nobull-btn,
+  .nobull-marquee {
+    animation: none;
+    transition: none;
+  }
+  
+  .nobull-card:hover {
+    transform: none;
+  }
+  
+  .nobull-card:hover .nobull-card-image {
+    transform: none;
+  }
+}

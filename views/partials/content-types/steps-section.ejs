@@ -1,0 +1,22 @@
+<%
+const bgClass = content.backgroundColor === '#000000' ? 'nobull-bg-black' : 'nobull-bg-white';
+%>
+<section class="nobull-section <%= bgClass %> nobull-text"
+    data-bg-color="<%= content.backgroundColor || 'transparent' %>"
+    data-text-color="<%= content.textColor || 'inherit' %>"
+    style="--section-bg-color: <%= content.backgroundColor || 'transparent' %>; --section-text-color: <%= content.textColor || 'inherit' %>">
+    <div class="nobull-content nobull-fade-in">
+        <h2 class="nobull-heading"><%= content.title %></h2>
+        <% if (content.subtitle) { %>
+        <div class="nobull-subheading mt-4"><%= content.subtitle %></div>
+        <% } %>
+        <% if (content.description) { %>
+        <div class="mt-4 h4"><%= content.description %></div>
+        <% } %>
+        <% if (content.buttonText && content.buttonLink) { %>
+        <div class="mt-5">
+            <a href="<%= content.buttonLink %>" class="nobull-button"><%= content.buttonText %></a>
+        </div>
+        <% } %>
+    </div>
+</section>

@@ -1,0 +1,287 @@
+<%- include('partials/header') %>
+
+<!-- Hero Section -->
+<section class="relative w-full h-screen overflow-hidden">
+  <!-- Background Image -->
+  <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="NOBULL Apparel" class="absolute w-full h-full object-cover z-0" />
+  
+  <!-- Dark Overlay -->
+  <div class="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
+
+  <!-- Content -->
+  <div class="relative z-20 flex flex-col items-center justify-center text-center h-full px-4">
+    <h1 class="text-white text-5xl md:text-7xl font-bold uppercase drop-shadow-lg tracking-wider mb-4">APPAREL</h1>
+    <p class="text-white tracking-widest uppercase text-xl md:text-2xl drop-shadow-sm font-medium mb-2">TRAIN HARD, LOOK GOOD</p>
+    <p class="text-white/80 tracking-wide text-base md:text-lg drop-shadow-sm mb-8">Performance-driven gear for every workout</p>
+    <div class="flex flex-col sm:flex-row gap-4">
+      <a href="/men/apparel" class="bg-white text-black font-bold py-4 px-8 uppercase tracking-wider hover:bg-black hover:text-white transition-all duration-300 border-2 border-white">Shop Men's</a>
+      <a href="/women/apparel" class="bg-transparent text-white font-bold py-4 px-8 uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-300 border-2 border-white">Shop Women's</a>
+    </div>
+  </div>
+</section>
+
+<!-- Promotional Banner -->
+<div class="w-full bg-black py-4 overflow-hidden">
+  <div class="whitespace-nowrap animate-marquee text-white font-bold text-lg tracking-widest flex items-center">
+    <span class="mx-8">🔥 MOISTURE-WICKING TECHNOLOGY</span>
+    <span class="mx-8">💪 BUILT FOR MOVEMENT</span>
+    <span class="mx-8">🚀 PREMIUM PERFORMANCE FABRICS</span>
+    <span class="mx-8">⚡ NO COMPROMISE ON COMFORT</span>
+    <span class="mx-8">🔥 MOISTURE-WICKING TECHNOLOGY</span>
+    <span class="mx-8">💪 BUILT FOR MOVEMENT</span>
+    <span class="mx-8">🚀 PREMIUM PERFORMANCE FABRICS</span>
+    <span class="mx-8">⚡ NO COMPROMISE ON COMFORT</span>
+  </div>
+</div>
+
+<!-- Featured Product Section -->
+<section class="bg-white py-20 px-4">
+  <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
+    <!-- Text Side -->
+    <div class="w-full lg:w-1/2 text-center lg:text-left">
+      <h2 class="text-4xl md:text-5xl font-bold uppercase text-black tracking-wide mb-6">PERFORMANCE TEE</h2>
+      <p class="text-lg text-gray-700 leading-relaxed mb-8">Engineered with moisture-wicking fabric and anti-odor technology. This isn't just another workout shirt - it's built to perform when you need it most.</p>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="/men/performance-tee" class="bg-black text-white font-bold py-4 px-8 uppercase tracking-wider hover:bg-gray-800 transition-all duration-300">Shop Men's</a>
+        <a href="/women/performance-tee" class="bg-transparent text-black font-bold py-4 px-8 uppercase tracking-wider hover:bg-black hover:text-white transition-all duration-300 border-2 border-black">Shop Women's</a>
+      </div>
+    </div>
+    <!-- Image Side -->
+    <div class="w-full lg:w-1/2">
+      <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="NOBULL Performance Tee" class="w-full h-[500px] object-cover" />
+    </div>
+  </div>
+</section>
+
+<!-- Men's Apparel Section -->
+<section class="w-full bg-gray-50 py-20 px-4">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl md:text-5xl font-bold uppercase mb-4 tracking-wide">MEN'S APPAREL</h2>
+      <p class="text-xl text-gray-600">Built for the modern athlete</p>
+    </div>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+      <% if (typeof menApparel !== 'undefined' && menApparel.length > 0) { %>
+        <% menApparel.forEach(product => { %>
+        <div class="group cursor-pointer">
+          <div class="relative overflow-hidden mb-4">
+            <img src="<%= product.image || 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80' %>" alt="<%= product.name %>" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+          </div>
+          <div class="text-center">
+            <p class="text-sm text-gray-500 uppercase tracking-wider mb-1"><%= product.category %></p>
+            <h3 class="text-lg font-bold uppercase tracking-wide mb-2"><%= product.name %></h3>
+            <p class="text-xl font-semibold"><%= product.price %> dh</p>
+          </div>
+        </div>
+        <% }); %>
+      <% } else { %>
+        <!-- Default Men's Apparel Products -->
+        <% const menProducts = [
+          {img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'PERFORMANCE TEE', price: '45', category: 'Men\'s Tops'},
+          {img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'TRAINING SHORTS', price: '55', category: 'Men\'s Shorts'},
+          {img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'JOGGER PANTS', price: '75', category: 'Men\'s Pants'},
+          {img: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'PERFORMANCE HOODIE', price: '85', category: 'Men\'s Hoodies'},
+        ]; %>
+        <% menProducts.forEach(product => { %>
+        <div class="group cursor-pointer">
+          <div class="relative overflow-hidden mb-4">
+            <img src="<%= product.img %>" alt="<%= product.name %>" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+          </div>
+          <div class="text-center">
+            <p class="text-sm text-gray-500 uppercase tracking-wider mb-1"><%= product.category %></p>
+            <h3 class="text-lg font-bold uppercase tracking-wide mb-2"><%= product.name %></h3>
+            <p class="text-xl font-semibold">DH<%= product.price %></p>
+          </div>
+        </div>
+        <% }); %>
+      <% } %>
+    </div>
+    
+    <div class="text-center">
+      <a href="/men/apparel" class="bg-black text-white font-bold py-4 px-8 uppercase tracking-wider hover:bg-gray-800 transition-all duration-300">View All Men's Apparel</a>
+    </div>
+  </div>
+</section>
+
+<!-- Women's Apparel Section -->
+<section class="w-full bg-white py-20 px-4">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl md:text-5xl font-bold uppercase mb-4 tracking-wide">WOMEN'S APPAREL</h2>
+      <p class="text-xl text-gray-600">Engineered for performance</p>
+    </div>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+      <% if (typeof womenApparel !== 'undefined' && womenApparel.length > 0) { %>
+        <% womenApparel.forEach(product => { %>
+        <div class="group cursor-pointer">
+          <div class="relative overflow-hidden mb-4">
+            <img src="<%= product.image || 'https://images.unsplash.com/photo-1506629905607-d9b0b1a9e1e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80' %>" alt="<%= product.name %>" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+          </div>
+          <div class="text-center">
+            <p class="text-sm text-gray-500 uppercase tracking-wider mb-1"><%= product.category %></p>
+            <h3 class="text-lg font-bold uppercase tracking-wide mb-2"><%= product.name %></h3>
+            <p class="text-xl font-semibold"><%= product.price %> dh</p>
+          </div>
+        </div>
+        <% }); %>
+      <% } else { %>
+        <!-- Default Women's Apparel Products -->
+        <% const womenProducts = [
+          {img: 'img/coming.png', name: 'PERFORMANCE TANK', price: '42', category: 'Women\'s Tops'},
+          {img: 'img/coming.png', name: 'HIGH-WAIST LEGGINGS', price: '65', category: 'Women\'s Leggings'},
+          {img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'TRAINING SHORTS', price: '48', category: 'Women\'s Shorts'},
+          {img: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', name: 'SPORTS BRA', price: '38', category: 'Women\'s Sports Bras'},
+        ]; %>
+        <% womenProducts.forEach(product => { %>
+        <div class="group cursor-pointer">
+          <div class="relative overflow-hidden mb-4">
+            <img src="<%= product.img %>" alt="<%= product.name %>" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+          </div>
+          <div class="text-center">
+            <p class="text-sm text-gray-500 uppercase tracking-wider mb-1"><%= product.category %></p>
+            <h3 class="text-lg font-bold uppercase tracking-wide mb-2"><%= product.name %></h3>
+            <p class="text-xl font-semibold">DH<%= product.price %></p>
+          </div>
+        </div>
+        <% }); %>
+      <% } %>
+    </div>
+    
+    <div class="text-center">
+      <a href="/women/apparel" class="bg-black text-white font-bold py-4 px-8 uppercase tracking-wider hover:bg-gray-800 transition-all duration-300">View All Women's Apparel</a>
+    </div>
+  </div>
+</section>
+
+<!-- Technology Section -->
+<section class="relative w-full py-20 px-4 bg-gray-900">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-white text-4xl md:text-5xl font-bold uppercase mb-6 tracking-wide">PERFORMANCE TECHNOLOGY</h2>
+      <p class="text-white/80 text-xl">Built with cutting-edge materials and construction</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <div class="text-center">
+        <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6">
+          <i class="fas fa-tint text-2xl text-gray-900"></i>
+        </div>
+        <h3 class="text-white text-xl font-bold uppercase mb-4 tracking-wide">MOISTURE-WICKING</h3>
+        <p class="text-white/70 leading-relaxed">Advanced fabric technology pulls sweat away from your skin, keeping you dry and comfortable during intense workouts.</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6">
+          <i class="fas fa-shield-alt text-2xl text-gray-900"></i>
+        </div>
+        <h3 class="text-white text-xl font-bold uppercase mb-4 tracking-wide">ANTI-ODOR</h3>
+        <p class="text-white/70 leading-relaxed">Built-in antimicrobial treatment prevents odor-causing bacteria, so your gear stays fresh workout after workout.</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6">
+          <i class="fas fa-expand-arrows-alt text-2xl text-gray-900"></i>
+        </div>
+        <h3 class="text-white text-xl font-bold uppercase mb-4 tracking-wide">4-WAY STRETCH</h3>
+        <p class="text-white/70 leading-relaxed">Engineered for unrestricted movement in all directions, giving you the freedom to perform at your best.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Categories Grid -->
+<section class="w-full bg-white py-20 px-4">
+  <div class="max-w-7xl mx-auto">
+    <h2 class="text-4xl md:text-5xl font-bold uppercase text-center mb-12 tracking-wide">SHOP BY CATEGORY</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <!-- Tops -->
+      <a href="/apparel/tops" class="group block relative overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Tops" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+        <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition duration-300"></div>
+        <div class="absolute bottom-8 left-8">
+          <h3 class="text-white text-2xl font-bold uppercase tracking-wider">TOPS</h3>
+          <p class="text-white/80 mt-2">Performance Tees & Tanks</p>
+        </div>
+      </a>
+      
+      <!-- Bottoms -->
+      <a href="/apparel/bottoms" class="group block relative overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Bottoms" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+        <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition duration-300"></div>
+        <div class="absolute bottom-8 left-8">
+          <h3 class="text-white text-2xl font-bold uppercase tracking-wider">BOTTOMS</h3>
+          <p class="text-white/80 mt-2">Shorts, Leggings & Pants</p>
+        </div>
+      </a>
+      
+      <!-- Outerwear -->
+      <a href="/apparel/outerwear" class="group block relative overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Outerwear" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+        <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition duration-300"></div>
+        <div class="absolute bottom-8 left-8">
+          <h3 class="text-white text-2xl font-bold uppercase tracking-wider">OUTERWEAR</h3>
+          <p class="text-white/80 mt-2">Hoodies & Jackets</p>
+        </div>
+      </a>
+      
+      <!-- Sports Bras -->
+      <a href="/apparel/sports-bras" class="group block relative overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Sports Bras" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+        <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition duration-300"></div>
+        <div class="absolute bottom-8 left-8">
+          <h3 class="text-white text-2xl font-bold uppercase tracking-wider">SPORTS BRAS</h3>
+          <p class="text-white/80 mt-2">Support & Performance</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Brand Story Section -->
+<section class="relative w-full h-[600px] flex items-center justify-center overflow-hidden">
+  <!-- Background Image -->
+  <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" alt="Brand Story" class="absolute inset-0 w-full h-full object-cover z-0" />
+  <!-- Dark Overlay -->
+  <div class="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
+  <!-- Content -->
+  <div class="relative z-20 text-center px-4 max-w-4xl">
+    <h2 class="text-white text-4xl md:text-6xl font-bold uppercase mb-6 tracking-wide">NO COMPROMISE</h2>
+    <p class="text-white/90 text-lg md:text-xl leading-relaxed mb-8">Every piece of PROJECT apparel is designed and tested by athletes who demand the best. We don't cut corners, and neither should you.</p>
+    <a href="/about" class="bg-white text-black font-bold py-4 px-8 uppercase tracking-wider hover:bg-black hover:text-white transition-all duration-300 border-2 border-white">Our Story</a>
+  </div>
+</section>
+
+<!-- Styles -->
+<style>
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  display: inline-block;
+  min-width: 200%;
+  animation: marquee 20s linear infinite;
+}
+
+/* Custom font styling to match NOBULL */
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+/* Button hover effects */
+.transition-all {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+</style>
+
+<!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,566 @@
+<%- include('partials/header') %>
+
+<!-- CSRF Token for AJAX requests -->
+<meta name="csrf-token" content="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>">
+
+<!-- Hero Section -->
+<section class="relative w-full h-screen overflow-hidden">
+  <!-- Background Image -->
+  <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="NOBULL Gym" class="absolute inset-0 w-full h-full object-cover z-0" />
+  
+  <!-- Dark Overlay -->
+  <div class="absolute inset-0 bg-black bg-opacity-70 z-10"></div>
+  
+  <!-- Content -->
+  <div class="relative z-20 flex flex-col items-center justify-center text-center h-full px-4">
+    <h1 class="text-white text-6xl md:text-8xl font-bold uppercase drop-shadow-lg tracking-wider mb-6">GYM</h1>
+    <p class="text-white/90 tracking-widest uppercase text-xl md:text-2xl drop-shadow-sm font-medium mb-4">BUILT FOR THE IRON</p>
+    <p class="text-white/90 text-lg md:text-xl drop-shadow-sm mb-8 max-w-2xl">Gear engineered for serious lifters. From the squat rack to the deadlift platform.</p>
+    <div class="flex flex-col sm:flex-row gap-4">
+      <a href="#products" class="bg-white text-black font-bold py-4 px-8 uppercase tracking-wider hover:bg-black hover:text-white transition-all duration-300 border-2 border-white">Shop Gym Gear</a>
+      <a href="/size-guide" class="bg-transparent text-white font-bold py-4 px-8 uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-300 border-2 border-white">Size Guide</a>
+    </div>
+  </div>
+</section>
+
+<!-- Gym Philosophy -->
+<section class="w-full py-20 px-4 bg-white">
+  <div class="max-w-6xl mx-auto text-center">
+    <h2 class="text-4xl md:text-5xl font-bold uppercase mb-8 tracking-wide">THE GYM IS SACRED</h2>
+    <p class="text-xl text-gray-700 mb-16 max-w-3xl mx-auto">Where iron meets will. Where limits are broken. Where champions are forged. Your gear should be as serious as your commitment.</p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <div class="text-center">
+        <div class="w-20 h-20 bg-black rounded-full flex items-center justify-center mx-auto mb-6">
+          <i class="fas fa-dumbbell text-white text-2xl"></i>
+        </div>
+        <h3 class="text-2xl font-bold uppercase mb-4 tracking-wide">BUILT FOR LIFTING</h3>
+        <p class="text-gray-600 leading-relaxed">Engineered specifically for weightlifting. Superior grip, stability, and support for your heaviest sets.</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-20 h-20 bg-black rounded-full flex items-center justify-center mx-auto mb-6">
+          <i class="fas fa-shield-alt text-white text-2xl"></i>
+        </div>
+        <h3 class="text-2xl font-bold uppercase mb-4 tracking-wide">UNBREAKABLE</h3>
+        <p class="text-gray-600 leading-relaxed">Built to withstand the punishment of serious training. Day after day, rep after rep.</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-20 h-20 bg-black rounded-full flex items-center justify-center mx-auto mb-6">
+          <i class="fas fa-fire text-white text-2xl"></i>
+        </div>
+        <h3 class="text-2xl font-bold uppercase mb-4 tracking-wide">NO COMPROMISE</h3>
+        <p class="text-gray-600 leading-relaxed">Zero gimmicks. Zero distractions. Just pure performance gear for serious athletes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Gender Selection & Products -->
+<section id="products" class="w-full py-20 px-4 bg-gray-50">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-bold uppercase mb-4 tracking-wide">GYM COLLECTION</h2>
+      <p class="text-xl text-gray-700">Gear for serious lifters</p>
+    </div>
+    
+    <!-- Gender Toggle -->
+    <div class="flex justify-center mb-12">
+      <div class="bg-white border-2 border-black rounded-lg p-2 flex">
+        <button id="menBtn" class="gender-btn <%= gender === 'men' ? 'active' : '' %>" data-gender="men">
+          <span class="font-bold text-sm uppercase tracking-wider">MEN</span>
+        </button>
+        <button id="womenBtn" class="gender-btn <%= gender === 'women' ? 'active' : '' %>" data-gender="women">
+          <span class="font-bold text-sm uppercase tracking-wider">WOMEN</span>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Loading State -->
+    <div id="loadingState" class="text-center py-12" style="display:none;">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-black"></div>
+      <p class="mt-4 text-gray-600 font-medium">Loading gym gear...</p>
+    </div>
+    
+    <!-- Products Grid -->
+    <div id="gymGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <% if (products && products.length > 0) { %>
+        <% products.forEach((product, index) => { %>
+          <div class="group cursor-pointer bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+            <div class="relative overflow-hidden">
+              <img src="<%= product.image || product.img %>" alt="<%= product.name %>" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+              <% if (index === 0) { %>
+                <div class="absolute top-4 left-4 bg-black text-white px-3 py-1 text-sm font-bold uppercase tracking-wider">Gym Favorite</div>
+              <% } else if (index === 1) { %>
+                <div class="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 text-sm font-bold uppercase tracking-wider">Heavy Duty</div>
+              <% } %>
+              <div class="absolute bottom-4 left-4 bg-black/80 text-white px-2 py-1 text-xs font-bold uppercase tracking-wider">Gym Ready</div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-2xl font-bold uppercase tracking-wide mb-2"><%= product.name %></h3>
+              <p class="text-gray-600 mb-4"><%= product.description || product.desc || 'Built for serious lifting and gym training. Engineered for performance and durability.' %></p>
+              <div class="flex items-center justify-between">
+                <span class="text-2xl font-bold"><%= product.price %> DH</span>
+                <div class="flex gap-2">
+                  <a href="/products/<%= product._id %>" class="bg-black text-white px-4 py-2 text-sm font-bold uppercase hover:bg-gray-800 transition">View Product</a>
+                  <button onclick="addToCartFromGym('<%= product._id %>')" class="bg-gray-200 text-black px-4 py-2 text-sm font-bold uppercase hover:bg-gray-300 transition">Add to Cart</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <!-- Fallback content if no products found -->
+        <div class="col-span-full text-center py-12">
+          <div class="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-dumbbell text-gray-400 text-2xl"></i>
+          </div>
+          <h3 class="text-2xl font-bold uppercase mb-4 tracking-wide">No Gym Products Found</h3>
+          <p class="text-gray-600 mb-8">Check back soon for new gym gear releases.</p>
+          <a href="/products" class="bg-black text-white font-bold py-3 px-6 uppercase tracking-wider hover:bg-gray-800 transition">Browse All Products</a>
+        </div>
+      <% } %>
+    </div>
+    
+    <!-- No Results Message -->
+    <div id="noProductsMsg" class="text-center py-12" style="display:none;">
+      <div class="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+        <i class="fas fa-dumbbell text-gray-400 text-2xl"></i>
+      </div>
+      <h3 class="text-2xl font-bold uppercase mb-4 tracking-wide">No Gym Products Found</h3>
+      <p class="text-gray-600 mb-8">Try switching to the other gender category or check back soon for new releases.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Gym Essentials -->
+<section class="w-full py-20 px-4 bg-white">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-bold uppercase mb-4 tracking-wide">GYM ESSENTIALS</h2>
+      <p class="text-xl text-gray-700">Everything you need for serious training</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <!-- Training Shoes -->
+      <div class="flex flex-col lg:flex-row items-center gap-8">
+        <div class="w-full lg:w-1/2">
+          <img src="https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Training Shoes" class="w-full h-96 object-cover rounded-lg" />
+        </div>
+        <div class="w-full lg:w-1/2 text-center lg:text-left">
+          <h3 class="text-3xl font-bold uppercase tracking-wide mb-4">TRAINING SHOES</h3>
+          <p class="text-gray-600 text-lg mb-6 leading-relaxed">Flat, stable platform for heavy lifting. Superior grip for rope climbs and box jumps.</p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <a href="/trainers" class="bg-black text-white font-bold py-3 px-6 uppercase tracking-wider hover:bg-gray-800 transition">Shop Trainers</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Gym Apparel -->
+      <div class="flex flex-col lg:flex-row-reverse items-center gap-8">
+        <div class="w-full lg:w-1/2">
+          <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Gym Apparel" class="w-full h-96 object-cover rounded-lg" />
+        </div>
+        <div class="w-full lg:w-1/2 text-center lg:text-left">
+          <h3 class="text-3xl font-bold uppercase tracking-wide mb-4">GYM APPAREL</h3>
+          <p class="text-gray-600 text-lg mb-6 leading-relaxed">Performance fabrics that move with you. Built to handle your toughest workouts.</p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <a href="/apparel" class="bg-black text-white font-bold py-3 px-6 uppercase tracking-wider hover:bg-gray-800 transition">Shop Apparel</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Gym Technology -->
+<section class="w-full py-20 px-4 bg-black text-white">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-bold uppercase mb-4 tracking-wide">GYM TECHNOLOGY</h2>
+      <p class="text-xl text-gray-300">Engineering for the iron temple</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div class="text-center">
+        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-grip-horizontal text-black text-xl"></i>
+        </div>
+        <h3 class="text-lg font-bold uppercase mb-2 tracking-wide">SUPERIOR GRIP</h3>
+        <p class="text-gray-300 text-sm">Maximum traction for heavy lifts</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-balance-scale text-black text-xl"></i>
+        </div>
+        <h3 class="text-lg font-bold uppercase mb-2 tracking-wide">STABLE PLATFORM</h3>
+        <p class="text-gray-300 text-sm">Flat sole for lifting stability</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-shield-alt text-black text-xl"></i>
+        </div>
+        <h3 class="text-lg font-bold uppercase mb-2 tracking-wide">REINFORCED</h3>
+        <p class="text-gray-300 text-sm">Built to handle heavy training</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-fire text-black text-xl"></i>
+        </div>
+        <h3 class="text-lg font-bold uppercase mb-2 tracking-wide">PERFORMANCE</h3>
+        <p class="text-gray-300 text-sm">Engineered for serious athletes</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Gym Motivation Section -->
+<section class="w-full py-20 px-4 bg-gray-900 text-white">
+  <div class="max-w-4xl mx-auto text-center">
+    <h2 class="text-4xl md:text-5xl font-bold uppercase mb-8 tracking-wide">RESPECT THE IRON</h2>
+    <blockquote class="text-2xl md:text-3xl font-light italic mb-8 leading-relaxed">
+      "The iron never lies to you. You can walk outside and listen to all kinds of talk, get told that you're a god or a total bastard. The iron will always kick you the real deal."
+    </blockquote>
+    <p class="text-xl text-gray-300 mb-8">- Henry Rollins</p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+      <div class="text-center">
+        <div class="text-4xl font-bold mb-2">💪</div>
+        <h4 class="text-lg font-bold uppercase mb-2">STRENGTH</h4>
+        <p class="text-gray-400">Built in the gym</p>
+      </div>
+      <div class="text-center">
+        <div class="text-4xl font-bold mb-2">🔥</div>
+        <h4 class="text-lg font-bold uppercase mb-2">DEDICATION</h4>
+        <p class="text-gray-400">Forged through consistency</p>
+      </div>
+      <div class="text-center">
+        <div class="text-4xl font-bold mb-2">⚡</div>
+        <h4 class="text-lg font-bold uppercase mb-2">POWER</h4>
+        <p class="text-gray-400">Unleashed through training</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="relative w-full h-96 flex items-center justify-center overflow-hidden">
+  <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" alt="NOBULL Gym Training" class="absolute inset-0 w-full h-full object-cover z-0" />
+  <div class="absolute inset-0 bg-black bg-opacity-70 z-10"></div>
+  <div class="relative z-20 text-center px-4">
+    <h2 class="text-white text-4xl md:text-6xl font-bold uppercase mb-6 tracking-wide">EARN YOUR STRENGTH</h2>
+    <p class="text-white/90 text-lg md:text-xl mb-8">Gear that matches your commitment to the iron</p>
+    <a href="/products" class="bg-white text-black font-bold py-4 px-8 uppercase tracking-wider hover:bg-black hover:text-white transition-all duration-300 border-2 border-white">Shop Gym Collection</a>
+  </div>
+</section>
+
+<style>
+/* Gender Toggle Styles */
+.gender-btn {
+  padding: 12px 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+  color: #000;
+}
+
+.gender-btn.active {
+  background: #000;
+  color: #fff;
+}
+
+.gender-btn:hover:not(.active) {
+  background: #f3f4f6;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Loading animation */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Hover effects */
+.group:hover .group-hover\:scale-105 {
+  transform: scale(1.05);
+}
+
+/* Transition utilities */
+.transition-all {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition {
+  transition: all 0.3s ease;
+}
+
+.duration-300 {
+  transition-duration: 300ms;
+}
+
+.duration-500 {
+  transition-duration: 500ms;
+}
+</style>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+// Gender switching functionality
+const menBtn = document.getElementById('menBtn');
+const womenBtn = document.getElementById('womenBtn');
+const gymGrid = document.getElementById('gymGrid');
+const noProductsMsg = document.getElementById('noProductsMsg');
+const loadingState = document.getElementById('loadingState');
+
+function showLoading() {
+  loadingState.style.display = 'block';
+  gymGrid.style.display = 'none';
+  noProductsMsg.style.display = 'none';
+}
+
+function hideLoading() {
+  loadingState.style.display = 'none';
+}
+
+function renderProducts(products) {
+  hideLoading();
+  gymGrid.innerHTML = '';
+  
+  if (!products.length) {
+    gymGrid.style.display = 'none';
+    noProductsMsg.style.display = 'block';
+    return;
+  }
+  
+  gymGrid.style.display = 'grid';
+  noProductsMsg.style.display = 'none';
+  
+  products.forEach((product, index) => {
+    const card = document.createElement('div');
+    card.className = 'group cursor-pointer bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300';
+    card.innerHTML = `
+      <div class="relative overflow-hidden">
+        <img src="${product.image || product.img}" alt="${product.name}" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+        ${index === 0 ? '<div class="absolute top-4 left-4 bg-black text-white px-3 py-1 text-sm font-bold uppercase tracking-wider">Gym Favorite</div>' : ''}
+        ${index === 1 ? '<div class="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 text-sm font-bold uppercase tracking-wider">Heavy Duty</div>' : ''}
+        <div class="absolute bottom-4 left-4 bg-black/80 text-white px-2 py-1 text-xs font-bold uppercase tracking-wider">Gym Ready</div>
+      </div>
+      <div class="p-6">
+        <h3 class="text-2xl font-bold uppercase tracking-wide mb-2">${product.name}</h3>
+        <p class="text-gray-600 mb-4">${product.description || product.desc || 'Built for serious lifting and gym training. Engineered for performance and durability.'}</p>
+        <div class="flex items-center justify-between">
+          <span class="text-2xl font-bold">${product.price} DH</span>
+          <div class="flex gap-2">
+            <a href="/products/${product._id}" class="bg-black text-white px-4 py-2 text-sm font-bold uppercase hover:bg-gray-800 transition">View Product</a>
+            <button onclick="addToCartFromGym('${product._id}')" class="bg-gray-200 text-black px-4 py-2 text-sm font-bold uppercase hover:bg-gray-300 transition">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    `;
+    gymGrid.appendChild(card);
+  });
+}
+
+async function switchGender(gender) {
+  showLoading();
+  
+  try {
+    const res = await fetch(`/api/drive?gender=${gender}`);
+    const data = await res.json();
+    renderProducts(data.products);
+    history.replaceState(null, '', `/drive?gender=${gender}`);
+  } catch (error) {
+    console.error('Error fetching gym products:', error);
+    hideLoading();
+    noProductsMsg.style.display = 'block';
+    gymGrid.style.display = 'none';
+  }
+}
+
+if (menBtn && womenBtn) {
+  menBtn.addEventListener('click', async () => {
+    if (menBtn.classList.contains('active')) return;
+    
+    menBtn.classList.add('active');
+    womenBtn.classList.remove('active');
+    await switchGender('men');
+  });
+
+  womenBtn.addEventListener('click', async () => {
+    if (womenBtn.classList.contains('active')) return;
+    
+    womenBtn.classList.add('active');
+    menBtn.classList.remove('active');
+    await switchGender('women');
+  });
+}
+
+// Add to cart functionality for gym page
+function addToCartFromGym(productId) {
+    // Get CSRF token if available
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    
+    // Create form data
+    const formData = new FormData();
+    formData.append('color', 'Black'); // Default color
+    formData.append('size', 'M'); // Default size
+    
+    // Add CSRF token if available
+    if (csrfToken) {
+        formData.append('_csrf', csrfToken);
+    }
+    
+    // Find the button that was clicked
+    const button = event.target;
+    const originalText = button.textContent;
+    
+    // Show loading state
+    button.textContent = 'Adding...';
+    button.disabled = true;
+    button.style.opacity = '0.7';
+    
+    fetch(`/cart/add/${productId}`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: new URLSearchParams(formData),
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            // Show success message
+            showNotification('💪 Added to cart! Ready to lift!', 'success');
+            
+            // Update button temporarily
+            button.textContent = '✓ Added!';
+            button.style.backgroundColor = '#10b981';
+            
+            // Update cart count if available
+            updateCartCount(data.cartCount);
+            
+            // Dispatch cart-updated event
+            window.dispatchEvent(new CustomEvent('cart-updated'));
+            
+            // Reset button after delay
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.disabled = false;
+                button.style.opacity = '1';
+                button.style.backgroundColor = '';
+            }, 2000);
+        } else {
+            throw new Error(data.error || 'Failed to add to cart');
+        }
+    })
+    .catch(error => {
+        console.error('Error adding to cart:', error);
+        showNotification('❌ Failed to add to cart. Please try again.', 'error');
+        
+        // Reset button
+        button.textContent = originalText;
+        button.disabled = false;
+        button.style.opacity = '1';
+    });
+}
+
+// Utility function to show notifications
+function showNotification(message, type) {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'success' ? '#10b981' : '#ef4444'};
+        color: white;
+        padding: 16px 24px;
+        border-radius: 8px;
+        z-index: 10000;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        animation: slideInRight 0.3s ease-out;
+        max-width: 300px;
+    `;
+    
+    notification.textContent = message;
+    
+    // Add animation styles if not already added
+    if (!document.querySelector('#notification-styles')) {
+        const style = document.createElement('style');
+        style.id = 'notification-styles';
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    document.body.appendChild(notification);
+    
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.style.animation = 'slideInRight 0.3s ease-out reverse';
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 300);
+        }
+    }, 3000);
+}
+
+// Utility function to update cart count
+function updateCartCount(count) {
+    const cartCounters = document.querySelectorAll('.cart-count, .cart-counter, [data-cart-count]');
+    cartCounters.forEach(counter => {
+        counter.textContent = count || 0;
+        if (count > 0) {
+            counter.style.display = 'inline-block';
+        }
+    });
+}
+
+// Smooth scroll for anchor links
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+});
+</script>
+
+<%- include('partials/footer') %>

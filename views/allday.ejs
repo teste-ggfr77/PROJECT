@@ -1,0 +1,435 @@
+<%- include('partials/header') %>
+
+<!-- Hero Section -->
+<section class="allday-hero">
+  <div class="hero-overlay">
+    <div class="hero-content">
+      <h1 class="hero-title">ALLDAY COLLECTION</h1>
+      <p class="hero-subtitle">FOOTWEAR BUILT FOR PERFORMANCE: IN AND OUT OF THE GYM</p>
+      <p class="hero-description">From morning workouts to evening adventures, our Allday collection delivers uncompromising comfort and durability for every step of your journey.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+  <div class="max-w-7xl mx-auto px-4 py-16">
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🏋️</div>
+        <h3>GYM READY</h3>
+        <p>Built to handle your toughest workouts with superior grip and stability</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🚶</div>
+        <h3>ALL-DAY COMFORT</h3>
+        <p>Engineered for extended wear with premium cushioning and breathable materials</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💪</div>
+        <h3>DURABLE DESIGN</h3>
+        <p>Constructed with high-quality materials to withstand daily wear and tear</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>VERSATILE STYLE</h3>
+        <p>Seamlessly transitions from gym to street with modern, athletic aesthetics</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Products Section -->
+<section class="products-section py-20 px-4">
+  <div class="max-w-7xl mx-auto">
+    <div class="section-header">
+      <div class="header-content">
+        <h2 class="section-title">CHOOSE YOUR STYLE</h2>
+        <p class="section-subtitle">Performance footwear designed for your active lifestyle</p>
+      </div>
+      <div class="gender-switcher">
+        <button id="menBtn" class="gender-btn <%= gender === 'men' ? 'active' : '' %>">MEN</button>
+        <button id="womenBtn" class="gender-btn <%= gender === 'women' ? 'active' : '' %>">WOMEN</button>
+      </div>
+    </div>
+    <div id="alldayGrid" class="fancy-card-grid">
+      <% products.forEach(product => { %>
+      <div class="fancy-card group">
+        <img src="<%= product.image || product.img %>" alt="<%= product.name %>" class="fancy-card-img" loading="lazy" />
+        <div class="fancy-card-body">
+          <h2 class="fancy-card-title"><%= product.name %></h2>
+          <p class="fancy-card-desc"><%= product.desc || product.description %></p>
+          <span class="fancy-card-price"><%= product.price %></span>
+          <a href="/products/<%= product._id %>" class="fancy-card-btn">Shop</a>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+    <div id="noProductsMsg" class="no-products-msg" style="display:none;">
+      <div class="no-products-content">
+        <h3>Coming Soon</h3>
+        <p>New Allday products for this category are currently in development. Check back soon!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="cta-section">
+  <div class="cta-content">
+    <h2>READY TO ELEVATE YOUR PERFORMANCE?</h2>
+    <p>Join thousands of athletes who trust PROJECT for their training and everyday needs</p>
+    <div class="cta-buttons">
+      <a href="/trainers" class="cta-btn primary">SHOP TRAINERS</a>
+      <a href="/outwork" class="cta-btn secondary">EXPLORE OUTWORK</a>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+
+<script>
+const menBtn = document.getElementById('menBtn');
+const womenBtn = document.getElementById('womenBtn');
+const alldayGrid = document.getElementById('alldayGrid');
+const noProductsMsg = document.getElementById('noProductsMsg');
+
+function renderProducts(products) {
+  alldayGrid.innerHTML = '';
+  if (!products.length) {
+    alldayGrid.style.display = 'none';
+    noProductsMsg.style.display = 'block';
+    return;
+  }
+  alldayGrid.style.display = 'grid';
+  noProductsMsg.style.display = 'none';
+  products.forEach(product => {
+    const card = document.createElement('div');
+    card.className = 'fancy-card group';
+    card.innerHTML = `
+      <img src="${product.image || product.img}" alt="${product.name}" class="fancy-card-img" loading="lazy" />
+      <div class="fancy-card-body">
+        <h2 class="fancy-card-title">${product.name}</h2>
+        <p class="fancy-card-desc">${product.desc || product.description || ''}</p>
+        <span class="fancy-card-price">${product.price}</span>
+        <a href="/products/${product._id}" class="fancy-card-btn">Shop</a>
+      </div>
+    `;
+    alldayGrid.appendChild(card);
+  });
+}
+
+menBtn.addEventListener('click', async () => {
+  menBtn.classList.add('active');
+  womenBtn.classList.remove('active');
+  const res = await fetch('/api/allday?gender=men');
+  const data = await res.json();
+  renderProducts(data.products);
+  history.replaceState(null, '', '/allday?gender=men');
+});
+
+womenBtn.addEventListener('click', async () => {
+  womenBtn.classList.add('active');
+  menBtn.classList.remove('active');
+  const res = await fetch('/api/allday?gender=women');
+  const data = await res.json();
+  renderProducts(data.products);
+  history.replaceState(null, '', '/allday?gender=women');
+});
+</script>
+
+<style>
+/* Hero Section */
+.allday-hero {
+  background: #000;
+  color: #fff;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.hero-overlay {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.hero-description {
+  font-size: 1rem;
+  color: #ccc;
+  line-height: 1.5;
+}
+
+/* Features Section */
+.features-section {
+  background: #fff;
+  padding: 3rem 1rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: #fff;
+  padding: 1.5rem;
+  text-align: center;
+  border: 1px solid #ddd;
+  transition: border-color 0.3s ease;
+}
+
+.feature-card:hover {
+  border-color: #000;
+}
+
+.feature-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 0.5rem;
+}
+
+.feature-card p {
+  color: #666;
+  line-height: 1.4;
+  font-size: 0.9rem;
+}
+
+/* Products Section */
+.products-section {
+  background: #f8f8f8;
+  padding: 3rem 1rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.header-content {
+  flex: 1;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+  font-size: 1rem;
+  color: #666;
+}
+
+.gender-switcher {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.gender-btn {
+  background: #fff;
+  border: 1px solid #000;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.gender-btn:hover,
+.gender-btn.active {
+  background: #000;
+  color: #fff;
+}
+
+.fancy-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.fancy-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  transition: border-color 0.3s ease;
+}
+
+.fancy-card:hover {
+  border-color: #000;
+}
+
+.fancy-card-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.fancy-card-body {
+  padding: 1rem;
+}
+
+.fancy-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 0.5rem;
+}
+
+.fancy-card-desc {
+  color: #666;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+  font-size: 0.9rem;
+}
+
+.fancy-card-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #000;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.fancy-card-btn {
+  display: inline-block;
+  background: #000;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.fancy-card-btn:hover {
+  background: #333;
+}
+
+/* No Products Message */
+.no-products-msg {
+  text-align: center;
+  padding: 2rem;
+}
+
+.no-products-content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 0.5rem;
+}
+
+.no-products-content p {
+  font-size: 1rem;
+  color: #666;
+}
+
+/* Call to Action Section */
+.cta-section {
+  background: #000;
+  color: #fff;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.cta-content h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.cta-content p {
+  font-size: 1rem;
+  color: #ccc;
+  margin-bottom: 2rem;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cta-btn {
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.cta-btn.primary {
+  background: #fff;
+  color: #000;
+}
+
+.cta-btn.primary:hover {
+  background: #f0f0f0;
+}
+
+.cta-btn.secondary {
+  background: transparent;
+  color: #fff;
+  border: 1px solid #fff;
+}
+
+.cta-btn.secondary:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .fancy-card-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .cta-btn {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+</style>

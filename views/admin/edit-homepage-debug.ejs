@@ -1,0 +1,415 @@
+<%- include('../partials/admin-header') %>
+
+<div class="container-fluid px-4 py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Edit Homepage Sections</h1>
+        <button onclick="saveAllChanges()" class="btn btn-success">Save All Changes</button>
+    </div>
+
+    <!-- Debug Panel -->
+    <div class="alert alert-info">
+        <h5>Debug Information</h5>
+        <div id="debug-info">
+            <p>Open browser console (F12) to see detailed logs when saving.</p>
+        </div>
+    </div>
+
+    <!-- Section Preview & Editor -->
+    <div class="row">
+        <!-- Preview Panel -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    Live Preview
+                </div>
+                <div class="card-body p-0">
+                    <!-- Hero Section Preview -->
+                    <div class="section-preview position-relative" id="hero-preview" onclick="showEditor('hero')">
+                        <div class="hero-section" style="min-height: 400px; background: url('<%= heroSection?.image || 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b' %>') center/cover;">
+                            <div class="hero-overlay"></div>
+                            <div class="hero-content text-center text-white p-5">
+                                <h1 class="display-4 fw-bold editable" data-field="title"><%= heroSection?.title || 'NO BULLSHIT' %></h1>
+                                <p class="lead fw-bold editable" data-field="subtitle"><%= heroSection?.subtitle || 'FOOTWEAR BUILT FOR PERFORMANCE' %></p>
+                                <p class="editable" data-field="description"><%= heroSection?.description || 'In and Out of the Gym' %></p>
+                            </div>
+                            <div class="edit-overlay">
+                                <span class="edit-badge"><i class="fas fa-edit"></i> Click to Edit</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Featured Product Preview -->
+                    <div class="section-preview position-relative" id="featured-preview" onclick="showEditor('featured')">
+                        <div class="bg-white py-5">
+                            <div class="container">
+                                <div class="row align-items-center">
+                                    <div class="col-md-6">
+                                        <img src="<%= featuredSection?.image || 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f' %>" 
+                                             alt="Featured Product" class="img-fluid rounded shadow">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h2 class="h1 fw-bold editable" data-field="title"><%= featuredSection?.title || 'OUTWORK TRAINER' %></h2>
+                                        <p class="lead editable" data-field="description">
+                                            <%= featuredSection?.description || 'Built for the athlete who refuses to compromise. The Outwork Trainer delivers unmatched durability and performance for your toughest workouts.' %>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="edit-overlay">
+                                <span class="edit-badge"><i class="fas fa-edit"></i> Click to Edit</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Promotional Banner Preview -->
+                    <div class="section-preview position-relative" id="promo-preview" onclick="showEditor('promo')">
+                        <div class="bg-dark text-white py-3">
+                            <div class="container">
+                                <div class="promo-scroll">
+                                    <% 
+                                    let promoMessages;
+                                    try {
+                                        promoMessages = promoSection?.description ? JSON.parse(promoSection.description) : [
+                                            '🔥 FREE SHIPPING ON ORDERS OVER $75',
+                                            '💪 BUILT FOR PERFORMANCE',
+                                            '🚀 NEW ARRIVALS JUST DROPPED',
+                                            '⚡ NO GIMMICKS, JUST GEAR THAT WORKS'
+                                        ];
+                                    } catch (e) {
+                                        promoMessages = [
+                                            '🔥 FREE SHIPPING ON ORDERS OVER $75',
+                                            '💪 BUILT FOR PERFORMANCE',
+                                            '🚀 NEW ARRIVALS JUST DROPPED',
+                                            '⚡ NO GIMMICKS, JUST GEAR THAT WORKS'
+                                        ];
+                                    }
+                                    %>
+                                    <div class="d-flex gap-4">
+                                        <% promoMessages.forEach(message => { %>
+                                            <span class="promo-message editable" data-field="message"><%= message %></span>
+                                        <% }) %>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="edit-overlay">
+                                <span class="edit-badge"><i class="fas fa-edit"></i> Click to Edit</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Editor Panel -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    Section Editor
+                </div>
+                <div class="card-body">
+                    <!-- Hero Section Editor -->
+                    <div id="hero-editor" class="section-editor d-none">
+                        <h3 class="h5 mb-3">Edit Hero Section</h3>
+                        <form id="hero-form" class="needs-validation" novalidate>
+                            <div class="mb-3">
+                                <label class="form-label">Title</label>
+                                <input type="text" class="form-control" name="title" value="<%= heroSection?.title || 'NO BULLSHIT' %>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Subtitle</label>
+                                <input type="text" class="form-control" name="subtitle" value="<%= heroSection?.subtitle || 'FOOTWEAR BUILT FOR PERFORMANCE' %>">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Description</label>
+                                <input type="text" class="form-control" name="description" value="<%= heroSection?.description || 'In and Out of the Gym' %>">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Background Image</label>
+                                <input type="file" class="form-control" name="image" accept="image/*">
+                                <div class="form-text">Recommended size: 1920x1080px</div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Featured Product Editor -->
+                    <div id="featured-editor" class="section-editor d-none">
+                        <h3 class="h5 mb-3">Edit Featured Product</h3>
+                        <form id="featured-form" class="needs-validation" novalidate>
+                            <div class="mb-3">
+                                <label class="form-label">Product Title</label>
+                                <input type="text" class="form-control" name="title" value="<%= featuredSection?.title || 'OUTWORK TRAINER' %>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" name="description" rows="3" required><%= featuredSection?.description || 'Built for the athlete who refuses to compromise. The Outwork Trainer delivers unmatched durability and performance for your toughest workouts.' %></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Product Image</label>
+                                <input type="file" class="form-control" name="image" accept="image/*">
+                                <div class="form-text">Recommended size: 800x800px</div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Promotional Banner Editor -->
+                    <div id="promo-editor" class="section-editor d-none">
+                        <h3 class="h5 mb-3">Edit Promotional Messages</h3>
+                        <form id="promo-form" class="needs-validation" novalidate>
+                            <div id="promo-messages">
+                                <% promoMessages.forEach((message, index) => { %>
+                                    <div class="mb-3 promo-message-group">
+                                        <div class="d-flex gap-2">
+                                            <input type="text" class="form-control" name="messages[]" value="<%= message %>" required>
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="removePromoMessage(this)">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                <% }) %>
+                            </div>
+                            <button type="button" class="btn btn-secondary btn-sm mb-3" onclick="addPromoMessage()">
+                                <i class="fas fa-plus"></i> Add Message
+                            </button>
+                        </form>
+                    </div>
+
+                    <div id="no-section-selected" class="text-center py-5">
+                        <i class="fas fa-hand-pointer fa-3x mb-3 text-muted"></i>
+                        <p class="text-muted">Click on any section in the preview to edit its content</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.section-preview {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.section-preview:hover .edit-overlay {
+    opacity: 1;
+}
+
+.edit-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.edit-badge {
+    background: white;
+    color: #333;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+.promo-scroll {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.promo-scroll .d-flex {
+    animation: scroll 20s linear infinite;
+}
+
+.promo-message {
+    padding: 0 20px;
+}
+
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.section-editor {
+    transition: all 0.3s ease;
+}
+</style>
+
+<script>
+let currentEditor = null;
+
+function showEditor(section) {
+    // Hide all editors
+    document.querySelectorAll('.section-editor').forEach(editor => {
+        editor.classList.add('d-none');
+    });
+    
+    // Show selected editor
+    const editor = document.getElementById(`${section}-editor`);
+    editor.classList.remove('d-none');
+    
+    // Hide placeholder
+    document.getElementById('no-section-selected').classList.add('d-none');
+    
+    currentEditor = section;
+    
+    // Highlight selected section
+    document.querySelectorAll('.section-preview').forEach(preview => {
+        preview.style.outline = 'none';
+    });
+    document.getElementById(`${section}-preview`).style.outline = '3px solid #0d6efd';
+}
+
+function addPromoMessage() {
+    const container = document.getElementById('promo-messages');
+    const div = document.createElement('div');
+    div.className = 'mb-3 promo-message-group';
+    div.innerHTML = `
+        <div class="d-flex gap-2">
+            <input type="text" class="form-control" name="messages[]" required>
+            <button type="button" class="btn btn-danger btn-sm" onclick="removePromoMessage(this)">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `;
+    container.appendChild(div);
+}
+
+function removePromoMessage(button) {
+    button.closest('.promo-message-group').remove();
+}
+
+async function saveAllChanges() {
+    const heroForm = document.getElementById('hero-form');
+    const featuredForm = document.getElementById('featured-form');
+    const promoForm = document.getElementById('promo-form');
+    
+    const debugInfo = document.getElementById('debug-info');
+    
+    try {
+        console.log('=== SAVING ALL CHANGES ===');
+        debugInfo.innerHTML = '<p>Starting save process...</p>';
+        
+        // Save hero section
+        const heroData = new FormData(heroForm);
+        console.log('Hero form data:');
+        for (let [key, value] of heroData.entries()) {
+            console.log(key, value);
+        }
+        
+        debugInfo.innerHTML += '<p>Saving hero section...</p>';
+        console.log('Sending hero section request...');
+        const heroResponse = await fetch('/admin/update-section/hero', {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
+            body: heroData
+        });
+        
+        console.log('Hero response status:', heroResponse.status);
+        const heroResult = await heroResponse.text();
+        console.log('Hero response:', heroResult);
+        
+        if (!heroResponse.ok) {
+            throw new Error('Failed to save hero section: ' + heroResult);
+        }
+        
+        debugInfo.innerHTML += '<p>✅ Hero section saved</p>';
+        
+        // Save featured section
+        const featuredData = new FormData(featuredForm);
+        console.log('Featured form data:');
+        for (let [key, value] of featuredData.entries()) {
+            console.log(key, value);
+        }
+        
+        debugInfo.innerHTML += '<p>Saving featured section...</p>';
+        console.log('Sending featured section request...');
+        const featuredResponse = await fetch('/admin/update-section/featured', {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
+            body: featuredData
+        });
+        
+        console.log('Featured response status:', featuredResponse.status);
+        const featuredResult = await featuredResponse.text();
+        console.log('Featured response:', featuredResult);
+        
+        if (!featuredResponse.ok) {
+            throw new Error('Failed to save featured section: ' + featuredResult);
+        }
+        
+        debugInfo.innerHTML += '<p>✅ Featured section saved</p>';
+        
+        // Save promo section
+        const promoData = new FormData(promoForm);
+        console.log('Promo form data:');
+        for (let [key, value] of promoData.entries()) {
+            console.log(key, value);
+        }
+        
+        debugInfo.innerHTML += '<p>Saving promo section...</p>';
+        console.log('Sending promo section request...');
+        const promoResponse = await fetch('/admin/update-section/promo', {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
+            body: promoData
+        });
+        
+        console.log('Promo response status:', promoResponse.status);
+        const promoResult = await promoResponse.text();
+        console.log('Promo response:', promoResult);
+        
+        if (!promoResponse.ok) {
+            throw new Error('Failed to save promo section: ' + promoResult);
+        }
+        
+        debugInfo.innerHTML += '<p>✅ Promo section saved</p>';
+        
+        console.log('All sections saved successfully');
+        debugInfo.innerHTML += '<p><strong>✅ All changes saved successfully!</strong></p>';
+        alert('All changes saved successfully!');
+        
+        setTimeout(() => {
+            location.reload();
+        }, 1000);
+        
+    } catch (error) {
+        console.error('Error saving changes:', error);
+        debugInfo.innerHTML += `<p><strong>❌ Error: ${error.message}</strong></p>`;
+        alert('Error saving changes: ' + error.message);
+    }
+}
+
+// Initialize tooltips
+document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(tooltip => {
+    new bootstrap.Tooltip(tooltip);
+});
+</script>
+
+<%- include('../partials/admin-footer') %>

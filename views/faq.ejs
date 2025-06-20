@@ -1,0 +1,346 @@
+<%- include('partials/header') %>
+
+<!-- Hero Section -->
+<section class="relative w-full h-[50vh] overflow-hidden">
+  <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="FAQ" class="absolute inset-0 w-full h-full object-cover z-0" />
+  <div class="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
+  <div class="relative z-20 flex flex-col items-center justify-center text-center h-full px-4">
+    <h1 class="text-white text-5xl md:text-7xl font-bold uppercase drop-shadow-lg tracking-wider mb-4">FAQ</h1>
+    <p class="text-white/90 tracking-wide text-xl md:text-2xl drop-shadow-sm font-medium">Frequently Asked Questions</p>
+  </div>
+</section>
+
+<!-- Search Section -->
+<section class="w-full py-12 px-4 bg-gray-50">
+  <div class="max-w-2xl mx-auto">
+    <div class="relative">
+      <input type="text" id="faqSearch" placeholder="Search for answers..." class="w-full px-6 py-4 text-lg border-2 border-black rounded-lg focus:outline-none focus:border-gray-600">
+      <svg class="absolute right-4 top-1/2 transform -translate-y-1/2 w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Categories -->
+<section class="w-full py-20 px-4 bg-white">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold uppercase mb-6 tracking-wide">BROWSE BY CATEGORY</h2>
+      <p class="text-xl text-gray-600">Find answers to your questions</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+      <div class="text-center p-8 border-2 border-gray-200 rounded-lg hover:border-black transition-colors cursor-pointer" onclick="scrollToSection('orders')">
+        <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold uppercase mb-2">ORDERS & SHIPPING</h3>
+        <p class="text-gray-600">Order status, shipping, and delivery questions</p>
+      </div>
+      
+      <div class="text-center p-8 border-2 border-gray-200 rounded-lg hover:border-black transition-colors cursor-pointer" onclick="scrollToSection('products')">
+        <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 2L3 7v11a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V7l-7-5z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold uppercase mb-2">PRODUCTS & SIZING</h3>
+        <p class="text-gray-600">Product information, sizing, and fit questions</p>
+      </div>
+      
+      <div class="text-center p-8 border-2 border-gray-200 rounded-lg hover:border-black transition-colors cursor-pointer" onclick="scrollToSection('account')">
+        <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold uppercase mb-2">ACCOUNT & PAYMENT</h3>
+        <p class="text-gray-600">Account management and payment questions</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Orders & Shipping FAQ -->
+<section id="orders" class="w-full py-20 px-4 bg-gray-50">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-4xl font-bold uppercase mb-12 tracking-wide text-center">ORDERS & SHIPPING</h2>
+    
+    <div class="space-y-6">
+      <div class="faq-item bg-white rounded-lg shadow-sm">
+        <button class="w-full text-left p-6 focus:outline-none" onclick="toggleFAQ(0)">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold uppercase tracking-wide">How can I track my order?</h3>
+            <svg class="w-6 h-6 transform transition-transform" id="faq-icon-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </button>
+        <div class="hidden px-6 pb-6" id="faq-answer-0">
+          <p class="text-gray-700 leading-relaxed">Once your order ships, you'll receive a tracking number via email. You can also track your order by logging into your account and viewing your order history. Tracking information is typically available within 24 hours of shipment.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item bg-white rounded-lg shadow-sm">
+        <button class="w-full text-left p-6 focus:outline-none" onclick="toggleFAQ(1)">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold uppercase tracking-wide">How long does shipping take?</h3>
+            <svg class="w-6 h-6 transform transition-transform" id="faq-icon-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </button>
+        <div class="hidden px-6 pb-6" id="faq-answer-1">
+          <p class="text-gray-700 leading-relaxed">Standard shipping takes 5-7 business days and is free on orders over 750 DH. Express shipping (2-3 days) costs 150 DH, and overnight shipping costs 250 DH. International shipping times vary by destination but typically take 10-21 business days.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item bg-white rounded-lg shadow-sm">
+        <button class="w-full text-left p-6 focus:outline-none" onclick="toggleFAQ(2)">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold uppercase tracking-wide">Can I change my shipping address after placing an order?</h3>
+            <svg class="w-6 h-6 transform transition-transform" id="faq-icon-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </button>
+        <div class="hidden px-6 pb-6" id="faq-answer-2">
+          <p class="text-gray-700 leading-relaxed">You can change your shipping address within 2 hours of placing your order by contacting customer service. After this window, we cannot guarantee address changes as your order may have already entered our fulfillment process.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item bg-white rounded-lg shadow-sm">
+        <button class="w-full text-left p-6 focus:outline-none" onclick="toggleFAQ(3)">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold uppercase tracking-wide">Do you ship internationally?</h3>
+            <svg class="w-6 h-6 transform transition-transform" id="faq-icon-3" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </button>
+        <div class="hidden px-6 pb-6" id="faq-answer-3">
+          <p class="text-gray-700 leading-relaxed">Yes, we ship to over 100 countries worldwide. International shipping costs vary by destination. Please note that international customers are responsible for any customs duties, taxes, or fees imposed by their country.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Products & Sizing FAQ -->
+<section id="products" class="w-full py-20 px-4 bg-white">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-4xl font-bold uppercase mb-12 tracking-wide text-center">PRODUCTS & SIZING</h2>
+    
+    <div class="space-y-6">
+      <div class="faq-item bg-gray-50 rounded-lg shadow-sm">
+        <button class="w-full text-left p-6 focus:outline-none" onclick="toggleFAQ(4)">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold uppercase tracking-wide">How do PROJECT shoes fit?</h3>
+            <svg class="w-6 h-6 transform transition-transform" id="faq-icon-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </button>
+        <div class="hidden px-6 pb-6" id="faq-answer-4">
+          <p class="text-gray-700 leading-relaxed">PROJECT shoes generally run true to size. However, we recommend checking our detailed size guide for each specific model. If you're between sizes, we suggest sizing up for training shoes and sizing down for lifestyle shoes. We offer free exchanges if the fit isn't perfect.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item bg-gray-50 rounded-lg shadow-sm">
+        <button class="w-full text-left p-6 focus:outline-none" onclick="toggleFAQ(5)">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold uppercase tracking-wide">What materials are used in PROJECT products?</h3>
+            <svg class="w-6 h-6 transform transition-transform" id="faq-icon-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </button>
+        <div class="hidden px-6 pb-6" id="faq-answer-5">
+          <p class="text-gray-700 leading-relaxed">We use premium materials including SuperFabric® for durability, breathable mesh for ventilation, and high-quality rubber compounds for traction. Our apparel features moisture-wicking fabrics and reinforced stitching. All materials are chosen for performance and longevity.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item bg-gray-50 rounded-lg shadow-sm">
+        <button class="w-full text-left p-6 focus:outline-none" onclick="toggleFAQ(6)">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold uppercase tracking-wide">How do I care for my PROJECT gear?</h3>
+            <svg class="w-6 h-6 transform transition-transform" id="faq-icon-6" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </button>
+        <div class="hidden px-6 pb-6" id="faq-answer-6">
+          <p class="text-gray-700 leading-relaxed">For footwear: Clean with mild soap and water, air dry away from direct heat. For apparel: Machine wash cold, tumble dry low or air dry. Avoid fabric softeners and bleach. Detailed care instructions are included with each product.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item bg-gray-50 rounded-lg shadow-sm">
+        <button class="w-full text-left p-6 focus:outline-none" onclick="toggleFAQ(7)">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold uppercase tracking-wide">Are PROJECT products suitable for specific sports?</h3>
+            <svg class="w-6 h-6 transform transition-transform" id="faq-icon-7" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </button>
+        <div class="hidden px-6 pb-6" id="faq-answer-7">
+          <p class="text-gray-700 leading-relaxed">PROJECT gear is designed for functional fitness and cross-training. Our shoes excel in weightlifting, CrossFit, HIIT workouts, and general gym training. While versatile, they're specifically engineered for multi-directional movement and stability rather than running-specific activities.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Account & Payment FAQ -->
+<section id="account" class="w-full py-20 px-4 bg-gray-50">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-4xl font-bold uppercase mb-12 tracking-wide text-center">ACCOUNT & PAYMENT</h2>
+    
+    <div class="space-y-6">
+      <div class="faq-item bg-white rounded-lg shadow-sm">
+        <button class="w-full text-left p-6 focus:outline-none" onclick="toggleFAQ(8)">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold uppercase tracking-wide">How do I create an account?</h3>
+            <svg class="w-6 h-6 transform transition-transform" id="faq-icon-8" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </button>
+        <div class="hidden px-6 pb-6" id="faq-answer-8">
+          <p class="text-gray-700 leading-relaxed">You can create an account during checkout or by clicking "Sign Up" in the top right corner of our website. You'll need to provide your email address and create a password. Having an account allows you to track orders, save favorites, and checkout faster.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item bg-white rounded-lg shadow-sm">
+        <button class="w-full text-left p-6 focus:outline-none" onclick="toggleFAQ(9)">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold uppercase tracking-wide">What payment methods do you accept?</h3>
+            <svg class="w-6 h-6 transform transition-transform" id="faq-icon-9" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </button>
+        <div class="hidden px-6 pb-6" id="faq-answer-9">
+          <p class="text-gray-700 leading-relaxed">We accept all major credit cards (Visa, Mastercard, American Express, Discover), PayPal, Apple Pay, Google Pay, and PROJECT gift cards. All transactions are processed securely using industry-standard encryption.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item bg-white rounded-lg shadow-sm">
+        <button class="w-full text-left p-6 focus:outline-none" onclick="toggleFAQ(10)">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold uppercase tracking-wide">Is my payment information secure?</h3>
+            <svg class="w-6 h-6 transform transition-transform" id="faq-icon-10" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </button>
+        <div class="hidden px-6 pb-6" id="faq-answer-10">
+          <p class="text-gray-700 leading-relaxed">Yes, your payment information is completely secure. We use SSL encryption and are PCI DSS compliant. We never store your complete credit card information on our servers. All payment processing is handled by trusted, certified payment processors.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item bg-white rounded-lg shadow-sm">
+        <button class="w-full text-left p-6 focus:outline-none" onclick="toggleFAQ(11)">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold uppercase tracking-wide">Can I use multiple discount codes on one order?</h3>
+            <svg class="w-6 h-6 transform transition-transform" id="faq-icon-11" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </button>
+        <div class="hidden px-6 pb-6" id="faq-answer-11">
+          <p class="text-gray-700 leading-relaxed">Only one discount code can be applied per order. If you have multiple codes, the system will apply the one that gives you the greatest discount. Discount codes cannot be combined with other promotional offers unless specifically stated.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Still Have Questions -->
+<section class="w-full py-20 px-4 bg-black">
+  <div class="max-w-4xl mx-auto text-center">
+    <h2 class="text-4xl font-bold uppercase text-white mb-8 tracking-wide">STILL HAVE QUESTIONS?</h2>
+    <p class="text-xl text-gray-300 leading-relaxed mb-12">
+      Can't find what you're looking for? Our customer service team is here to help.
+    </p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+      <div class="bg-gray-900 p-8 rounded-lg">
+        <h3 class="text-xl font-bold text-white mb-4 uppercase">CONTACT SUPPORT</h3>
+        <p class="text-gray-300 mb-6">Get personalized help from our customer service team</p>
+        <a href="/contact" class="bg-white text-black font-bold py-3 px-6 uppercase tracking-wider hover:bg-gray-200 transition-all duration-300">Contact Us</a>
+      </div>
+      
+      <div class="bg-gray-900 p-8 rounded-lg">
+        <h3 class="text-xl font-bold text-white mb-4 uppercase">LIVE CHAT</h3>
+        <p class="text-gray-300 mb-6">Chat with us in real-time for immediate assistance</p>
+        <button class="bg-white text-black font-bold py-3 px-6 uppercase tracking-wider hover:bg-gray-200 transition-all duration-300" onclick="openLiveChat()">Start Chat</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+function toggleFAQ(index) {
+  const answer = document.getElementById(`faq-answer-${index}`);
+  const icon = document.getElementById(`faq-icon-${index}`);
+  
+  if (answer.classList.contains('hidden')) {
+    answer.classList.remove('hidden');
+    icon.style.transform = 'rotate(180deg)';
+  } else {
+    answer.classList.add('hidden');
+    icon.style.transform = 'rotate(0deg)';
+  }
+}
+
+function scrollToSection(sectionId) {
+  const section = document.getElementById(sectionId);
+  if (section) {
+    section.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }
+}
+
+function openLiveChat() {
+  // Placeholder for live chat integration
+  alert('Live chat feature coming soon! Please contact us via email or phone for immediate assistance.');
+}
+
+// FAQ Search functionality
+document.getElementById('faqSearch').addEventListener('input', function(e) {
+  const searchTerm = e.target.value.toLowerCase();
+  const faqItems = document.querySelectorAll('.faq-item');
+  
+  faqItems.forEach(item => {
+    const question = item.querySelector('h3').textContent.toLowerCase();
+    const answer = item.querySelector('p').textContent.toLowerCase();
+    
+    if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+      item.style.display = 'block';
+    } else {
+      item.style.display = searchTerm === '' ? 'block' : 'none';
+    }
+  });
+});
+
+// Auto-expand FAQ if URL has hash
+document.addEventListener('DOMContentLoaded', function() {
+  const hash = window.location.hash;
+  if (hash) {
+    const section = document.querySelector(hash);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+});
+</script>
+
+<%- include('partials/footer') %>

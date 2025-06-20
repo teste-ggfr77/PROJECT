@@ -1,0 +1,649 @@
+<%- include('partials/header') %>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: #ffffff;
+        padding-top: 80px;
+    }
+
+    .wholesale-hero {
+        position: relative;
+        height: 60vh;
+        background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .wholesale-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="wholesale-pattern" width="25" height="25" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="12.5" height="12.5" fill="rgba(255,255,255,0.05)"/><rect x="12.5" y="12.5" width="12.5" height="12.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23wholesale-pattern)"/></svg>');
+        opacity: 0.3;
+    }
+
+    .wholesale-hero-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        color: white;
+        max-width: 800px;
+        padding: 0 2rem;
+    }
+
+    .wholesale-hero-title {
+        font-size: clamp(3rem, 8vw, 6rem);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .wholesale-hero-subtitle {
+        font-size: clamp(1.25rem, 3vw, 1.5rem);
+        font-weight: 400;
+        letter-spacing: 0.05em;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+    }
+
+    .wholesale-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 5rem 2rem;
+    }
+
+    .wholesale-benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 3rem;
+        margin-top: 3rem;
+    }
+
+    .benefit-card {
+        background: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        border: 3px solid transparent;
+    }
+
+    .benefit-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        border-color: #ea580c;
+    }
+
+    .benefit-card-header {
+        height: 200px;
+        background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .benefit-card-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 20px,
+            rgba(255, 255, 255, 0.1) 20px,
+            rgba(255, 255, 255, 0.1) 40px
+        );
+        animation: wholesale-slide 4s linear infinite;
+    }
+
+    @keyframes wholesale-slide {
+        0% { transform: translateX(-50%) translateY(-50%) rotate(0deg); }
+        100% { transform: translateX(-50%) translateY(-50%) rotate(360deg); }
+    }
+
+    .benefit-icon {
+        width: 5rem;
+        height: 5rem;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+    }
+
+    .benefit-icon i {
+        font-size: 2rem;
+        color: white;
+    }
+
+    .benefit-card-content {
+        padding: 2.5rem;
+    }
+
+    .benefit-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+        color: #000000;
+    }
+
+    .benefit-description {
+        color: #666666;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        font-size: 1rem;
+    }
+
+    .benefit-features {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .benefit-features li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        color: #333333;
+        font-weight: 500;
+    }
+
+    .benefit-features li::before {
+        content: '✓';
+        background: #ea580c;
+        color: white;
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    .section-intro {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .section-title {
+        font-size: clamp(2.5rem, 5vw, 3.5rem);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+        color: #000000;
+    }
+
+    .section-description {
+        font-size: 1.25rem;
+        color: #666666;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    .brand-highlight {
+        color: #ea580c;
+        font-weight: 700;
+    }
+
+    .wholesale-cta {
+        background: #ea580c;
+        color: white;
+        padding: 1.5rem 3rem;
+        text-decoration: none;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        border: 2px solid #ea580c;
+        display: inline-block;
+        margin-top: 2rem;
+    }
+
+    .wholesale-cta:hover {
+        background: white;
+        color: #ea580c;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(234, 88, 12, 0.3);
+    }
+
+    .application-form {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 3rem;
+        margin-top: 4rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
+    }
+
+    .simple-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .simple-header h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 0.5rem;
+    }
+
+    .simple-header p {
+        font-size: 1rem;
+        color: #6b7280;
+        line-height: 1.6;
+    }
+
+    .simple-form {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-field {
+        flex: 1;
+    }
+
+    .form-field.full-width {
+        flex: 1 1 100%;
+    }
+
+    .form-field label {
+        display: block;
+        font-weight: 500;
+        color: #374151;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 1rem;
+        background: #ffffff;
+        color: #111827;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        box-sizing: border-box;
+    }
+
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+        outline: none;
+        border-color: #ea580c;
+        box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
+    }
+
+    .form-field textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .form-field input::placeholder,
+    .form-field textarea::placeholder {
+        color: #9ca3af;
+    }
+
+    .submit-btn {
+        background: #ea580c;
+        color: white;
+        padding: 0.875rem 2rem;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .submit-btn:hover {
+        background: #c2410c;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+    }
+
+    .submit-btn:active {
+        transform: translateY(0);
+    }
+
+    @media (max-width: 640px) {
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+        
+        .application-form {
+            padding: 2rem;
+        }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .wholesale-container {
+            padding: 3rem 1rem;
+        }
+
+        .wholesale-benefits-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .benefit-card-content {
+            padding: 2rem;
+        }
+
+        .wholesale-hero-content {
+            padding: 0 1rem;
+        }
+
+        .application-form {
+            padding: 2rem;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .wholesale-benefits-grid {
+            gap: 1.5rem;
+        }
+
+        .benefit-card-content {
+            padding: 1.5rem;
+        }
+
+        .application-form {
+            padding: 1.5rem;
+        }
+    }
+
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+        .benefit-card,
+        .wholesale-cta,
+        .benefit-card-header::before {
+            animation: none;
+            transition: none;
+        }
+
+        .benefit-card:hover {
+            transform: none;
+        }
+
+        .wholesale-cta:hover {
+            transform: none;
+        }
+    }
+
+    .benefit-card:focus-within {
+        outline: 3px solid #ea580c;
+        outline-offset: 2px;
+    }
+</style>
+
+<main>
+    <!-- Hero Section -->
+    <section class="wholesale-hero">
+        <div class="wholesale-hero-content">
+            <h1 class="wholesale-hero-title">Wholesale</h1>
+            <p class="wholesale-hero-subtitle">Partner With Performance - Join <span class="brand-highlight">PROJECT</span></p>
+        </div>
+    </section>
+
+    <!-- Wholesale Benefits Section -->
+    <section class="wholesale-container">
+        <div class="section-intro">
+            <h2 class="section-title">Why Partner With Us</h2>
+            <p class="section-description">
+                Join the <span class="brand-highlight">PROJECT</span> wholesale network and bring premium gym apparel to your customers. 
+                Built for retailers who demand quality, performance, and profit.
+            </p>
+        </div>
+
+        <div class="wholesale-benefits-grid">
+            <!-- Competitive Pricing -->
+            <article class="benefit-card">
+                <div class="benefit-card-header">
+                    <div class="benefit-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                </div>
+                <div class="benefit-card-content">
+                    <h3 class="benefit-title">Competitive Pricing</h3>
+                    <p class="benefit-description">
+                        Maximize your margins with our competitive wholesale pricing structure. Built for retailers who want to offer premium gym apparel while maintaining healthy profits.
+                    </p>
+                    <ul class="benefit-features">
+                        <li>Tiered pricing based on volume</li>
+                        <li>Up to 50% off retail prices</li>
+                        <li>Seasonal promotional pricing</li>
+                        <li>Early access to sale inventory</li>
+                        <li>Flexible payment terms available</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- Product Support -->
+            <article class="benefit-card">
+                <div class="benefit-card-header">
+                    <div class="benefit-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                </div>
+                <div class="benefit-card-content">
+                    <h3 class="benefit-title">Dedicated Support</h3>
+                    <p class="benefit-description">
+                        Get the support you need to succeed. Our dedicated wholesale team provides personalized service to help your fitness retail business thrive.
+                    </p>
+                    <ul class="benefit-features">
+                        <li>Dedicated account manager</li>
+                        <li>Priority customer service</li>
+                        <li>Product training and education</li>
+                        <li>Inventory planning assistance</li>
+                        <li>Technical support and troubleshooting</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- Marketing Materials -->
+            <article class="benefit-card">
+                <div class="benefit-card-header">
+                    <div class="benefit-icon">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                </div>
+                <div class="benefit-card-content">
+                    <h3 class="benefit-title">Marketing Support</h3>
+                    <p class="benefit-description">
+                        Boost your sales with professional marketing materials and promotional support. Everything you need to showcase PROJECT gym apparel effectively.
+                    </p>
+                    <ul class="benefit-features">
+                        <li>High-quality product photography</li>
+                        <li>Point-of-sale materials</li>
+                        <li>Digital marketing assets</li>
+                        <li>Co-op advertising opportunities</li>
+                        <li>Social media content and templates</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- Flexible Ordering -->
+            <article class="benefit-card">
+                <div class="benefit-card-header">
+                    <div class="benefit-icon">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                </div>
+                <div class="benefit-card-content">
+                    <h3 class="benefit-title">Flexible Ordering</h3>
+                    <p class="benefit-description">
+                        Order what you need, when you need it. Our flexible ordering system adapts to your business needs and cash flow requirements.
+                    </p>
+                    <ul class="benefit-features">
+                        <li>Low minimum order quantities</li>
+                        <li>Mixed size and color orders</li>
+                        <li>Drop-shipping available</li>
+                        <li>Fast turnaround times</li>
+                        <li>Easy reorder system</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- Quality Guarantee -->
+            <article class="benefit-card">
+                <div class="benefit-card-header">
+                    <div class="benefit-icon">
+                        <i class="fas fa-shield-check"></i>
+                    </div>
+                </div>
+                <div class="benefit-card-content">
+                    <h3 class="benefit-title">Quality Guarantee</h3>
+                    <p class="benefit-description">
+                        Stand behind every piece with confidence. Our quality guarantee ensures your customers get the premium gym apparel they expect from PROJECT.
+                    </p>
+                    <ul class="benefit-features">
+                        <li>Rigorous quality control standards</li>
+                        <li>Defect replacement guarantee</li>
+                        <li>Return policy for unsold inventory</li>
+                        <li>Product liability coverage</li>
+                        <li>Customer satisfaction guarantee</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- Exclusive Access -->
+            <article class="benefit-card">
+                <div class="benefit-card-header">
+                    <div class="benefit-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                <div class="benefit-card-content">
+                    <h3 class="benefit-title">Exclusive Access</h3>
+                    <p class="benefit-description">
+                        Get first access to new releases and exclusive colorways. Stay ahead of the competition with the latest PROJECT gym apparel innovations.
+                    </p>
+                    <ul class="benefit-features">
+                        <li>Early access to new collections</li>
+                        <li>Exclusive wholesale-only products</li>
+                        <li>Limited edition releases</li>
+                        <li>Seasonal preview opportunities</li>
+                        <li>Beta testing for new products</li>
+                    </ul>
+                </div>
+            </article>
+        </div>
+
+        <!-- Application Form -->
+        <div class="application-form">
+            <div class="simple-header">
+                <h2>Apply for Wholesale</h2>
+                <p>Ready to partner with <strong>PROJECT</strong>? Complete the application below and our wholesale team will review your submission within 48 hours.</p>
+            </div>
+
+            <form class="simple-form">
+                <div class="form-row">
+                    <div class="form-field">
+                        <label for="business-name">Business Name *</label>
+                        <input type="text" id="business-name" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="contact-name">Contact Name *</label>
+                        <input type="text" id="contact-name" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-field">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-field">
+                        <label for="business-type">Business Type *</label>
+                        <select id="business-type" required>
+                            <option value="">Select Business Type</option>
+                            <option value="gym">Gym/Fitness Center</option>
+                            <option value="retail">Retail Store</option>
+                            <option value="online">Online Retailer</option>
+                            <option value="boutique">Fitness Boutique</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-field">
+                        <label for="years-business">Years in Business *</label>
+                        <select id="years-business" required>
+                            <option value="">Select Years</option>
+                            <option value="0-1">0-1 Years</option>
+                            <option value="2-5">2-5 Years</option>
+                            <option value="6-10">6-10 Years</option>
+                            <option value="10+">10+ Years</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-field full-width">
+                        <label for="business-address">Business Address *</label>
+                        <textarea id="business-address" required></textarea>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-field full-width">
+                        <label for="additional-info">Tell us about your business and why you want to carry PROJECT</label>
+                        <textarea id="additional-info" placeholder="Describe your target customers, current brands you carry, and your interest in PROJECT gym apparel..."></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit Application</button>
+            </form>
+        </div>
+    </section>
+</main>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,318 @@
+.promotion-section {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background-color: #000;
+    color: #fff;
+    padding: 0;
+}
+
+.promotion-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+    z-index: 1;
+}
+
+.promotion-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 6rem 2rem;
+    max-width: 1440px;
+    margin: 0 auto;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.promotion-headline {
+    font-size: clamp(3rem, 10vw, 6rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 2rem;
+    line-height: 1;
+    max-width: 14ch;
+}
+
+.promotion-message {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    max-width: 600px;
+}
+
+.promotion-cta {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50px;
+    text-decoration: none;
+    margin-top: 2rem;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+.promotion-cta:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+.promotion-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: 0.5s;
+}
+
+.promotion-cta:hover::before {
+    left: 100%;
+}
+
+.countdown-timer {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    display: flex;
+    gap: 1.5rem;
+    max-width: 400px;
+}
+
+.countdown-item {
+    text-align: center;
+}
+
+.countdown-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.countdown-label {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    opacity: 0.8;
+}
+
+.promotion-dates {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-top: 1rem;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+/* Status Messages */
+.promotion-expired,
+.promotion-coming-soon {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 2rem 0;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .promotion-headline {
+        font-size: 2.5rem;
+    }
+
+    .promotion-message {
+        font-size: 1.2rem;
+    }
+
+    .countdown-timer {
+        gap: 1rem;
+    }
+
+    .countdown-value {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .promotion-section {
+        min-height: 400px;
+    }
+
+    .promotion-headline {
+        font-size: 2rem;
+    }
+
+    .promotion-message {
+        font-size: 1rem;
+    }
+
+    .promotion-cta {
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+    }
+}
+
+/* Style Variations */
+.promotion-section.light-theme {
+    background-color: #fff;
+    color: #000;
+}
+
+.promotion-section.light-theme .promotion-cta {
+    background-color: #000;
+    color: #fff;
+}
+
+.promotion-section.light-theme .promotion-cta:hover {
+    background-color: #ff0000;
+}
+
+/* Promotion Types */
+.promotion-type-urgent {
+    background-color: #dc3545;
+}
+
+.promotion-type-special {
+    background: linear-gradient(135deg, #6b46c1 0%, #2d3748 100%);
+}
+
+.promotion-type-seasonal {
+    background: linear-gradient(135deg, #38a169 0%, #234e52 100%);
+}
+
+.promotion-type-flash {
+    background: linear-gradient(135deg, #ed8936 0%, #742a2a 100%);
+}
+
+/* Countdown Timer */
+.promotion-countdown {
+    display: flex;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    font-family: 'Arial', sans-serif;
+}
+
+.countdown-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    min-width: 80px;
+    text-align: center;
+}
+
+.countdown-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.countdown-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+/* Urgent Indicator */
+.urgent-badge {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: #ff3232;
+    color: white;
+    padding: 1rem 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 1rem;
+    animation: slideInFromRight 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10;
+}
+
+@media (max-width: 600px) {
+  .urgent-badge {
+    right: 10px;
+    top: 10px;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.7rem;
+  }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInFromRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Admin Edit Mode Styles */
+.promotion-section.edit-mode {
+    border: 2px dashed #666;
+}
+
+.promotion-section.edit-mode .promotion-content {
+    min-height: 300px;
+}
+
+.edit-overlay {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background-color: rgba(0,0,0,0.8);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    z-index: 3;
+}

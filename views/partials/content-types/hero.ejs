@@ -1,0 +1,54 @@
+<%# NOBULL-inspired Hero Section %>
+<section class="hero-section <%= content.customClass %>"
+    <% if (content.responsive?.hideOnMobile) { %>data-hide-on-mobile="true"<% } %>
+    <% if (content.responsive?.hideOnTablet) { %>data-hide-on-tablet="true"<% } %>
+    <% if (content.responsive?.hideOnDesktop) { %>data-hide-on-desktop="true"<% } %>>
+
+    <!-- Background Media -->
+    <div class="hero-bg">
+        <% if (content.video) { %>
+            <video autoplay muted loop playsinline>
+                <source src="<%= content.video %>" type="video/mp4">
+            </video>
+        <% } else if (content.image) { %>
+            <img src="<%= content.image %>" alt="<%= content.title %>" />
+        <% } %>
+    </div>
+
+    <!-- Gradient Overlay -->
+    <div class="hero-overlay"></div>
+
+    <!-- Main Content -->
+    <div class="hero-content">
+        <h1 class="hero-title"><%= content.title %></h1>
+        <% if (content.subtitle) { %>
+            <div class="hero-subtitle"><%= content.subtitle %></div>
+        <% } %>
+        <% if (content.buttonText && content.buttonLink) { %>
+            <a href="<%= content.buttonLink %>" class="hero-button">
+                <%= content.buttonText %>
+            </a>
+        <% } %>
+
+        <!-- Bottom Navigation and Progress -->
+        <div class="hero-bottom">
+            <% if (content.subtitle) { %>
+                <div class="hero-nav">
+                    <%= content.subtitle %>
+                </div>
+            <% } %>
+            <div class="hero-progress">
+                <span class="progress-dot active"></span>
+                <span class="progress-dot"></span>
+                <span class="progress-dot"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Media Controls -->
+    <div class="hero-controls">
+        <button class="control-button" aria-label="Play/Pause">
+            <i class="fas fa-play"></i>
+        </button>
+    </div>
+</section>

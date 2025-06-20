@@ -1,0 +1,108 @@
+.fancy-card {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12);
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(.4,2,.3,1), box-shadow 0.3s;
+  position: relative;
+  border: 1px solid #e5e7eb;
+  max-width: 340px;
+  min-width: 0;
+}
+.fancy-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 16px 40px 0 rgba(31, 38, 135, 0.18);
+  border-color: #000;
+}
+.fancy-card-img {
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 1.25rem 1.25rem 0 0;
+  transition: transform 0.4s cubic-bezier(.4,2,.3,1);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+.fancy-card:hover .fancy-card-img {
+  transform: scale(1.08) rotate(-2deg);
+}
+.fancy-card-body {
+  padding: 1.5rem 1.25rem 1.75rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.fancy-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.fancy-card-desc {
+  color: #6b7280;
+  font-size: 1.08rem;
+  margin-bottom: 0.5rem;
+  min-height: 2.5em;
+}
+.fancy-card-price {
+  font-size: 1.18rem;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 0.75rem;
+}
+.fancy-card-btn {
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 0.65rem 1.7rem;
+  font-size: 1.08rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.fancy-card-btn:hover {
+  background: #fff;
+  color: #000;
+  border: 1px solid #000;
+}
+.fancy-card-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2.2rem 1.5rem;
+  justify-items: center;
+  align-items: stretch;
+  margin-bottom: 2rem;
+}
+@media (max-width: 1200px) {
+  .fancy-card-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (max-width: 900px) {
+  .fancy-card-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 700px) {
+  .fancy-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 480px) {
+  .fancy-card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 768px) {
+  .fancy-card {
+    max-width: 220px;
+  }
+  .fancy-card-img {
+    max-width: 180px;
+  }
+}

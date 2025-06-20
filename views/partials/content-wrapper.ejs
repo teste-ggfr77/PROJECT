@@ -1,0 +1,100 @@
+<%
+// Helper functions for generating content block attributes
+function getContentClasses(content) {
+    const classes = ['content-block'];
+    
+    // Add layout class if specified
+    if (content.layout) {
+        classes.push(`content-layout-${content.layout}`);
+    }
+    
+    // Add theme variations
+    if (content.theme) {
+        classes.push(`content-theme-${content.theme}`);
+    }
+    
+    // Add animation class if specified
+    if (content.animation) {
+        classes.push(`content-animation-${content.animation}`);
+    }
+    
+    // Add alignment class
+    if (content.alignment) {
+        classes.push(`content-align-${content.alignment}`);
+    }
+    
+    // Add responsive classes
+    if (content.responsive) {
+        if (content.responsive.hideOnMobile) classes.push('content-hide-mobile');
+        if (content.responsive.hideOnTablet) classes.push('content-hide-tablet');
+        if (content.responsive.hideOnDesktop) classes.push('content-hide-desktop');
+    }
+    
+    // Add custom classes
+    if (content.customClass) {
+        classes.push(content.customClass);
+    }
+    
+    return classes.join(' ');
+}
+
+// Generate content block data attributes
+function getDataAttributes(content) {
+    const attrs = {
+        'data-type': content.type,
+        'data-layout': content.layout || 'contained',
+        'data-theme': content.theme || 'default',
+        'data-animation': content.animation || 'none',
+        'data-alignment': content.alignment || 'left'
+    };
+    
+    // Add custom data attributes
+    if (content.data) {
+        Object.entries(content.data).forEach(([key, value]) => {
+            attrs[`data-${key}`] = value;
+        });
+    }
+    
+    return Object.entries(attrs)
+        .map(([key, value]) => `${key}="${value}"`)
+        .join(' ');
+}
+
+// Generate inline styles with CSS variables
+function getInlineStyles(content) {
+    const styles = [];
+    
+    if (content.backgroundColor) {
+        styles.push(`--content-bg-color: ${content.backgroundColor}`);
+    }
+    if (content.textColor) {
+        styles.push(`--content-text-color: ${content.textColor}`);
+    }
+    if (content.spacing) {
+        if (content.spacing.marginTop) styles.push(`--content-margin-top: ${content.spacing.marginTop}`);
+        if (content.spacing.marginBottom) styles.push(`--content-margin-bottom: ${content.spacing.marginBottom}`);
+        if (content.spacing.paddingTop) styles.push(`--content-padding-top: ${content.spacing.paddingTop}`);
+        if (content.spacing.paddingBottom) styles.push(`--content-padding-bottom: ${content.spacing.paddingBottom}`);
+    }
+    
+    return styles.join(';');
+}
+%>
+
+<section class="<%= getContentClasses(content) %>" 
+         <%= getDataAttributes(content) %>
+         style="<%= getInlineStyles(content) %>">
+    
+    <div class="content-inner">
+        <% try { %>
+            <%- include(`content-types/${content.type}`, { content }) %>
+        <% } catch (e) { %>
+            <div class="content-error">
+                <p>Error loading content type: <%= content.type %></p>
+                <% if (process.env.NODE_ENV === 'development') { %>
+                    <pre><%= e.message %></pre>
+                <% } %>
+            </div>
+        <% } %>
+    </div>
+</section>

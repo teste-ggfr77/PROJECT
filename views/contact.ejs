@@ -1,0 +1,346 @@
+<%- include('partials/header') %>
+
+<style>
+/* Clean Nobull-Style Contact Page */
+.contact-container {
+    max-width: 800px;
+    margin: 4rem auto;
+    padding: 2rem;
+    width: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.contact-wrapper {
+    background: #ffffff;
+    color: #000000;
+    padding: 3rem;
+    width: 100%;
+}
+
+.contact-title {
+    font-size: 2.5rem;
+    color: #000000;
+    margin-bottom: 1rem;
+    text-align: left;
+    font-weight: 700;
+    letter-spacing: -1px;
+}
+
+.contact-intro {
+    margin-bottom: 3rem;
+}
+
+.contact-intro p {
+    font-size: 1.1rem;
+    color: #666666;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 0;
+}
+
+.form-group-half {
+    width: 100%;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #000000;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.form-input {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #cccccc;
+    border-radius: 0;
+    font-size: 1rem;
+    background: #ffffff;
+    color: #000000;
+    transition: border-color 0.3s ease;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #000000;
+}
+
+.form-input:hover {
+    border-color: #999999;
+}
+
+textarea.form-input {
+    resize: vertical;
+    min-height: 120px;
+    font-family: inherit;
+}
+
+.submit-btn {
+    background: #000000;
+    color: #ffffff;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    align-self: flex-start;
+}
+
+.submit-btn:hover {
+    background: #333333;
+}
+
+.submit-btn:active {
+    background: #000000;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 0;
+    margin-bottom: 2rem;
+    position: relative;
+    font-weight: 500;
+}
+
+.alert-success {
+    background-color: #f0f8f0;
+    color: #2d5a2d;
+    border: 1px solid #a3d9a3;
+}
+
+.alert-danger {
+    background-color: #fdf2f2;
+    color: #7d2d2d;
+    border: 1px solid #f5a3a3;
+}
+
+.close-btn {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.close-btn:hover {
+    opacity: 1;
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Contact Info Section */
+.contact-info {
+    margin-top: 4rem;
+    padding: 2rem 0;
+    text-align: left;
+}
+
+.contact-info h3 {
+    color: #000000;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.contact-info p {
+    color: #666666;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.contact-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.contact-detail {
+    padding: 0;
+}
+
+.contact-detail h4 {
+    color: #000000;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.contact-detail p {
+    color: #666666;
+    margin: 0.25rem 0;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.contact-detail p:first-of-type {
+    font-weight: 600;
+    color: #000000;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .contact-container {
+        padding: 1rem;
+        margin: 2rem auto;
+    }
+
+    .contact-wrapper {
+        padding: 2rem;
+    }
+    
+    .contact-title {
+        font-size: 2rem;
+    }
+    
+    .form-input {
+        padding: 0.875rem;
+    }
+    
+    .submit-btn {
+        padding: 0.875rem 1.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .contact-details {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-title {
+        font-size: 1.8rem;
+    }
+    
+    .contact-wrapper {
+        padding: 1.5rem;
+    }
+    
+    .contact-info {
+        padding: 1.5rem 0;
+    }
+}
+</style>
+
+<div class="container mt-5 contact-container">
+    <div class="contact-wrapper">
+        <h1 class="contact-title">Contact Us</h1>
+        
+        <div class="contact-intro">
+            <p>We'd love to hear from you! Send us a message and we'll respond as soon as possible.</p>
+        </div>
+        
+        <% if (messages.success) { %>
+            <div class="alert alert-success fade-in">
+                <%= messages.success %>
+                <button type="button" class="close-btn" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <% } %>
+        
+        <% if (messages.error) { %>
+            <div class="alert alert-danger fade-in">
+                <%= messages.error %>
+                <button type="button" class="close-btn" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <% } %>
+        
+        <form action="/contact" method="POST" class="contact-form">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+            <div class="form-row">
+                <div class="form-group form-group-half">
+                    <label for="name" class="form-label">Name *</label>
+                    <input type="text" class="form-control form-input" id="name" name="name" required placeholder="Your full name">
+                </div>
+
+                <div class="form-group form-group-half">
+                    <label for="email" class="form-label">Email *</label>
+                    <input type="email" class="form-control form-input" id="email" name="email" required placeholder="your.email@example.com">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="subject" class="form-label">Subject *</label>
+                <input type="text" class="form-control form-input" id="subject" name="subject" required placeholder="What is this about?">
+            </div>
+
+            <div class="form-group">
+                <label for="message" class="form-label">Message *</label>
+                <textarea class="form-control form-input" id="message" name="message" rows="6" required placeholder="Tell us more about your inquiry..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary submit-btn">Send Message</button>
+        </form>
+        
+        <div class="contact-info">
+            <h3>Other Ways to Reach Us</h3>
+            <div class="contact-details">
+                <div class="contact-detail">
+                    <h4>📧 Email</h4>
+                    <p>support@runningstore.com</p>
+                    <p>We typically respond within 24 hours</p>
+                </div>
+                <div class="contact-detail">
+                    <h4>📞 Phone</h4>
+                    <p>1-800-RUN-HELP</p>
+                    <p>Mon-Fri: 8AM-8PM EST</p>
+                </div>
+                <div class="contact-detail">
+                    <h4>💬 Live Chat</h4>
+                    <p>Available on our website</p>
+                    <p>During business hours</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,43 @@
+<%# Newsletter Section %>
+<section 
+    class="section-base newsletter-section <%= content.layout %> <%= content.animation %> <%= content.customClass || '' %>"
+    style="
+        --section-bg-color: <%= content.backgroundColor || 'transparent' %>;
+        --section-text-color: <%= content.textColor || 'inherit' %>;
+        --section-padding-top: <%= content.spacing?.paddingTop || '2rem' %>;
+        --section-padding-bottom: <%= content.spacing?.paddingBottom || '2rem' %>;
+        --section-margin-top: <%= content.spacing?.marginTop || '0' %>;
+        --section-margin-bottom: <%= content.spacing?.marginBottom || '0' %>;"
+    <% if (content.responsive?.hideOnMobile) { %>data-hide-on-mobile="true"<% } %>
+    <% if (content.responsive?.hideOnTablet) { %>data-hide-on-tablet="true"<% } %>
+    <% if (content.responsive?.hideOnDesktop) { %>data-hide-on-desktop="true"<% } %>>
+    
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h2 class="newsletter-title"><%= content.title %></h2>
+                <% if (content.subtitle) { %>
+                    <p class="lead newsletter-subtitle mb-4"><%= content.subtitle %></p>
+                <% } %>
+                <% if (content.description) { %>
+                    <p class="newsletter-description mb-4"><%= content.description %></p>
+                <% } %>
+                
+                <form class="newsletter-form" action="/api/newsletter/subscribe" method="POST">
+                    <div class="input-group input-group-lg mb-3">
+                        <input type="email" class="form-control" name="email" placeholder="Enter your email address" required>
+                        <button class="btn btn-primary" type="submit">
+                            <%= content.buttonText || 'Subscribe' %>
+                        </button>
+                    </div>
+                </form>
+                
+                <% if (content.image) { %>
+                    <div class="newsletter-image mt-4">
+                        <img src="<%= content.image %>" alt="Newsletter image" class="img-fluid rounded">
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</section>

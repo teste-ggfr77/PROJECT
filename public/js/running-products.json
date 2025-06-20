@@ -1,0 +1,54 @@
+{
+  "women": [
+    {
+      "img": "https://via.placeholder.com/400x400?text=Run+1",
+      "name": "Velocity Knit",
+      "price": "$139",
+      "desc": "Lightweight, breathable, and fast."
+    },
+    {
+      "img": "https://via.placeholder.com/400x400?text=Run+2",
+      "name": "Endura Pro",
+      "price": "$159",
+      "desc": "Maximum cushioning for long runs."
+    },
+    {
+      "img": "https://via.placeholder.com/400x400?text=Run+3",
+      "name": "Sprint Mesh",
+      "price": "$119",
+      "desc": "Responsive and flexible for speed."
+    },
+    {
+      "img": "https://via.placeholder.com/400x400?text=Run+4",
+      "name": "Urban Glide",
+      "price": "$129",
+      "desc": "Everyday comfort for city miles."
+    }
+  ],
+  "men": [
+    {
+      "img": "https://via.placeholder.com/400x400?text=Men+Run+1",
+      "name": "Pace Runner",
+      "price": "$135",
+      "desc": "Built for speed and durability."
+    },
+    {
+      "img": "https://via.placeholder.com/400x400?text=Men+Run+2",
+      "name": "Trail Master",
+      "price": "$155",
+      "desc": "Grip and support for any terrain."
+    },
+    {
+      "img": "https://via.placeholder.com/400x400?text=Men+Run+3",
+      "name": "Urban Sprint",
+      "price": "$125",
+      "desc": "Lightweight for city running."
+    },
+    {
+      "img": "https://via.placeholder.com/400x400?text=Men+Run+4",
+      "name": "Cushion Flow",
+      "price": "$145",
+      "desc": "Extra comfort for long distances."
+    }
+  ]
+}

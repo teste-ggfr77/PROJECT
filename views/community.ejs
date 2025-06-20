@@ -1,0 +1,357 @@
+<%- include('partials/header') %>
+
+<style>
+.community-container {
+    max-width: 900px;
+    margin: 100px auto 40px auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    padding: 2.5rem 2rem 2rem 2rem;
+    min-height: 70vh;
+}
+.community-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+.community-header i {
+    font-size: 2.5rem;
+    color: #6366f1;
+}
+.community-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #22223b;
+}
+.community-description {
+    color: #666;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+.community-feed {
+    margin-bottom: 2.5rem;
+}
+.post-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+.post-user {
+    font-weight: 600;
+    color: #4f46e5;
+}
+.post-date {
+    color: #aaa;
+    font-size: 0.95rem;
+}
+.post-content {
+    margin-bottom: 1rem;
+    color: #333;
+}
+.post-image {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+.post-actions {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+.post-actions button {
+    background: none;
+    border: none;
+    color: #6366f1;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: color 0.2s;
+}
+.post-actions button.liked {
+    color: #f59e42;
+}
+.add-post-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+.add-post-form textarea {
+    resize: vertical;
+    min-height: 60px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 0.75rem;
+    font-size: 1rem;
+}
+.add-post-form button {
+    align-self: flex-end;
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.add-post-form button:hover {
+    background: #4f46e5;
+}
+.post-comments {
+    margin-top: 1.5rem;
+}
+.comment-card {
+    background: #f0f2f5;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+.comment-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+.comment-user {
+    font-weight: 600;
+    color: #333;
+}
+.comment-date {
+    color: #888;
+    font-size: 0.9rem;
+}
+.comment-content {
+    color: #444;
+}
+.add-comment-form {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+.add-comment-form textarea {
+    flex-grow: 1;
+    resize: vertical;
+    min-height: 40px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.95rem;
+}
+.add-comment-form button {
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.add-comment-form button:hover {
+    background: #4f46e5;
+}
+.instagram-feed {
+    margin-top: 3rem;
+}
+.instagram-feed h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #22223b;
+    margin-bottom: 1.5rem;
+}
+.instagram-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+.instagram-post {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.instagram-post img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+</style>
+
+<div class="community-container">
+    <div class="community-header">
+        <i class="fas fa-users"></i>
+        <span class="community-title">Community</span>
+    </div>
+    <div class="community-description">
+        Welcome to the Community! Share your thoughts, ask questions, and connect with other members.
+    </div>
+
+    <% if (user && user.isAdmin) { %>
+    <form class="add-post-form" action="/community" method="POST" enctype="multipart/form-data">
+        <textarea name="content" placeholder="What's on your mind?" required></textarea>
+        <input type="file" name="image">
+        <button type="submit">Post</button>
+    </form>
+    <% } %>
+
+    <div class="community-feed">
+        <% posts.forEach(post => { %>
+            <div class="post-card">
+                <div class="post-header">
+                    <span class="post-user"><i class="fas fa-user-circle"></i> <%= post.user.name %></span>
+                    <span class="post-date"><%= new Date(post.createdAt).toLocaleString() %></span>
+                </div>
+                <div class="post-content"><%= post.content %></div>
+                <% if (post.imageUrl) { %>
+                    <img src="<%= post.imageUrl %>" alt="Post Image" class="post-image">
+                <% } %>
+                <div class="post-actions">
+                    <button class="like-btn" data-post-id="<%= post._id %>"><i class="fas fa-thumbs-up"></i> Like <span><%= post.likes %></span></button>
+                    <% if (user && (user.isAdmin || user._id.equals(post.user._id))) { %>
+                        <button class="delete-btn text-danger" data-post-id="<%= post._id %>">Delete</button>
+                    <% } %>
+                </div>
+                <div class="post-comments">
+                    <% post.comments.forEach(comment => { %>
+                        <div class="comment-card">
+                            <div class="comment-header">
+                                <span class="comment-user"><i class="fas fa-user-circle"></i> <%= comment.user ? comment.user.name : 'User not found' %></span>
+                                <span class="comment-date"><%= new Date(comment.createdAt).toLocaleString() %></span>
+                            </div>
+                            <div class="comment-content"><%= comment.content %></div>
+                        </div>
+                    <% }) %>
+                </div>
+                <form class="add-comment-form" action="/community/<%= post._id %>/comment" method="POST">
+                    <textarea name="content" placeholder="Add a comment..." required></textarea>
+                    <button type="submit">Comment</button>
+                </form>
+            </div>
+        <% }) %>
+    </div>
+
+    <div class="instagram-feed">
+        <h2>Feedback from Instagram</h2>
+        <div class="instagram-grid" id="instagram-grid"></div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const communityFeed = document.querySelector('.community-feed');
+
+    communityFeed.addEventListener('click', async (e) => {
+        const likeBtn = e.target.closest('.like-btn');
+        const deleteBtn = e.target.closest('.delete-btn');
+
+        if (likeBtn) {
+            e.preventDefault();
+            const postId = likeBtn.dataset.postId;
+            try {
+                const response = await fetch(`/community/${postId}/like`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    likeBtn.querySelector('span').textContent = data.likes;
+                }
+            } catch (error) {
+                console.error('Error liking post:', error);
+            }
+        }
+
+        if (deleteBtn) {
+            e.preventDefault();
+            const postId = deleteBtn.dataset.postId;
+            if (confirm('Are you sure you want to delete this post?')) {
+                try {
+                    const response = await fetch(`/community/${postId}/delete`, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        deleteBtn.closest('.post-card').remove();
+                    }
+                } catch (error) {
+                    console.error('Error deleting post:', error);
+                }
+            }
+        }
+    });
+
+    communityFeed.addEventListener('submit', async (e) => {
+        if (e.target.matches('.add-comment-form')) {
+            e.preventDefault();
+            const form = e.target;
+            const postId = form.action.split('/')[4];
+            const content = form.querySelector('textarea[name="content"]').value;
+
+            try {
+                const response = await fetch(`/community/${postId}/comment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ content })
+                });
+                const newComment = await response.json();
+                if (response.ok) {
+                    const commentCard = `
+                        <div class="comment-card">
+                            <div class="comment-header">
+                                <span class="comment-user"><i class="fas fa-user-circle"></i> ${newComment.user.name}</span>
+                                <span class="comment-date">${new Date(newComment.createdAt).toLocaleString()}</span>
+                            </div>
+                            <div class="comment-content">${newComment.content}</div>
+                        </div>
+                    `;
+                    form.previousElementSibling.insertAdjacentHTML('beforeend', commentCard);
+                    form.querySelector('textarea[name="content"]').value = '';
+                }
+            } catch (error) {
+                console.error('Error adding comment:', error);
+            }
+        }
+    });
+
+    const instagramGrid = document.getElementById('instagram-grid');
+    const accessToken = 'YOUR_INSTAGRAM_ACCESS_TOKEN'; // Replace with your actual access token
+    const userId = 'YOUR_INSTAGRAM_USER_ID'; // Replace with your actual user ID
+
+    fetch(`https://graph.instagram.com/${userId}/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp&access_token=${accessToken}`)
+        .then(response => response.json())
+        .then(data => {
+            data.data.forEach(post => {
+                if (post.media_type === 'IMAGE') {
+                    const instagramPost = `
+                        <a href="${post.permalink}" target="_blank" class="instagram-post">
+                            <img src="${post.media_url}" alt="${post.caption}">
+                        </a>
+                    `;
+                    instagramGrid.innerHTML += instagramPost;
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching Instagram feed:', error));
+});
+</script>
+
+<%- include('partials/footer') %>

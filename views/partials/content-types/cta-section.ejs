@@ -1,0 +1,50 @@
+<%# CTA Section %>
+<section 
+    class="section-base cta-section <%= content.layout %> <%= content.animation %> <%= content.customClass %>"
+    style="
+        --section-bg-color: <%= content.backgroundColor || 'transparent' %>;
+        --section-text-color: <%= content.textColor || 'inherit' %>;
+        --section-padding-top: <%= content.spacing?.paddingTop || '4rem' %>;
+        --section-padding-bottom: <%= content.spacing?.paddingBottom || '4rem' %>;
+        --section-margin-top: <%= content.spacing?.marginTop || '0' %>;
+        --section-margin-bottom: <%= content.spacing?.marginBottom || '0' %>;"
+
+    <% if (content.responsive?.hideOnMobile) { %>data-hide-on-mobile="true"<% } %>
+    <% if (content.responsive?.hideOnTablet) { %>data-hide-on-tablet="true"<% } %>
+    <% if (content.responsive?.hideOnDesktop) { %>data-hide-on-desktop="true"<% } %>>
+    
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6 text-center">
+                <% if (content.image) { %>
+                    <div class="cta-image mb-4">
+                        <img src="<%= content.image %>" alt="<%= content.title %>" class="img-fluid">
+                    </div>
+                <% } %>
+                
+                <h2 class="display-4 fw-bold mb-4"><%= content.title %></h2>
+                
+                <% if (content.subtitle) { %>
+                    <p class="lead mb-4"><%= content.subtitle %></p>
+                <% } %>
+                
+                <% if (content.description) { %>
+                    <p class="mb-5"><%= content.description %></p>
+                <% } %>
+                
+                <div class="cta-buttons">
+                    <% if (content.buttonText && content.buttonLink) { %>
+                        <a href="<%= content.buttonLink %>" class="btn btn-primary btn-lg px-5">
+                            <%= content.buttonText %>
+                        </a>
+                    <% } %>
+                    <% if (content.secondaryButtonText && content.secondaryButtonLink) { %>
+                        <a href="<%= content.secondaryButtonLink %>" class="btn btn-outline-primary btn-lg px-5 ms-3">
+                            <%= content.secondaryButtonText %>
+                        </a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

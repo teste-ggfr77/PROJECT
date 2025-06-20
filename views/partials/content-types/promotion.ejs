@@ -1,0 +1,58 @@
+<%# Promotion Section %>
+<section class="promotion-section promotion-type-<%= content.promotionType || 'default' %> <%= content.customClass %>"
+    <% if (content.backgroundColor || content.textColor) { %>
+        style="<%= content.backgroundColor ? `background-color: ${content.backgroundColor};` : '' %><%= content.textColor ? ` color: ${content.textColor};` : '' %>"
+    <% } %>
+    data-start-date="<%= content.promotionStartDate ? content.promotionStartDate.toISOString() : '' %>"
+    data-end-date="<%= content.promotionEndDate ? content.promotionEndDate.toISOString() : '' %>">
+    
+    <% if (content.image) { %>
+        <img class="promotion-background" src="<%= content.image %>" alt="<%= content.title %>">
+    <% } %>
+
+    <% if (content.isUrgent) { %>
+        <div class="urgent-badge">
+            Limited Time Offer
+        </div>
+    <% } %>
+
+    <div class="promotion-content">
+        <h2 class="promotion-headline"><%= content.title %></h2>
+          <% if (content.subtitle) { %>
+            <p class="promotion-message"><%= content.subtitle %></p>
+        <% } %>
+        
+        <% if (content.showCountdown && content.promotionEndDate) { %>
+            <div class="countdown-timer" data-end-date="<%= content.promotionEndDate.toISOString() %>">
+                <div class="countdown-item">
+                    <span class="countdown-number" data-days>00</span>
+                    <span class="countdown-label">Days</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" data-hours>00</span>
+                    <span class="countdown-label">Hours</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" data-minutes>00</span>
+                    <span class="countdown-label">Minutes</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" data-seconds>00</span>
+                    <span class="countdown-label">Seconds</span>
+                </div>
+            </div>
+        <% } %>
+
+        <% if (content.promotionStartDate && content.promotionEndDate) { %>
+            <div class="promotion-dates">
+                Valid from <%= content.promotionStartDate.toLocaleDateString() %> to <%= content.promotionEndDate.toLocaleDateString() %>
+            </div>
+        <% } %>
+
+        <% if (content.buttonText && content.buttonLink) { %>
+            <a href="<%= content.buttonLink %>" class="promotion-cta">
+                <%= content.buttonText %>
+            </a>
+        <% } %>
+    </div>
+</section>

@@ -1,0 +1,454 @@
+<%- include('partials/header') %>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: #ffffff;
+        padding-top: 80px;
+    }
+
+    .gift-hero {
+        position: relative;
+        height: 60vh;
+        background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .gift-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="gift-pattern" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="2" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23gift-pattern)"/></svg>');
+        opacity: 0.3;
+    }
+
+    .gift-hero-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        color: white;
+        max-width: 800px;
+        padding: 0 2rem;
+    }
+
+    .gift-hero-title {
+        font-size: clamp(3rem, 8vw, 6rem);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .gift-hero-subtitle {
+        font-size: clamp(1.25rem, 3vw, 1.5rem);
+        font-weight: 400;
+        letter-spacing: 0.05em;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+    }
+
+    .gift-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 5rem 2rem;
+    }
+
+    .gift-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 3rem;
+        margin-top: 3rem;
+    }
+
+    .gift-card-option {
+        background: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        border: 3px solid transparent;
+    }
+
+    .gift-card-option:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        border-color: #7c3aed;
+    }
+
+    .gift-card-visual {
+        height: 200px;
+        background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .gift-card-visual::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 15px,
+            rgba(255, 255, 255, 0.1) 15px,
+            rgba(255, 255, 255, 0.1) 30px
+        );
+        animation: shimmer 3s linear infinite;
+    }
+
+    @keyframes shimmer {
+        0% { transform: translateX(-50%) translateY(-50%) rotate(0deg); }
+        100% { transform: translateX(-50%) translateY(-50%) rotate(360deg); }
+    }
+
+    .gift-card-icon {
+        width: 5rem;
+        height: 5rem;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+    }
+
+    .gift-card-icon i {
+        font-size: 2rem;
+        color: white;
+    }
+
+    .gift-card-content {
+        padding: 2.5rem;
+    }
+
+    .gift-card-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+        color: #000000;
+    }
+
+    .gift-card-description {
+        color: #666666;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        font-size: 1rem;
+    }
+
+    .gift-card-features {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 2.5rem 0;
+    }
+
+    .gift-card-features li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        color: #333333;
+        font-weight: 500;
+    }
+
+    .gift-card-features li::before {
+        content: '✓';
+        background: #7c3aed;
+        color: white;
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    .gift-card-cta {
+        display: inline-block;
+        background: #7c3aed;
+        color: white;
+        padding: 1.25rem 2.5rem;
+        text-decoration: none;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        border: 2px solid #7c3aed;
+        text-align: center;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .gift-card-cta:hover {
+        background: white;
+        color: #7c3aed;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+    }
+
+    .section-intro {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .section-title {
+        font-size: clamp(2.5rem, 5vw, 3.5rem);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+        color: #000000;
+    }
+
+    .section-description {
+        font-size: 1.25rem;
+        color: #666666;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    .brand-highlight {
+        color: #7c3aed;
+        font-weight: 700;
+    }
+
+    .gift-amounts {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 1rem;
+        margin: 2rem 0;
+    }
+
+    .amount-option {
+        background: #f8f9fa;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        padding: 1rem;
+        text-align: center;
+        font-weight: 700;
+        font-size: 1.25rem;
+        color: #333;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .amount-option:hover,
+    .amount-option.selected {
+        background: #7c3aed;
+        color: white;
+        border-color: #7c3aed;
+        transform: translateY(-2px);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .gift-container {
+            padding: 3rem 1rem;
+        }
+
+        .gift-cards-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .gift-card-content {
+            padding: 2rem;
+        }
+
+        .gift-hero-content {
+            padding: 0 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .gift-cards-grid {
+            gap: 1.5rem;
+        }
+
+        .gift-card-content {
+            padding: 1.5rem;
+        }
+    }
+
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+        .gift-card-option,
+        .gift-card-cta,
+        .gift-card-visual::before {
+            animation: none;
+            transition: none;
+        }
+
+        .gift-card-option:hover {
+            transform: none;
+        }
+
+        .gift-card-cta:hover {
+            transform: none;
+        }
+    }
+
+    .gift-card-option:focus-within {
+        outline: 3px solid #7c3aed;
+        outline-offset: 2px;
+    }
+</style>
+
+<main>
+    <!-- Hero Section -->
+    <section class="gift-hero">
+        <div class="gift-hero-content">
+            <h1 class="gift-hero-title">Gift Cards</h1>
+            <p class="gift-hero-subtitle">Give The Gift of Performance with <span class="brand-highlight">PROJECT</span></p>
+        </div>
+    </section>
+
+    <!-- Gift Cards Section -->
+    <section class="gift-container">
+        <div class="section-intro">
+            <h2 class="section-title">Perfect for Every Athlete</h2>
+            <p class="section-description">
+                Whether they're crushing PRs or just starting their fitness journey, 
+                <span class="brand-highlight">PROJECT</span> gift cards deliver premium gym apparel that performs when it matters most.
+            </p>
+        </div>
+
+        <div class="gift-cards-grid">
+            <!-- Digital Gift Card -->
+            <article class="gift-card-option">
+                <div class="gift-card-visual">
+                    <div class="gift-card-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                </div>
+                <div class="gift-card-content">
+                    <h3 class="gift-card-title">Digital Gift Card</h3>
+                    <p class="gift-card-description">
+                        Instant delivery for last-minute gifts. Perfect for the tech-savvy athlete who wants immediate access to premium gym gear.
+                    </p>
+                    <ul class="gift-card-features">
+                        <li>Instant email delivery</li>
+                        <li>Custom personal message</li>
+                        <li>Mobile-friendly design</li>
+                        <li>Never expires, no fees</li>
+                        <li>Easy online redemption</li>
+                    </ul>
+                    <div class="gift-amounts">
+                        <div class="amount-option">$25</div>
+                        <div class="amount-option">$50</div>
+                        <div class="amount-option">$100</div>
+                        <div class="amount-option">$200</div>
+                    </div>
+                    <a href="#" class="gift-card-cta">Buy Digital Card</a>
+                </div>
+            </article>
+
+            <!-- Physical Gift Card -->
+            <article class="gift-card-option">
+                <div class="gift-card-visual">
+                    <div class="gift-card-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                </div>
+                <div class="gift-card-content">
+                    <h3 class="gift-card-title">Physical Gift Card</h3>
+                    <p class="gift-card-description">
+                        Premium physical card with sleek PROJECT branding. Perfect for special occasions and those who appreciate tangible gifts.
+                    </p>
+                    <ul class="gift-card-features">
+                        <li>Premium card stock with PROJECT branding</li>
+                        <li>Elegant gift packaging included</li>
+                        <li>Free shipping on orders over $50</li>
+                        <li>Never expires, no hidden fees</li>
+                        <li>Redeemable online and in-store</li>
+                    </ul>
+                    <div class="gift-amounts">
+                        <div class="amount-option">$50</div>
+                        <div class="amount-option">$100</div>
+                        <div class="amount-option">$250</div>
+                        <div class="amount-option">$500</div>
+                    </div>
+                    <a href="#" class="gift-card-cta">Order Physical Card</a>
+                </div>
+            </article>
+
+            <!-- Custom Amount -->
+            <article class="gift-card-option">
+                <div class="gift-card-visual">
+                    <div class="gift-card-icon">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                </div>
+                <div class="gift-card-content">
+                    <h3 class="gift-card-title">Custom Amount</h3>
+                    <p class="gift-card-description">
+                        Choose any amount from $25 to $1000. Perfect when you know exactly what they need or want to give them complete freedom to choose.
+                    </p>
+                    <ul class="gift-card-features">
+                        <li>Any amount from $25 - $1000</li>
+                        <li>Digital or physical card options</li>
+                        <li>Bulk purchasing available</li>
+                        <li>Corporate gifting solutions</li>
+                        <li>Volume discounts for large orders</li>
+                    </ul>
+                    <div style="margin: 2rem 0;">
+                        <input type="number" placeholder="Enter custom amount" style="width: 100%; padding: 1rem; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1.1rem; text-align: center;" min="25" max="1000">
+                    </div>
+                    <a href="#" class="gift-card-cta">Create Custom Card</a>
+                </div>
+            </article>
+        </div>
+
+        <!-- Additional Info Section -->
+        <div style="background: #f8f9fa; border-radius: 16px; padding: 3rem; margin-top: 4rem; text-align: center;">
+            <h3 style="font-size: 2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5rem; color: #000;">Why Choose PROJECT Gift Cards?</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                <div>
+                    <div style="width: 3rem; height: 3rem; background: #7c3aed; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i class="fas fa-infinity" style="color: white; font-size: 1.2rem;"></i>
+                    </div>
+                    <h4 style="font-weight: 700; margin-bottom: 0.5rem; text-transform: uppercase;">Never Expire</h4>
+                    <p style="color: #666; line-height: 1.6;">No expiration dates, no fees. Your gift keeps giving until every dollar is spent.</p>
+                </div>
+                <div>
+                    <div style="width: 3rem; height: 3rem; background: #7c3aed; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i class="fas fa-shield-check" style="color: white; font-size: 1.2rem;"></i>
+                    </div>
+                    <h4 style="font-weight: 700; margin-bottom: 0.5rem; text-transform: uppercase;">Secure & Protected</h4>
+                    <p style="color: #666; line-height: 1.6;">Advanced security features protect against fraud and unauthorized use.</p>
+                </div>
+                <div>
+                    <div style="width: 3rem; height: 3rem; background: #7c3aed; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i class="fas fa-globe" style="color: white; font-size: 1.2rem;"></i>
+                    </div>
+                    <h4 style="font-weight: 700; margin-bottom: 0.5rem; text-transform: uppercase;">Universal Access</h4>
+                    <p style="color: #666; line-height: 1.6;">Redeemable online, in-store, and through our mobile app worldwide.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<%- include('partials/footer') %>

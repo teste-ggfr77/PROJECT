@@ -1,0 +1,254 @@
+<%- include('partials/header') %>
+
+<!-- Hero Section -->
+<section class="relative w-full h-[50vh] overflow-hidden">
+  <img src="https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Shipping" class="absolute inset-0 w-full h-full object-cover z-0" />
+  <div class="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
+  <div class="relative z-20 flex flex-col items-center justify-center text-center h-full px-4">
+    <h1 class="text-white text-5xl md:text-7xl font-bold uppercase drop-shadow-lg tracking-wider mb-4">SHIPPING INFO</h1>
+    <p class="text-white/90 tracking-wide text-xl md:text-2xl drop-shadow-sm font-medium">Fast, Reliable Delivery Worldwide</p>
+  </div>
+</section>
+
+<!-- Free Shipping Banner -->
+<section class="w-full bg-black py-6">
+  <div class="max-w-4xl mx-auto text-center px-4">
+    <h2 class="text-white text-2xl md:text-3xl font-bold uppercase tracking-wider mb-2">FREE SHIPPING ON ORDERS OVER 750 DH</h2>
+    <p class="text-gray-300 text-lg">No minimum order for PROJECT members</p>
+  </div>
+</section>
+
+<!-- Shipping Options -->
+<section class="w-full py-20 px-4 bg-white">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold uppercase mb-6 tracking-wide">SHIPPING OPTIONS</h2>
+      <p class="text-xl text-gray-600">Choose the delivery speed that works for you</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Standard Shipping -->
+      <div class="border-2 border-gray-200 p-8 rounded-lg hover:border-black transition-colors">
+        <div class="text-center">
+          <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
+              <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1V8a1 1 0 00-1-1h-3z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold uppercase mb-4">STANDARD SHIPPING</h3>
+          <p class="text-3xl font-bold mb-4">FREE</p>
+          <p class="text-gray-600 mb-4">On orders over 750 DH</p>
+          <p class="text-sm text-gray-500">5-7 business days</p>
+        </div>
+      </div>
+      
+      <!-- Express Shipping -->
+      <div class="border-2 border-black p-8 rounded-lg bg-gray-50">
+        <div class="text-center">
+          <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
+              <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1V8a1 1 0 00-1-1h-3z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold uppercase mb-4">EXPRESS SHIPPING</h3>
+          <p class="text-3xl font-bold mb-4">150 DH</p>
+          <p class="text-gray-600 mb-4">All orders</p>
+          <p class="text-sm text-gray-500">2-3 business days</p>
+        </div>
+      </div>
+      
+      <!-- Overnight Shipping -->
+      <div class="border-2 border-gray-200 p-8 rounded-lg hover:border-black transition-colors">
+        <div class="text-center">
+          <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
+              <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1V8a1 1 0 00-1-1h-3z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold uppercase mb-4">OVERNIGHT SHIPPING</h3>
+          <p class="text-3xl font-bold mb-4">250 DH</p>
+          <p class="text-gray-600 mb-4">All orders</p>
+          <p class="text-sm text-gray-500">Next business day</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="text-center mt-12">
+      <p class="text-gray-600 text-lg">*Shipping times are estimates and may vary during peak seasons</p>
+    </div>
+  </div>
+</section>
+
+<!-- International Shipping -->
+<section class="w-full py-20 px-4 bg-gray-50">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold uppercase mb-6 tracking-wide">INTERNATIONAL SHIPPING</h2>
+      <p class="text-xl text-gray-600">We ship to over 100 countries worldwide</p>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div>
+        <h3 class="text-2xl font-bold uppercase mb-6">SHIPPING ZONES</h3>
+        <div class="space-y-6">
+          <div class="border-l-4 border-black pl-6">
+            <h4 class="text-lg font-bold mb-2">ZONE 1 - NORTH AMERICA</h4>
+            <p class="text-gray-600 mb-2">Canada, Mexico</p>
+            <p class="font-semibold">150 DH - 7-10 business days</p>
+          </div>
+          
+          <div class="border-l-4 border-black pl-6">
+            <h4 class="text-lg font-bold mb-2">ZONE 2 - EUROPE</h4>
+            <p class="text-gray-600 mb-2">UK, EU countries, Norway, Switzerland</p>
+            <p class="font-semibold">200 DH - 10-14 business days</p>
+          </div>
+          
+          <div class="border-l-4 border-black pl-6">
+            <h4 class="text-lg font-bold mb-2">ZONE 3 - ASIA PACIFIC</h4>
+            <p class="text-gray-600 mb-2">Australia, Japan, South Korea, Singapore</p>
+            <p class="font-semibold">250 DH - 12-16 business days</p>
+          </div>
+          
+          <div class="border-l-4 border-black pl-6">
+            <h4 class="text-lg font-bold mb-2">ZONE 4 - REST OF WORLD</h4>
+            <p class="text-gray-600 mb-2">All other countries</p>
+            <p class="font-semibold">300 DH - 14-21 business days</p>
+          </div>
+        </div>
+      </div>
+      
+      <div>
+        <h3 class="text-2xl font-bold uppercase mb-6">IMPORTANT NOTES</h3>
+        <div class="space-y-4">
+          <div class="flex items-start gap-4">
+            <div class="w-6 h-6 bg-black rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+              <span class="text-white text-sm font-bold">!</span>
+            </div>
+            <div>
+              <h4 class="font-bold mb-1">Customs & Duties</h4>
+              <p class="text-gray-600">International customers are responsible for any customs duties, taxes, or fees imposed by their country.</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start gap-4">
+            <div class="w-6 h-6 bg-black rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+              <span class="text-white text-sm font-bold">!</span>
+            </div>
+            <div>
+              <h4 class="font-bold mb-1">Address Accuracy</h4>
+              <p class="text-gray-600">Please ensure your shipping address is complete and accurate to avoid delays.</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start gap-4">
+            <div class="w-6 h-6 bg-black rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+              <span class="text-white text-sm font-bold">!</span>
+            </div>
+            <div>
+              <h4 class="font-bold mb-1">Restricted Items</h4>
+              <p class="text-gray-600">Some countries may have restrictions on certain products. Check local regulations.</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start gap-4">
+            <div class="w-6 h-6 bg-black rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+              <span class="text-white text-sm font-bold">!</span>
+            </div>
+            <div>
+              <h4 class="font-bold mb-1">Currency</h4>
+              <p class="text-gray-600">All prices are displayed in USD. Your bank may charge conversion fees.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Order Processing -->
+<section class="w-full py-20 px-4 bg-white">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold uppercase mb-6 tracking-wide">ORDER PROCESSING</h2>
+      <p class="text-xl text-gray-600">How we handle your order from click to delivery</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="text-center">
+        <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="text-white font-bold text-xl">1</span>
+        </div>
+        <h3 class="text-lg font-bold uppercase mb-2">ORDER PLACED</h3>
+        <p class="text-gray-600">You'll receive an order confirmation email immediately</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="text-white font-bold text-xl">2</span>
+        </div>
+        <h3 class="text-lg font-bold uppercase mb-2">PROCESSING</h3>
+        <p class="text-gray-600">We pick, pack, and prepare your order (1-2 business days)</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="text-white font-bold text-xl">3</span>
+        </div>
+        <h3 class="text-lg font-bold uppercase mb-2">SHIPPED</h3>
+        <p class="text-gray-600">Your order ships and you receive tracking information</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="text-white font-bold text-xl">4</span>
+        </div>
+        <h3 class="text-lg font-bold uppercase mb-2">DELIVERED</h3>
+        <p class="text-gray-600">Your PROJECT gear arrives at your door</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="w-full py-20 px-4 bg-black">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold uppercase text-white mb-4 tracking-wide">SHIPPING FAQ</h2>
+      <p class="text-xl text-gray-300">Common questions about shipping</p>
+    </div>
+    
+    <div class="space-y-6">
+      <div class="bg-gray-900 rounded-lg p-6">
+        <h3 class="text-lg font-bold text-white mb-3">Can I change my shipping address after placing an order?</h3>
+        <p class="text-gray-300">You can change your shipping address within 2 hours of placing your order by contacting our customer service team. After this window, we cannot guarantee address changes as your order may have already entered our fulfillment process.</p>
+      </div>
+      
+      <div class="bg-gray-900 rounded-lg p-6">
+        <h3 class="text-lg font-bold text-white mb-3">Do you ship to P.O. boxes?</h3>
+        <p class="text-gray-300">We can ship to P.O. boxes using standard shipping only. Express and overnight shipping options are not available for P.O. box addresses due to carrier restrictions.</p>
+      </div>
+      
+      <div class="bg-gray-900 rounded-lg p-6">
+        <h3 class="text-lg font-bold text-white mb-3">What if my package is lost or damaged?</h3>
+        <p class="text-gray-300">If your package is lost in transit or arrives damaged, please contact us immediately. We'll work with the carrier to investigate and will send a replacement or provide a full refund.</p>
+      </div>
+      
+      <div class="bg-gray-900 rounded-lg p-6">
+        <h3 class="text-lg font-bold text-white mb-3">Can I track my international order?</h3>
+        <p class="text-gray-300">Yes, all international orders include tracking. However, tracking may be limited once the package enters the destination country's postal system. We recommend checking with your local postal service for final delivery updates.</p>
+      </div>
+      
+      <div class="bg-gray-900 rounded-lg p-6">
+        <h3 class="text-lg font-bold text-white mb-3">What happens if I'm not home for delivery?</h3>
+        <p class="text-gray-300">Delivery procedures vary by carrier and location. Most carriers will attempt delivery 2-3 times before returning the package to a local facility for pickup. You'll receive notifications about delivery attempts and pickup instructions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<%- include('partials/footer') %>

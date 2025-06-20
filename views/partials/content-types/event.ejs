@@ -1,0 +1,74 @@
+<%# NOBULL-inspired Event Section %>
+<section 
+    class="section-base event-section <%= content.layout %> <%= content.animation %> <%= content.customClass %>"
+    style="
+        --section-bg-color: <%= content.backgroundColor || '#ffffff' %>;
+        --section-text-color: <%= content.textColor || '#000000' %>;
+        --section-padding-top: <%= content.spacing?.paddingTop || '4rem' %>;
+        --section-padding-bottom: <%= content.spacing?.paddingBottom || '4rem' %>;
+        --section-margin-top: <%= content.spacing?.marginTop || '0' %>;
+        --section-margin-bottom: <%= content.spacing?.marginBottom || '0' %>;"
+
+    <% if (content.responsive?.hideOnMobile) { %>data-hide-on-mobile="true"<% } %>
+    <% if (content.responsive?.hideOnTablet) { %>data-hide-on-tablet="true"<% } %>
+    <% if (content.responsive?.hideOnDesktop) { %>data-hide-on-desktop="true"<% } %>>
+    
+    <div class="event-section-header">
+        <% if (content.subtitle) { %>
+            <div class="event-section-subtitle"><%= content.subtitle %></div>
+        <% } %>
+        <h2 class="event-section-title"><%= content.title %></h2>
+        <% if (content.description) { %>
+            <div class="event-section-description"><%= content.description %></div>
+        <% } %>
+    </div>
+
+    <div class="events-grid">
+        <% if (content.events && content.events.length > 0) { %>
+            <% content.events.forEach(event => { %>
+                <div class="event-card">
+                    <% if (event.image) { %>
+                        <div class="event-image-container">
+                            <img src="<%= event.image %>" alt="<%= event.title %>" class="event-image">
+                        </div>
+                    <% } %>
+                    <div class="event-content">
+                        <h3 class="event-title"><%= event.title %></h3>
+                        <div class="event-meta">
+                            <% if (event.date) { %>
+                                <div class="event-date">
+                                    <i class="fas fa-calendar"></i>
+                                    <%= new Date(event.date).toLocaleDateString('en-US', {
+                                        month: 'short',
+                                        day: 'numeric',
+                                        year: 'numeric'
+                                    }) %>
+                                </div>
+                            <% } %>
+                            <% if (event.time) { %>
+                                <div class="event-time">
+                                    <i class="fas fa-clock"></i>
+                                    <%= event.time %>
+                                </div>
+                            <% } %>
+                            <% if (event.location) { %>
+                                <div class="event-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <%= event.location %>
+                                </div>
+                            <% } %>
+                        </div>
+                        <% if (event.description) { %>
+                            <p class="event-description"><%= event.description %></p>
+                        <% } %>
+                        <% if (event.buttonText && event.buttonLink) { %>
+                            <a href="<%= event.buttonLink %>" class="event-button">
+                                <%= event.buttonText %>
+                            </a>
+                        <% } %>
+                    </div>
+                </div>
+            <% }); %>
+        <% } %>
+    </div>
+</section>

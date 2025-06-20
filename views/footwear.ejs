@@ -1,0 +1,321 @@
+<%- include('partials/header') %>
+
+<!-- Footwear Hero Section -->
+<section class="relative w-full min-h-screen h-screen overflow-hidden">
+  <!-- Background Image -->
+  <img src="/img/coming.png" alt="NOBULL Footwear" class="absolute inset-0 w-full h-full object-cover z-0 block" style="min-height:100%; min-width:100%;" />
+  
+  <!-- Dark Overlay -->
+  <div class="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
+  
+  <!-- Content -->
+  <div class="relative z-20 flex flex-col items-center justify-center text-center h-full px-4">
+    <h1 class="text-white text-6xl md:text-8xl font-bold uppercase drop-shadow-lg tracking-wider mb-6">FOOTWEAR</h1>
+    <p class="text-white tracking-widest uppercase text-xl md:text-2xl drop-shadow-sm font-medium mb-4">BUILT FOR PERFORMANCE</p>
+    <p class="text-white/90 text-lg md:text-xl drop-shadow-sm mb-8 max-w-2xl">From the gym floor to the streets. Every step engineered for durability, comfort, and performance.</p>
+    <div class="flex flex-col sm:flex-row gap-4">
+      <a href="#trainers" class="bg-white text-black font-bold py-4 px-8 uppercase tracking-wider hover:bg-black hover:text-white transition-all duration-300 border-2 border-white">Shop Trainers</a>
+      <a href="#lifestyle" class="bg-transparent text-white font-bold py-4 px-8 uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-300 border-2 border-white">Shop Lifestyle</a>
+    </div>
+  </div>
+</section>
+
+<!-- Performance Promise -->
+<section class="w-full py-20 px-4 bg-white">
+  <div class="max-w-6xl mx-auto text-center">
+    <h2 class="text-4xl md:text-5xl font-bold uppercase mb-8 tracking-wide">THE PROJECT PROMISE</h2>
+    <p class="text-xl text-gray-700 mb-16 max-w-3xl mx-auto">Every shoe is designed with one goal: to perform when it matters most. No gimmicks, no shortcuts, just footwear that works as hard as you do.</p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <div class="text-center">
+        <div class="w-20 h-20 bg-black rounded-full flex items-center justify-center mx-auto mb-6">
+          <i class="fas fa-dumbbell text-white text-2xl"></i>
+        </div>
+        <h3 class="text-2xl font-bold uppercase mb-4 tracking-wide">DURABILITY</h3>
+        <p class="text-gray-600 leading-relaxed">Built to withstand your toughest workouts. Premium materials and construction that won't quit when you won't.</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-20 h-20 bg-black rounded-full flex items-center justify-center mx-auto mb-6">
+          <i class="fas fa-bolt text-white text-2xl"></i>
+        </div>
+        <h3 class="text-2xl font-bold uppercase mb-4 tracking-wide">PERFORMANCE</h3>
+        <p class="text-gray-600 leading-relaxed">Engineered for athletes who demand more. Superior grip, stability, and support for every movement.</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-20 h-20 bg-black rounded-full flex items-center justify-center mx-auto mb-6">
+          <i class="fas fa-heart text-white text-2xl"></i>
+        </div>
+        <h3 class="text-2xl font-bold uppercase mb-4 tracking-wide">COMFORT</h3>
+        <p class="text-gray-600 leading-relaxed">All-day comfort that doesn't compromise performance. From first step to final rep.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Training Footwear Section -->
+<section id="trainers" class="w-full py-20 px-4 bg-gray-50">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-bold uppercase mb-4 tracking-wide">TRAINING FOOTWEAR</h2>
+      <p class="text-xl text-gray-700">Built for the gym, tested by athletes</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Outwork Trainer -->
+      <div class="group cursor-pointer bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+        <div class="relative overflow-hidden">
+          <img src=" /img/coming.png" alt="Outwork Trainer" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+          <div class="absolute top-4 left-4 bg-black text-white px-3 py-1 text-sm font-bold uppercase tracking-wider">Best Seller</div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-2xl font-bold uppercase tracking-wide mb-2">OUTWORK TRAINER</h3>
+          <p class="text-gray-600 mb-4">The ultimate cross-training shoe. Built for lifting, cardio, and everything in between.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold">149 DH</span>
+            <div class="flex gap-2">
+              <a href="/men/outwork" class="bg-black text-white px-4 py-2 text-sm font-bold uppercase hover:bg-gray-800 transition">Men's</a>
+              <a href="/women/outwork" class="bg-gray-200 text-black px-4 py-2 text-sm font-bold uppercase hover:bg-gray-300 transition">Women's</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Drive Mesh -->
+      <div class="group cursor-pointer bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+        <div class="relative overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Drive Mesh" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+          <div class="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 text-sm font-bold uppercase tracking-wider">New</div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-2xl font-bold uppercase tracking-wide mb-2">DRIVE MESH</h3>
+          <p class="text-gray-600 mb-4">Lightweight mesh construction for breathability and flexibility during intense workouts.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold">139 DH</span>
+            <div class="flex gap-2">
+              <a href="/men/drive" class="bg-black text-white px-4 py-2 text-sm font-bold uppercase hover:bg-gray-800 transition">Men's</a>
+              <a href="/women/drive" class="bg-gray-200 text-black px-4 py-2 text-sm font-bold uppercase hover:bg-gray-300 transition">Women's</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Journey Runner -->
+      <div class="group cursor-pointer bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+        <div class="relative overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Journey Runner" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+        </div>
+        <div class="p-6">
+          <h3 class="text-2xl font-bold uppercase tracking-wide mb-2">JOURNEY RUNNER</h3>
+          <p class="text-gray-600 mb-4">Engineered for distance. Superior cushioning and support for your longest runs.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold">159 DH</span>
+            <div class="flex gap-2">
+              <a href="/men/journey" class="bg-black text-white px-4 py-2 text-sm font-bold uppercase hover:bg-gray-800 transition">Men's</a>
+              <a href="/women/journey" class="bg-gray-200 text-black px-4 py-2 text-sm font-bold uppercase hover:bg-gray-300 transition">Women's</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Lifestyle Footwear Section -->
+<section id="lifestyle" class="w-full py-20 px-4 bg-white">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-bold uppercase mb-4 tracking-wide">LIFESTYLE FOOTWEAR</h2>
+      <p class="text-xl text-gray-700">Performance meets style for everyday wear</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <!-- Allday Knit -->
+      <div class="flex flex-col lg:flex-row items-center gap-8">
+        <div class="w-full lg:w-1/2">
+          <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Allday Knit" class="w-full h-96 object-cover rounded-lg" />
+        </div>
+        <div class="w-full lg:w-1/2 text-center lg:text-left">
+          <h3 class="text-3xl font-bold uppercase tracking-wide mb-4">ALLDAY KNIT</h3>
+          <p class="text-gray-600 text-lg mb-6 leading-relaxed">Seamless knit construction provides all-day comfort and style. Perfect for the gym and beyond.</p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <a href="/men/allday" class="bg-black text-white font-bold py-3 px-6 uppercase tracking-wider hover:bg-gray-800 transition">Shop Men's - 129 DH</a>
+            <a href="/women/allday" class="bg-gray-200 text-black font-bold py-3 px-6 uppercase tracking-wider hover:bg-gray-300 transition">Shop Women's - 129 DH</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Canvas Collection -->
+      <div class="flex flex-col lg:flex-row-reverse items-center gap-8">
+        <div class="w-full lg:w-1/2">
+          <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Canvas Collection" class="w-full h-96 object-cover rounded-lg" />
+        </div>
+        <div class="w-full lg:w-1/2 text-center lg:text-left">
+          <h3 class="text-3xl font-bold uppercase tracking-wide mb-4">CANVAS COLLECTION</h3>
+          <p class="text-gray-600 text-lg mb-6 leading-relaxed">Classic canvas construction with modern performance features. Timeless style meets contemporary comfort.</p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <a href="/men/canvas" class="bg-black text-white font-bold py-3 px-6 uppercase tracking-wider hover:bg-gray-800 transition">Shop Men's - 99 DH</a>
+            <a href="/women/canvas" class="bg-gray-200 text-black font-bold py-3 px-6 uppercase tracking-wider hover:bg-gray-300 transition">Shop Women's - 99 DH</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Technology Section -->
+<section class="w-full py-20 px-4 bg-black text-white">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-bold uppercase mb-4 tracking-wide">PERFORMANCE TECHNOLOGY</h2>
+      <p class="text-xl text-gray-300">Innovation that makes a difference</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div class="text-center">
+        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-shield-alt text-black text-xl"></i>
+        </div>
+        <h3 class="text-lg font-bold uppercase mb-2 tracking-wide">SUPERGRIP OUTSOLE</h3>
+        <p class="text-gray-300 text-sm">Superior traction on any surface</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-wind text-black text-xl"></i>
+        </div>
+        <h3 class="text-lg font-bold uppercase mb-2 tracking-wide">BREATHABLE MESH</h3>
+        <p class="text-gray-300 text-sm">Enhanced airflow and moisture management</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-compress-arrows-alt text-black text-xl"></i>
+        </div>
+        <h3 class="text-lg font-bold uppercase mb-2 tracking-wide">ZERO DROP</h3>
+        <p class="text-gray-300 text-sm">Natural foot positioning for better performance</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-hammer text-black text-xl"></i>
+        </div>
+        <h3 class="text-lg font-bold uppercase mb-2 tracking-wide">REINFORCED TOE</h3>
+        <p class="text-gray-300 text-sm">Extra durability where you need it most</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Size Guide CTA -->
+<section class="w-full py-16 px-4 bg-gray-100">
+  <div class="max-w-4xl mx-auto text-center">
+    <h2 class="text-3xl md:text-4xl font-bold uppercase mb-4 tracking-wide">FIND YOUR PERFECT FIT</h2>
+    <p class="text-lg text-gray-700 mb-8">Get the right size the first time with our comprehensive sizing guide</p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="/size-guide" class="bg-black text-white font-bold py-4 px-8 uppercase tracking-wider hover:bg-gray-800 transition-all duration-300 flex items-center gap-2">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        Size Guide
+      </a>
+      <a href="/fit-guarantee" class="bg-transparent text-black font-bold py-4 px-8 uppercase tracking-wider hover:bg-black hover:text-white transition-all duration-300 border-2 border-black flex items-center gap-2">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+        </svg>
+        Fit Guarantee
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Customer Reviews -->
+<section class="w-full py-20 px-4 bg-white">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-bold uppercase mb-4 tracking-wide">WHAT ATHLETES SAY</h2>
+      <div class="flex items-center justify-center mb-8">
+        <div class="flex items-center gap-1">
+          <% for(let i=1; i<=5; i++) { %>
+            <svg class="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+              <polygon points="10,1 12.59,7.36 19.51,7.36 13.97,11.64 16.56,18 10,13.72 3.44,18 6.03,11.64 0.49,7.36 7.41,7.36"/>
+            </svg>
+          <% } %>
+        </div>
+        <span class="ml-3 text-xl font-semibold text-gray-700">4.8/5 (3,247 reviews)</span>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <% const footwearReviews = [
+        {snippet: 'Best training shoes I\'ve ever owned. The grip during rope climbs is incredible, and they\'ve held up through 8 months of daily CrossFit.', name: 'Alex M.', product: 'Outwork Trainer', verified: true},
+        {snippet: 'Finally found running shoes that don\'t fall apart after 200 miles. The Journey Runners are built like tanks but feel like clouds.', name: 'Sarah L.', product: 'Journey Runner', verified: true},
+        {snippet: 'Love the Allday Knits for both gym and casual wear. They look great with jeans and perform amazing during workouts.', name: 'Mike R.', product: 'Allday Knit', verified: true},
+      ]; %>
+      <% footwearReviews.forEach(review => { %>
+      <div class="bg-gray-50 p-6 rounded-lg">
+        <div class="flex items-center gap-1 mb-4">
+          <% for(let i=1; i<=5; i++) { %>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+              <polygon points="10,1 12.59,7.36 19.51,7.36 13.97,11.64 16.56,18 10,13.72 3.44,18 6.03,11.64 0.49,7.36 7.41,7.36"/>
+            </svg>
+          <% } %>
+        </div>
+        <p class="text-gray-800 mb-4">"<%= review.snippet %>"</p>
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="font-semibold text-gray-900"><%= review.name %></span>
+            <p class="text-sm text-gray-600"><%= review.product %></p>
+          </div>
+          <% if(review.verified) { %>
+          <span class="text-sm text-green-600 font-medium">✓ Verified</span>
+          <% } %>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="relative w-full h-96 flex items-center justify-center overflow-hidden">
+  <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" alt="NOBULL Athletes" class="absolute inset-0 w-full h-full object-cover z-0" />
+  <div class="absolute inset-0 bg-black bg-opacity-70 z-10"></div>
+  <div class="relative z-20 text-center px-4">
+    <h2 class="text-white text-4xl md:text-6xl font-bold uppercase mb-6 tracking-wide">READY TO OUTWORK?</h2>
+    <p class="text-white/90 text-lg md:text-xl mb-8">Join thousands of athletes who trust PROJECT footwear</p>
+    <a href="/products" class="bg-white text-black font-bold py-4 px-8 uppercase tracking-wider hover:bg-black hover:text-white transition-all duration-300 border-2 border-white">Shop All Footwear</a>
+  </div>
+</section>
+
+<style>
+/* Additional styles for footwear page */
+.transition-all {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth scroll for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom hover effects */
+.group:hover .group-hover\:scale-105 {
+  transform: scale(1.05);
+}
+
+/* Button animations */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.animate-pulse {
+  animation: pulse 2s infinite;
+}
+</style>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<%- include('partials/footer') %>

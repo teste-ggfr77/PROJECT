@@ -1,0 +1,96 @@
+<%- include('partials/header') %>
+<link rel="stylesheet" href="/css/order.css">
+
+<div class="container my-5">
+    <% if (messages.success) { %>
+        <div class="alert alert-success text-center fade-in">
+            <%= messages.success %>
+        </div>
+    <% } %>    
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-sm order-card">
+                <div class="card-header bg-white border-bottom-0 py-4">
+                    <h3 class="text-center mb-2">Order Details</h3>
+                    <p class="text-center order-id mb-0">Order #<%= order._id %></p>
+                </div>                <div class="card-body px-4">
+                    <!-- Customer Information -->
+                    <div class="info-section">
+                        <h6 class="mb-4 text-uppercase" style="letter-spacing: 0.05em;">Customer Information</h6>
+                        <div class="info-grid">
+                            <!-- Shipping Address -->
+                            <div class="info-item">
+                                <div class="info-label">Shipping Address</div>
+                                <div class="info-value"><%= order.shippingAddress %></div>
+                            </div>
+                            
+                            <!-- Phone Number -->
+                            <div class="info-item">
+                                <div class="info-label">Phone</div>
+                                <div class="info-value"><%= order.phone %></div>
+                            </div>
+                            
+                            <!-- Order Status -->
+                            <div class="info-item">
+                                <div class="info-label">Order Status</div>
+                                <div class="info-value">
+                                    <span class="order-status <%= order.status %>">
+                                        <%= order.status.charAt(0).toUpperCase() + order.status.slice(1) %>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- Order Items -->
+                    <div class="mb-4">
+                        <h5 class="border-bottom pb-2 text-primary">Order Items</h5>
+                        <div class="table-responsive rounded">
+                            <table class="table table-hover align-middle">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="ps-4">Product</th>
+                                        <th>Color</th>
+                                        <th class="text-center">Quantity</th>
+                                        <th class="text-end">Price</th>
+                                        <th class="text-end pe-4">Total</th>
+                                    </tr>
+                                </thead>                                <tbody>
+                                    <% order.items.forEach(item => { %>
+                                        <tr>                                            <td class="ps-4">
+                                                <div class="d-flex align-items-center">
+                                                    <img src="<%= item.product.image || '/images/default-product.png' %>" 
+                                                         alt="<%= item.product.name %>" 
+                                                         class="me-3"
+                                                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                                                    <span class="fw-medium"><%= item.product.name || item.product %></span>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-light text-dark"><%= item.color %></span></td>
+                                            <td class="text-center fw-medium"><%= item.quantity %></td>
+                                            <td class="text-end">$<%= item.price.toFixed(2) %></td>
+                                            <td class="text-end pe-4">$<%= (item.price * item.quantity).toFixed(2) %></td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody><tfoot class="table-light">
+                                    <tr>
+                                        <td colspan="4" class="text-end fw-bold">Total:</td>
+                                        <td class="text-end order-total">$<%= order.total.toFixed(2) %></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>                    <!-- Actions -->
+                    <div class="text-center mt-4">
+                        <a href="/orders" class="btn btn-outline-primary me-3 order-action-btn">
+                            <i class="bi bi-list-ul"></i> View All Orders
+                        </a>
+                        <a href="/products" class="btn btn-primary order-action-btn">
+                            <i class="bi bi-cart"></i> Continue Shopping
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,952 @@
+<%- include('../partials/admin-header', { title: 'Edit Page Content' }) %>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">Edit Content</h2>
+                    <a href="/admin/page-contents" class="btn btn-secondary">Back to Content List</a>
+                </div>
+                <div class="card-body">
+                    <% if (messages.error) { %>
+                        <div class="alert alert-danger"><%= messages.error %></div>
+                    <% } %>
+                    
+                    <form action="/admin/edit-content/<%= content._id %>" method="POST" enctype="multipart/form-data">
+                        <!-- Basic Information -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="type">Content Type*</label>
+                                    <select class="form-control" id="type" name="type" required>
+                                        <option value="hero" <%= content.type === 'hero' ? 'selected' : '' %>>Hero Section</option>
+                                        <option value="event" <%= content.type === 'event' ? 'selected' : '' %>>Event</option>
+                                        <option value="promotion" <%= content.type === 'promotion' ? 'selected' : '' %>>Promotion</option>
+                                        <option value="featured" <%= content.type === 'featured' ? 'selected' : '' %>>Featured Content</option>
+                                        <option value="banner" <%= content.type === 'banner' ? 'selected' : '' %>>Banner</option>
+                                        <option value="testimonial" <%= content.type === 'testimonial' ? 'selected' : '' %>>Testimonial</option>
+                                        <option value="product-showcase" <%= content.type === 'product-showcase' ? 'selected' : '' %>>Product Showcase</option>
+                                        <option value="newsletter" <%= content.type === 'newsletter' ? 'selected' : '' %>>Newsletter Section</option>
+                                        <option value="category-grid" <%= content.type === 'category-grid' ? 'selected' : '' %>>Category Grid</option>
+                                        <option value="cta-section" <%= content.type === 'cta-section' ? 'selected' : '' %>>Call to Action</option>
+                                        <option value="info-cards" <%= content.type === 'info-cards' ? 'selected' : '' %>>Info Cards</option>
+                                        <option value="video-section" <%= content.type === 'video-section' ? 'selected' : '' %>>Video Section</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="order">Display Order</label>
+                                    <input type="number" class="form-control" id="order" name="order" value="<%= content.order %>">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="title">Title*</label>
+                                    <input type="text" class="form-control" id="title" name="title" value="<%= content.title %>" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-3">
+                                <div class="form-group">
+                                    <label for="subtitle">Subtitle</label>
+                                    <input type="text" class="form-control" id="subtitle" name="subtitle" value="<%= content.subtitle %>">
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-3">
+                                <div class="form-group">
+                                    <label for="description">Description</label>
+                                    <textarea class="form-control" id="description" name="description" rows="4"><%= content.description %></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Media -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="image"><strong>Main Image</strong></label>
+                                    <div class="upload-container p-3 mb-2 bg-light border rounded">
+                                        <% if (content.image) { %>
+                                            <div class="current-image mb-2">
+                                                <p class="mb-2">Current image:</p>
+                                                <img src="<%= content.image %>" alt="Current image" class="img-thumbnail" style="max-height: 100px;">
+                                            </div>
+                                        <% } %>
+                                        <div class="upload-box p-4 border rounded text-center <%= content.image ? 'mt-3' : '' %>">
+                                            <i class="fas fa-cloud-upload-alt fa-2x mb-2"></i>
+                                            <p class="mb-2">Click to upload new image or drag and drop</p>
+                                            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                                            <div id="mainImagePreview" class="mt-2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="additionalImages"><strong>Additional Images</strong></label>
+                                    <div class="upload-container p-3 mb-2 bg-light border rounded">
+                                        <% if (content.additionalImages && content.additionalImages.length > 0) { %>
+                                            <div class="current-images mb-2">
+                                                <p class="mb-2">Current images:</p>
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    <% content.additionalImages.forEach(img => { %>
+                                                        <img src="<%= img %>" alt="Additional image" class="img-thumbnail" style="max-height: 100px;">
+                                                    <% }); %>
+                                                </div>
+                                            </div>
+                                        <% } %>
+                                        <div class="upload-box p-4 border rounded text-center <%= content.additionalImages?.length ? 'mt-3' : '' %>">
+                                            <i class="fas fa-images fa-2x mb-2"></i>
+                                            <p class="mb-2">Click to upload multiple images or drag and drop</p>
+                                            <input type="file" class="form-control" id="additionalImages" name="additionalImages" multiple accept="image/*">
+                                            <div id="additionalImagesPreview" class="mt-2 d-flex flex-wrap gap-2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-3">
+                                <div class="form-group">
+                                    <label for="videoUrl">Video URL</label>
+                                    <input type="url" class="form-control" id="videoUrl" name="videoUrl" value="<%= content.videoUrl %>" placeholder="YouTube or Vimeo URL">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="buttonText">Primary Button Text</label>
+                                    <input type="text" class="form-control" id="buttonText" name="buttonText" value="<%= content.buttonText %>">
+                                </div>
+                                <div class="form-group mt-3">
+                                    <label for="buttonLink">Primary Button Link</label>
+                                    <input type="text" class="form-control" id="buttonLink" name="buttonLink" value="<%= content.buttonLink %>">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="secondaryButtonText">Secondary Button Text</label>
+                                    <input type="text" class="form-control" id="secondaryButtonText" name="secondaryButtonText" value="<%= content.secondaryButtonText %>">
+                                </div>
+                                <div class="form-group mt-3">
+                                    <label for="secondaryButtonLink">Secondary Button Link</label>
+                                    <input type="text" class="form-control" id="secondaryButtonLink" name="secondaryButtonLink" value="<%= content.secondaryButtonLink %>">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Styling -->
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="backgroundColor">Background Color</label>
+                                    <input type="color" class="form-control" id="backgroundColor" name="backgroundColor" value="<%= content.backgroundColor || '#ffffff' %>">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="textColor">Text Color</label>
+                                    <input type="color" class="form-control" id="textColor" name="textColor" value="<%= content.textColor || '#000000' %>">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="customClass">Custom CSS Class</label>
+                                    <input type="text" class="form-control" id="customClass" name="customClass" value="<%= content.customClass %>">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Layout Settings -->
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="layout">Layout</label>
+                                    <select class="form-control" id="layout" name="layout">
+                                        <option value="full-width" <%= content.layout === 'full-width' ? 'selected' : '' %>>Full Width</option>
+                                        <option value="contained" <%= content.layout === 'contained' ? 'selected' : '' %>>Contained</option>
+                                        <option value="split" <%= content.layout === 'split' ? 'selected' : '' %>>Split</option>
+                                        <option value="grid" <%= content.layout === 'grid' ? 'selected' : '' %>>Grid</option>
+                                        <option value="carousel" <%= content.layout === 'carousel' ? 'selected' : '' %>>Carousel</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="alignment">Content Alignment</label>
+                                    <select class="form-control" id="alignment" name="alignment">
+                                        <option value="left" <%= content.alignment === 'left' ? 'selected' : '' %>>Left</option>
+                                        <option value="center" <%= content.alignment === 'center' ? 'selected' : '' %>>Center</option>
+                                        <option value="right" <%= content.alignment === 'right' ? 'selected' : '' %>>Right</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="animation">Animation</label>
+                                    <select class="form-control" id="animation" name="animation">
+                                        <option value="none" <%= content.animation === 'none' ? 'selected' : '' %>>None</option>
+                                        <option value="fade-in" <%= content.animation === 'fade-in' ? 'selected' : '' %>>Fade In</option>
+                                        <option value="slide-up" <%= content.animation === 'slide-up' ? 'selected' : '' %>>Slide Up</option>
+                                        <option value="slide-in" <%= content.animation === 'slide-in' ? 'selected' : '' %>>Slide In</option>
+                                        <option value="zoom" <%= content.animation === 'zoom' ? 'selected' : '' %>>Zoom</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Spacing -->
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="spacing.paddingTop">Padding Top</label>
+                                    <input type="text" class="form-control" id="spacing.paddingTop" name="spacing[paddingTop]" 
+                                        value="<%= content.spacing?.paddingTop || '2rem' %>">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="spacing.paddingBottom">Padding Bottom</label>
+                                    <input type="text" class="form-control" id="spacing.paddingBottom" name="spacing[paddingBottom]" 
+                                        value="<%= content.spacing?.paddingBottom || '2rem' %>">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="spacing.marginTop">Margin Top</label>
+                                    <input type="text" class="form-control" id="spacing.marginTop" name="spacing[marginTop]" 
+                                        value="<%= content.spacing?.marginTop || '0' %>">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="spacing.marginBottom">Margin Bottom</label>
+                                    <input type="text" class="form-control" id="spacing.marginBottom" name="spacing[marginBottom]" 
+                                        value="<%= content.spacing?.marginBottom || '0' %>">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Responsive Settings -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5>Responsive Display</h5>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="hideOnMobile" name="responsive[hideOnMobile]" 
+                                        value="true" <%= content.responsive?.hideOnMobile ? 'checked' : '' %>>
+                                    <label class="form-check-label" for="hideOnMobile">Hide on Mobile</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="hideOnTablet" name="responsive[hideOnTablet]" 
+                                        value="true" <%= content.responsive?.hideOnTablet ? 'checked' : '' %>>
+                                    <label class="form-check-label" for="hideOnTablet">Hide on Tablet</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="hideOnDesktop" name="responsive[hideOnDesktop]" 
+                                        value="true" <%= content.responsive?.hideOnDesktop ? 'checked' : '' %>>
+                                    <label class="form-check-label" for="hideOnDesktop">Hide on Desktop</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Schedule -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="startDate">Start Date (Optional)</label>
+                                    <input type="datetime-local" class="form-control" id="startDate" name="startDate" 
+                                        value="<%= content.startDate ? content.startDate.toISOString().slice(0,16) : '' %>">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="endDate">End Date (Optional)</label>
+                                    <input type="datetime-local" class="form-control" id="endDate" name="endDate" 
+                                        value="<%= content.endDate ? content.endDate.toISOString().slice(0,16) : '' %>">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Featured Content Fields -->
+                        <div id="featuredFields" class="row mb-4" style="display: none;">
+                            <div class="col-12">
+                                <h5>Featured Items</h5>
+                                <div id="featuredItems">
+                                    <% if (content.items && content.items.length > 0) { %>
+                                        <% content.items.forEach((item, index) => { %>
+                                            <div class="featured-item-container mb-4 p-3 border rounded">
+                                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                                    <h6>Featured Item <%= index + 1 %></h6>
+                                                    <button type="button" class="btn btn-danger btn-sm remove-featured-item">Remove</button>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label>Item Title*</label>
+                                                            <input type="text" class="form-control featured-item-title" name="items[<%= index %>][title]" value="<%= item.title %>" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label>Category Tag</label>
+                                                            <input type="text" class="form-control featured-item-category" name="items[<%= index %>][category]" value="<%= item.category %>" placeholder="e.g., Training, Apparel">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 mt-3">
+                                                        <div class="form-group">
+                                                            <label>Description</label>
+                                                            <textarea class="form-control featured-item-description" name="items[<%= index %>][description]" rows="2"><%= item.description %></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 mt-3">
+                                                        <div class="form-group">
+                                                            <label>Item Image*</label>
+                                                            <div class="upload-container p-3 mb-2 bg-light border rounded">
+                                                                <% if (item.image) { %>
+                                                                    <div class="current-image mb-2">
+                                                                        <img src="<%= item.image %>" alt="Current image" class="img-thumbnail">
+                                                                    </div>
+                                                                <% } %>
+                                                                <input type="file" class="form-control featured-item-image" name="items[<%= index %>][image]" accept="image/*">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3 mt-3">
+                                                        <div class="form-group">
+                                                            <label>CTA Text</label>
+                                                            <input type="text" class="form-control featured-item-cta-text" name="items[<%= index %>][ctaText]" value="<%= item.ctaText %>" placeholder="e.g., View More">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3 mt-3">
+                                                        <div class="form-group">
+                                                            <label>CTA Link*</label>
+                                                            <input type="text" class="form-control featured-item-cta-link" name="items[<%= index %>][ctaLink]" value="<%= item.ctaLink %>" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% }); %>
+                                    <% } %>
+                                </div>
+                                <button type="button" class="btn btn-outline-primary" id="addFeaturedItem">
+                                    Add Another Item
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Add this after the form-groups and before the submit button -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5>Live Preview</h5>
+                                <div class="preview-wrapper">
+                                    <div id="contentPreview" class="content-preview border rounded p-3">
+                                        <!-- Preview content will be rendered here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">Update Content</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('type').addEventListener('change', function() {
+    const type = this.value;
+    // Only hide/show video section and buttons for newsletter type
+    const videoSection = document.getElementById('videoUrl').closest('.row');
+    const buttons = document.querySelector('.row:has(#buttonText)').closest('.row');
+    
+    if (type === 'video-section') {
+        videoSection.style.display = 'flex';
+    } else {
+        videoSection.style.display = 'none';
+    }
+
+    if (type === 'newsletter') {
+        buttons.style.display = 'none';
+    } else {
+        buttons.style.display = 'flex';
+    }
+
+    // Show/hide featured fields
+    const featuredFields = document.getElementById('featuredFields');
+    if (type === 'featured') {
+        featuredFields.style.display = 'block';
+    } else {
+        featuredFields.style.display = 'none';
+    }
+});
+
+// Initialize color pickers
+const colorInputs = document.querySelectorAll('input[type="color"]');
+colorInputs.forEach(input => {
+    input.addEventListener('input', function() {
+        this.parentElement.style.backgroundColor = this.value;
+    });
+});
+
+// Enhanced image preview functionality
+function previewImage(input, previewContainer) {
+    const container = previewContainer || input.closest('.media-upload').querySelector('.image-preview');
+    container.innerHTML = ''; // Clear existing preview
+
+    if (input.files && input.files.length > 0) {
+        Array.from(input.files).forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewWrapper = document.createElement('div');
+                previewWrapper.className = 'additional-image-container';
+                
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'img-thumbnail preview-img';
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'btn btn-sm btn-danger remove-image';
+                removeBtn.innerHTML = '✕';
+                removeBtn.onclick = () => previewWrapper.remove();
+                
+                previewWrapper.appendChild(img);
+                previewWrapper.appendChild(removeBtn);
+                container.appendChild(previewWrapper);
+            }
+            reader.readAsDataURL(file);
+        });
+    }
+}
+
+// Set up enhanced image preview listeners
+document.getElementById('image').addEventListener('change', function() {
+    previewImage(this);
+});
+
+document.getElementById('additionalImages').addEventListener('change', function() {
+    previewImage(this);
+});
+
+// Handle remove image buttons
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('remove-image')) {
+        const target = e.target.dataset.target;
+        const index = e.target.dataset.index;
+        
+        // Remove the preview
+        e.target.closest('.additional-image-container, .image-preview').remove();
+        
+        // Here you could also add logic to track deleted images
+        // and send that information to the server when the form is submitted
+    }
+});
+
+    // Image preview functionality for main image
+    document.getElementById('image').addEventListener('change', function(e) {
+        const preview = document.getElementById('mainImagePreview');
+        preview.innerHTML = '';
+        
+        if (this.files && this.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'img-thumbnail mt-2';
+                img.style = 'max-height: 100px;';
+                preview.appendChild(img);
+            }
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+
+    // Image preview functionality for additional images
+    document.getElementById('additionalImages').addEventListener('change', function(e) {
+        const preview = document.getElementById('additionalImagesPreview');
+        preview.innerHTML = '';
+        
+        if (this.files) {
+            Array.from(this.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'img-thumbnail';
+                    img.style = 'max-height: 100px;';
+                    preview.appendChild(img);
+                }
+                reader.readAsDataURL(file);
+            });
+        }
+    });
+
+    // Optional: Add drag and drop functionality
+    ['image', 'additionalImages'].forEach(id => {
+        const dropZone = document.getElementById(id).closest('.upload-box');
+        
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-primary');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('border-primary');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-primary');
+            const input = document.getElementById(id);
+            input.files = e.dataTransfer.files;
+            input.dispatchEvent(new Event('change'));
+        });
+    });
+
+// Live Preview Handler
+class ContentPreview {
+    constructor() {
+        this.previewContainer = document.getElementById('contentPreview');
+        this.type = document.getElementById('type').value;
+        this.setupEventListeners();
+        this.updatePreview();
+    }
+
+    setupEventListeners() {
+        // Monitor all form inputs for changes
+        document.querySelectorAll('input, textarea, select').forEach(input => {
+            input.addEventListener('input', () => this.updatePreview());
+            input.addEventListener('change', () => this.updatePreview());
+        });
+
+        // Special handling for image uploads
+        document.querySelectorAll('input[type="file"]').forEach(input => {
+            input.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.tempImageUrl = e.target.result;
+                        this.updatePreview();
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+        });
+
+        // Show featured fields if type is 'featured'
+        if (this.type === 'featured') {
+            document.getElementById('featuredFields').style.display = 'block';
+        }
+
+        // Handle featured item additions and removals
+        document.getElementById('addFeaturedItem')?.addEventListener('click', () => this.updatePreview());
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('remove-featured-item')) {
+                setTimeout(() => this.updatePreview(), 100);
+            }
+        });
+    }
+
+    updatePreview() {
+        const content = this.collectFormData();
+        
+        switch(document.getElementById('type').value) {
+            case 'featured':
+                this.renderFeaturedPreview(content);
+                break;
+            case 'hero':
+                this.renderHeroPreview(content);
+                break;
+            case 'event':
+                this.renderEventPreview(content);
+                break;
+            case 'promotion':
+                this.renderPromotionPreview(content);
+                break;
+            default:
+                this.previewContainer.innerHTML = '<div class="alert alert-info">Select a content type to see preview</div>';
+        }
+    }
+
+    collectFormData() {
+        const baseData = {
+            title: document.getElementById('title').value,
+            subtitle: document.getElementById('subtitle').value,
+            description: document.getElementById('description').value,
+            backgroundColor: document.getElementById('backgroundColor').value,
+            textColor: document.getElementById('textColor').value,
+            customClass: document.getElementById('customClass').value,
+            layout: document.getElementById('layout').value,
+            alignment: document.getElementById('alignment').value,
+            animation: document.getElementById('animation').value,
+            spacing: {
+                paddingTop: document.getElementById('spacing.paddingTop').value,
+                paddingBottom: document.getElementById('spacing.paddingBottom').value,
+                marginTop: document.getElementById('spacing.marginTop').value,
+                marginBottom: document.getElementById('spacing.marginBottom').value
+            }
+        };
+
+        // Add featured items if type is featured
+        if (document.getElementById('type').value === 'featured') {
+            baseData.items = this.collectFeaturedItems();
+        }
+
+        return baseData;
+    }
+
+    collectFeaturedItems() {
+        const items = [];
+        const containers = document.querySelectorAll('.featured-item-container');
+        
+        containers.forEach(container => {
+            const item = {
+                title: container.querySelector('.featured-item-title').value,
+                category: container.querySelector('.featured-item-category').value,
+                description: container.querySelector('.featured-item-description').value,
+                ctaText: container.querySelector('.featured-item-cta-text').value,
+                ctaLink: container.querySelector('.featured-item-cta-link').value
+            };
+
+            // Get image from either file input or existing image
+            const currentImage = container.querySelector('.current-image img');
+            const fileInput = container.querySelector('.featured-item-image');
+            
+            if (fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    item.image = e.target.result;
+                    this.updatePreview();
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else if (currentImage) {
+                item.image = currentImage.src;
+            }
+
+            items.push(item);
+        });
+
+        return items;
+    }
+
+    renderFeaturedPreview(content) {
+        this.previewContainer.innerHTML = `
+            <div class="featured-section ${content.customClass}" style="
+                background-color: ${content.backgroundColor};
+                color: ${content.textColor};
+                padding: ${content.spacing.paddingTop} ${content.spacing.paddingBottom};
+                margin: ${content.spacing.marginTop} ${content.spacing.marginBottom};
+                text-align: ${content.alignment};
+            ">
+                <div class="featured-header">
+                    <h2 class="featured-title" style="font-size: 2rem; font-weight: bold; margin-bottom: 1rem;">
+                        ${content.title || 'Featured Content'}
+                    </h2>
+                    ${content.subtitle ? `
+                        <p class="featured-subtitle" style="font-size: 1.2rem; opacity: 0.8;">
+                            ${content.subtitle}
+                        </p>
+                    ` : ''}
+                </div>
+
+                <div class="featured-grid" style="
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                    gap: 2rem;
+                    margin-top: 2rem;
+                ">
+                    ${content.items ? content.items.map(item => `
+                        <article class="featured-item" style="
+                            background: ${this.adjustColor(content.backgroundColor, 20)};
+                            border-radius: 8px;
+                            overflow: hidden;
+                            transition: transform 0.3s ease;
+                        ">
+                            ${item.image ? `
+                                <div class="featured-image" style="
+                                    position: relative;
+                                    padding-top: 75%;
+                                    overflow: hidden;
+                                ">
+                                    <img src="${item.image}" alt="${item.title}" style="
+                                        position: absolute;
+                                        top: 0;
+                                        left: 0;
+                                        width: 100%;
+                                        height: 100%;
+                                        object-fit: cover;
+                                    ">
+                                </div>
+                            ` : ''}
+                            <div class="featured-content" style="padding: 1.5rem;">
+                                ${item.category ? `
+                                    <span class="featured-category" style="
+                                        display: inline-block;
+                                        padding: 0.25rem 0.75rem;
+                                        margin-bottom: 0.5rem;
+                                        background: ${content.textColor};
+                                        color: ${content.backgroundColor};
+                                        font-size: 0.8rem;
+                                        text-transform: uppercase;
+                                        border-radius: 4px;
+                                    ">${item.category}</span>
+                                ` : ''}
+                                <h3 style="font-size: 1.25rem; margin: 0.75rem 0;">${item.title}</h3>
+                                ${item.description ? `
+                                    <p style="margin-bottom: 1rem; opacity: 0.9;">${item.description}</p>
+                                ` : ''}
+                                <a href="${item.ctaLink}" class="featured-cta" style="
+                                    display: inline-block;
+                                    padding: 0.5rem 1rem;
+                                    border: 2px solid ${content.textColor};
+                                    color: ${content.textColor};
+                                    text-decoration: none;
+                                    font-weight: 600;
+                                    transition: all 0.3s ease;
+                                ">${item.ctaText || 'View More'}</a>
+                            </div>
+                        </article>
+                    `).join('') : ''}
+                </div>
+            </div>
+        `;
+
+        // Add hover effects
+        const items = this.previewContainer.querySelectorAll('.featured-item');
+        items.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.transform = 'translateY(-5px)';
+            });
+            item.addEventListener('mouseleave', () => {
+                item.style.transform = 'translateY(0)';
+            });
+        });
+    }
+
+    // Helper function to adjust color brightness
+    adjustColor(color, amount) {
+        return color === '#ffffff' ? '#f5f5f5' : this.lightenDarkenColor(color, amount);
+    }
+
+    lightenDarkenColor(col, amt) {
+        let usePound = false;
+        if (col[0] === "#") {
+            col = col.slice(1);
+            usePound = true;
+        }
+        let num = parseInt(col,16);
+        let r = (num >> 16) + amt;
+        let b = ((num >> 8) & 0x00FF) + amt;
+        let g = (num & 0x0000FF) + amt;
+        r = Math.min(Math.max(0, r), 255);
+        b = Math.min(Math.max(0, b), 255);
+        g = Math.min(Math.max(0, g), 255);
+        return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16);
+    }
+
+    // ...existing preview methods...
+}
+
+// Initialize live preview when document is ready
+document.addEventListener('DOMContentLoaded', () => {
+    const preview = new ContentPreview();
+});
+</script>
+
+<style>
+/* Image Upload Styling */
+.media-upload {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #f8f9fa;
+}
+
+.image-preview {
+    position: relative;
+    display: inline-block;
+}
+
+.preview-img {
+    max-height: 150px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.remove-image {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+}
+
+.additional-image-container {
+    position: relative;
+    display: inline-block;
+    margin: 5px;
+}
+
+.upload-box {
+    margin-top: 10px;
+}
+
+.upload-box input[type="file"] {
+    border: 2px dashed #dee2e6;
+    padding: 10px;
+    background-color: white;
+}
+
+.upload-box input[type="file"]:hover {
+    border-color: #adb5bd;
+}
+
+/* New styles for upload containers */
+.upload-container {
+    transition: border-color 0.3s;
+}
+
+.upload-container:hover {
+    border-color: #007bff;
+}
+
+.current-image, .current-images {
+    border: 1px solid #007bff;
+    padding: 5px;
+    border-radius: 4px;
+    background-color: #e9f7ff;
+}
+
+.current-image img, .current-images img {
+    max-height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.fas {
+    color: #007bff;
+}
+
+.upload-container {
+    background-color: #f8f9fa;
+}
+
+.upload-box {
+    background-color: #ffffff;
+    border: 2px dashed #dee2e6 !important;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-box:hover {
+    border-color: #0d6efd !important;
+    background-color: #f8f9fa;
+}
+
+.upload-box input[type="file"] {
+    cursor: pointer;
+}
+
+.current-image img,
+.current-images img {
+    object-fit: cover;
+    border: 1px solid #dee2e6;
+}
+
+.gap-2 {
+    gap: 0.5rem !important;
+}
+
+/* Preview Styles */
+.preview-wrapper {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.content-preview {
+    background: white;
+    min-height: 200px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid #dee2e6;
+}
+
+/* Featured content preview specific styles */
+.content-preview .featured-section {
+    padding: 2rem;
+}
+
+.content-preview .featured-item {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.content-preview .featured-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.content-preview .featured-cta:hover {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: white;
+}
+
+/* Responsive preview */
+@media (max-width: 768px) {
+    .content-preview .featured-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Animation for updates */
+.content-preview.updating {
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+/* Featured item form styles */
+.featured-item-container {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.featured-item-container:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.upload-container {
+    background-color: white;
+}
+
+.current-image img {
+    max-height: 120px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+#addFeaturedItem {
+    margin-top: 1rem;
+    transition: all 0.3s ease;
+}
+
+#addFeaturedItem:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+</style>
+
+<%- include('../partials/admin-footer') %>

@@ -1,0 +1,217 @@
+<%- include('../partials/admin-header', { title: 'Edit Product' }) %>
+
+<style>
+    .gradient-header {
+        background: linear-gradient(to right, #6d28d9, #4c1d95);
+        color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .card {
+        border: none;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        border-radius: 12px;
+        margin-bottom: 2rem;
+    }
+    .card-header {
+        background: #f3e8ff;
+        border-bottom: 1px solid #e9d5ff;
+        border-radius: 12px 12px 0 0;
+    }
+    .card-title, .card-header h2 {
+        color: #6d28d9;
+        font-weight: 600;
+    }
+    .btn-secondary {
+        background: #f3e8ff;
+        color: #6d28d9;
+        border: none;
+        transition: all 0.2s;
+    }
+    .btn-secondary:hover {
+        background: #e9d5ff;
+        color: #4c1d95;
+    }
+    .btn-primary {
+        background: #6d28d9;
+        border: none;
+        color: white;
+        transition: all 0.2s;
+    }
+    .btn-primary:hover {
+        background: #4c1d95;
+        color: white;
+    }
+    .form-label {
+        font-weight: 500;
+        color: #4b5563;
+    }
+    .form-control, .form-select {
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #a78bfa;
+        box-shadow: 0 0 0 3px #ede9fe;
+    }
+    .alert-success {
+        background: #dcfce7;
+        color: #166534;
+        border: none;
+    }
+    .alert-danger {
+        background: #fee2e2;
+        color: #991b1b;
+        border: none;
+    }
+    .form-text {
+        color: #6b7280;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+    }
+    .d-grid .btn {
+        font-size: 1.1rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+    }
+    .current-image {
+        border: 1px solid #e9d5ff;
+        border-radius: 8px;
+        padding: 0.5rem;
+        background: #f3e8ff;
+        max-width: 220px;
+    }
+</style>
+
+<div class="container-fluid px-4">
+    <div class="gradient-header d-flex justify-content-between align-items-center">
+        <div>
+            <h2 class="m-0">Edit Product</h2>
+            <p class="text-light mb-0 mt-2">Update product details and images</p>
+        </div>
+        <a href="/admin" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <% if (messages && (messages.error || messages.success)) { %>
+                        <% if (messages.error) { %>
+                            <div class="alert alert-danger"><%= messages.error %></div>
+                        <% } %>
+                        <% if (messages.success) { %>
+                            <div class="alert alert-success"><%= messages.success %></div>
+                        <% } %>
+                    <% } %>
+                    <form action="/admin/edit-product/<%= product._id %>" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()" data-csrf="<%= csrfToken %>">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Product Name</label>
+                            <input type="text" class="form-control" id="name" name="name" value="<%= product.name %>" required minlength="2" maxlength="100">
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3" required minlength="10" maxlength="1000"><%= product.description %></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="price" class="form-label">Price</label>
+                            <input type="number" class="form-control" id="price" name="price" value="<%= product.price %>" step="0.01" min="0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="colors" class="form-label">Colors (comma-separated)</label>
+                            <input type="text" class="form-control" id="colors" name="colors" value="<%= product.colors.join(',') %>" placeholder="Red, Blue, Green">
+                        </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <select class="form-select" id="category" name="category" required>
+                                <option value="">Select a category</option>
+                                <% categories.forEach(category => { %>
+                                    <option value="<%= category.name %>" <%= product.category === category.name ? 'selected' : '' %>><%= category.name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Quantity</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" value="<%= product.quantity %>" required min="0">
+                        </div>
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Product Image</label>
+                            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                            <small class="form-text">Leave empty to keep current image</small>
+                        </div>
+                        <% if (product.image) { %>
+                            <div class="mb-3">
+                                <label class="form-label">Current Image</label>
+                                <div>
+                                    <img src="<%= product.image %>" alt="<%= product.name %>" class="current-image">
+                                </div>
+                            </div>
+                        <% } %>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Update Product
+                            </button>
+                        </div>
+                    </form>
+                    <script>
+                        // Debug logging for form submission
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const form = document.querySelector('form');
+                            form.addEventListener('submit', function(e) {
+                                console.log('Form submission:', {
+                                    csrf: form.querySelector('[name="_csrf"]').value,
+                                    action: form.action,
+                                    method: form.method,
+                                    enctype: form.enctype
+                                });
+                            });
+                        });
+
+                        function validateForm() {
+                            const name = document.getElementById('name').value.trim();
+                            const description = document.getElementById('description').value.trim();
+                            const price = parseFloat(document.getElementById('price').value);
+                            const quantity = parseInt(document.getElementById('quantity').value);
+                            const category = document.getElementById('category').value;
+                            
+                            if (name.length < 2 || name.length > 100) {
+                                alert('Product name must be between 2 and 100 characters');
+                                return false;
+                            }
+                            
+                            if (description.length < 10 || description.length > 1000) {
+                                alert('Description must be between 10 and 1000 characters');
+                                return false;
+                            }
+                            
+                            if (isNaN(price) || price < 0) {
+                                alert('Price must be a valid positive number');
+                                return false;
+                            }
+                            
+                            if (isNaN(quantity) || quantity < 0) {
+                                alert('Quantity must be a valid positive number');
+                                return false;
+                            }
+                            
+                            if (!category) {
+                                alert('Please select a category');
+                                return false;
+                            }
+                            
+                            return true;
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/admin-footer') %>

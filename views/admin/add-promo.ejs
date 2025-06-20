@@ -1,0 +1,255 @@
+<%- include('../partials/admin-header', { title: 'Add Promo Code' }) %>
+
+<style>
+    .gradient-header {
+        background: linear-gradient(to right, #6d28d9, #4c1d95);
+        color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card {
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        border-radius: 10px;
+        margin-bottom: 2rem;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #4b5563;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control, .form-select {
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #8b5cf6;
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+    }
+
+    .form-text {
+        color: #6b7280;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+    }
+
+    .btn-primary {
+        background-color: #6d28d9;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #5b21b6;
+        transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+        background-color: #f3e8ff;
+        border: none;
+        color: #6d28d9;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: #e9d5ff;
+        color: #5b21b6;
+    }
+
+    .input-group-text {
+        background-color: #f3e8ff;
+        color: #6d28d9;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+    }
+
+    .required-field::after {
+        content: '*';
+        color: #dc2626;
+        margin-left: 4px;
+    }
+
+    .helper-text {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #6b7280;
+        margin-top: 0.5rem;
+    }
+
+    .helper-text i {
+        color: #8b5cf6;
+        font-size: 0.875rem;
+    }
+</style>
+
+<div class="container-fluid px-4">
+    <div class="gradient-header">
+        <h2 class="m-0">Add Promo Code</h2>
+        <p class="text-light mb-0 mt-2">Create a new promotional code for discounts</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body p-4">
+                    <form method="POST" class="needs-validation" novalidate>
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        
+                        <div class="mb-4">
+                            <label for="code" class="form-label required-field">Promo Code</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-ticket-alt"></i>
+                                </span>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="code" 
+                                       name="code" 
+                                       placeholder="e.g., SUMMER2025"
+                                       required
+                                       pattern="[A-Za-z0-9-_]+"
+                                       minlength="3"
+                                       maxlength="20">
+                            </div>
+                            <div class="helper-text">
+                                <i class="fas fa-info-circle"></i>
+                                Use letters, numbers, hyphens, and underscores only
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="discountType" class="form-label required-field">Discount Type</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-tag"></i>
+                                </span>
+                                <select class="form-select" id="discountType" name="discountType" required>
+                                    <option value="" disabled selected>Select discount type</option>
+                                    <option value="fixed">Fixed Amount ($)</option>
+                                    <option value="percentage">Percentage (%)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="discountValue" class="form-label required-field">Discount Value</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="valuePrefix">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </span>
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="discountValue" 
+                                       name="discountValue" 
+                                       required
+                                       min="0.01"
+                                       step="0.01">
+                            </div>
+                            <div class="helper-text" id="valueHelp">
+                                <i class="fas fa-info-circle"></i>
+                                Enter the discount amount in dollars
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="expiryDate" class="form-label">Expiry Date</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-calendar"></i>
+                                </span>
+                                <input type="date" 
+                                       class="form-control" 
+                                       id="expiryDate" 
+                                       name="expiryDate"
+                                       min="<%= new Date().toISOString().split('T')[0] %>">
+                            </div>
+                            <div class="helper-text">
+                                <i class="fas fa-info-circle"></i>
+                                Leave empty for no expiry
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="usageLimit" class="form-label required-field">Usage Limit</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-users"></i>
+                                </span>
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="usageLimit" 
+                                       name="usageLimit" 
+                                       value="1" 
+                                       min="1" 
+                                       required>
+                            </div>
+                            <div class="helper-text">
+                                <i class="fas fa-info-circle"></i>
+                                Maximum number of times this code can be used
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-3 mt-5">
+                            <a href="/admin/promo-codes" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Promo Codes
+                            </a>
+                            <button type="submit" class="btn btn-primary flex-grow-1">
+                                <i class="fas fa-save me-2"></i>Create Promo Code
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const discountType = document.getElementById('discountType');
+    const valueHelp = document.getElementById('valueHelp');
+    const valuePrefix = document.getElementById('valuePrefix');
+    const discountValue = document.getElementById('discountValue');
+
+    discountType.addEventListener('change', function() {
+        if (this.value === 'percentage') {
+            valuePrefix.innerHTML = '<i class="fas fa-percent"></i>';
+            discountValue.min = '1';
+            discountValue.max = '100';
+            discountValue.step = '1';
+            valueHelp.innerHTML = '<i class="fas fa-info-circle"></i> Enter a value between 1 and 100';
+        } else {
+            valuePrefix.innerHTML = '<i class="fas fa-dollar-sign"></i>';
+            discountValue.min = '0.01';
+            discountValue.max = '';
+            discountValue.step = '0.01';
+            valueHelp.innerHTML = '<i class="fas fa-info-circle"></i> Enter the discount amount in dollars';
+        }
+    });
+
+    // Form validation
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+});
+</script>
+
+<%- include('../partials/admin-footer') %>

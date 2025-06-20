@@ -1,0 +1,54 @@
+<%# Category Grid Section %>
+<section 
+    class="section-base category-grid-section <%= content.layout %> <%= content.animation %> <%= content.customClass %>"
+    style="
+        --section-bg-color: <%= content.backgroundColor || 'transparent' %>;
+        --section-text-color: <%= content.textColor || 'inherit' %>;
+        --section-padding-top: <%= content.spacing?.paddingTop || '2rem' %>;
+        --section-padding-bottom: <%= content.spacing?.paddingBottom || '2rem' %>;
+        --section-margin-top: <%= content.spacing?.marginTop || '0' %>;
+        --section-margin-bottom: <%= content.spacing?.marginBottom || '0' %>;"
+
+    <% if (content.responsive?.hideOnMobile) { %>data-hide-on-mobile="true"<% } %>
+    <% if (content.responsive?.hideOnTablet) { %>data-hide-on-tablet="true"<% } %>
+    <% if (content.responsive?.hideOnDesktop) { %>data-hide-on-desktop="true"<% } %>>
+    
+    <div class="container">
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-8 text-center">
+                <h2 class="section-title"><%= content.title %></h2>
+                <% if (content.subtitle) { %>
+                    <p class="section-subtitle lead"><%= content.subtitle %></p>
+                <% } %>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <% if (content.additionalImages?.length > 0) { %>
+                <% content.additionalImages.forEach((image, index) => { %>
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <div class="category-card">
+                            <div class="category-image-wrapper">
+                                <img src="<%= image %>" alt="Category Image" class="img-fluid rounded">
+                            </div>
+                            <% if (content.description) { %>
+                                <% const titles = content.description.split('|'); %>
+                                <h5 class="category-title text-center mt-3">
+                                    <%= titles[index] || '' %>
+                                </h5>
+                            <% } %>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } %>
+        </div>
+
+        <% if (content.buttonText && content.buttonLink) { %>
+            <div class="text-center mt-5">
+                <a href="<%= content.buttonLink %>" class="btn btn-primary">
+                    <%= content.buttonText %>
+                </a>
+            </div>
+        <% } %>
+    </div>
+</section>

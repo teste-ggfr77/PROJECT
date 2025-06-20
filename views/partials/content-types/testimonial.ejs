@@ -1,0 +1,74 @@
+<%# Testimonial Section %>
+<section 
+    class="section-base testimonial-section <%= content.layout %> <%= content.animation %> <%= content.customClass %>"
+    style="
+        --section-bg-color: <%= content.backgroundColor || 'transparent' %>;
+        --section-text-color: <%= content.textColor || 'inherit' %>;
+        --section-padding-top: <%= content.spacing?.paddingTop || '2rem' %>;
+        --section-padding-bottom: <%= content.spacing?.paddingBottom || '2rem' %>;
+        --section-margin-top: <%= content.spacing?.marginTop || '0' %>;
+        --section-margin-bottom: <%= content.spacing?.marginBottom || '0' %>;"
+
+    <% if (content.responsive?.hideOnMobile) { %>data-hide-on-mobile="true"<% } %>
+    <% if (content.responsive?.hideOnTablet) { %>data-hide-on-tablet="true"<% } %>
+    <% if (content.responsive?.hideOnDesktop) { %>data-hide-on-desktop="true"<% } %>>
+    
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h2><%= content.title %></h2>
+                <% if (content.subtitle) { %>
+                    <p class="lead text-muted mb-5"><%= content.subtitle %></p>
+                <% } %>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <% if (content.layout === 'carousel' && content.additionalImages?.length > 0) { %>
+                    <div id="testimonialCarousel-<%= content._id %>" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <% content.additionalImages.forEach((image, index) => { %>
+                                <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                                    <div class="text-center">
+                                        <img src="<%= image %>" alt="Testimonial" class="testimonial-image mb-4">
+                                        <div class="testimonial-content">
+                                            <p class="lead mb-4"><%= content.description %></p>
+                                            <% if (content.buttonText) { %>
+                                                <p class="author-name mb-2"><%= content.buttonText %></p>
+                                            <% } %>
+                                            <% if (content.buttonLink) { %>
+                                                <small class="author-title text-muted"><%= content.buttonLink %></small>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel-<%= content._id %>" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel-<%= content._id %>" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    </div>
+                <% } else { %>
+                    <div class="text-center">
+                        <% if (content.image) { %>
+                            <img src="<%= content.image %>" alt="Testimonial" class="testimonial-image mb-4">
+                        <% } %>
+                        <div class="testimonial-content">
+                            <p class="lead mb-4"><%= content.description %></p>
+                            <% if (content.buttonText) { %>
+                                <p class="author-name mb-2"><%= content.buttonText %></p>
+                            <% } %>
+                            <% if (content.buttonLink) { %>
+                                <small class="author-title text-muted"><%= content.buttonLink %></small>
+                            <% } %>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</section>

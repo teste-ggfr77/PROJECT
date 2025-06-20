@@ -1,0 +1,1413 @@
+<%- include('partials/header') %>
+
+<style>
+/* Modern CSS Variables */
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    --warning-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --info-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --card-shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.15);
+    --border-radius: 16px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+.animate-fade-in {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-slide-in {
+    animation: slideInRight 0.6s ease-out;
+}
+
+/* Enhanced base styles */
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+}
+.profile-layout {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+    margin: 2rem auto;
+    max-width: 1400px;
+    padding: 0 2rem;
+}
+
+.profile-section {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary-gradient);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.profile-section:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--card-shadow-hover);
+}
+
+/* Grid layout assignments */
+.header-section {
+    grid-column: span 12;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.settings-section {
+    grid-column: span 12;
+    grid-row: 2;
+    margin-bottom: 1.5rem;
+}
+
+.stats-section {
+    grid-column: span 4;
+    grid-row: 3;
+}
+
+.account-section {
+    grid-column: span 8;
+    grid-row: 3;
+}
+
+.orders-section {
+    grid-column: span 8;
+    grid-row: 4;
+}
+
+.achievements-section {
+    grid-column: span 4;
+    grid-row: 4;
+}
+
+/* Settings section specific styles */
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 0.5rem;
+}
+
+.settings-card {
+    background: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    transition: var(--transition);
+    box-shadow: var(--card-shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.settings-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--primary-gradient);
+}
+
+.settings-card:nth-child(2)::before {
+    background: var(--warning-gradient);
+}
+
+.settings-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--card-shadow-hover);
+}
+
+/* Loading skeleton */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+.skeleton-text {
+    height: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.skeleton-title {
+    height: 1.5rem;
+    width: 60%;
+    margin-bottom: 1rem;
+}
+
+.skeleton-avatar {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+}
+
+/* Enhanced buttons */
+.btn-profile {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    background: white;
+    color: #333;
+    text-decoration: none;
+    border: 2px solid #e9ecef;
+    transition: var(--transition);
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-profile::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.5s;
+}
+
+.btn-profile:hover::before {
+    left: 100%;
+}
+
+.btn-profile:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: #667eea;
+    color: #667eea;
+}
+
+.settings-card h4 {
+    color: var(--bs-dark);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.settings-card h4 i {
+    color: var(--bs-primary);
+}
+
+.settings-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .stats-section,
+    .account-section,
+    .orders-section,
+    .achievements-section {
+        grid-column: span 12;
+        grid-row: auto;
+    }
+}
+
+.profile-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.profile-header {
+    grid-column: span 12;
+    background: var(--primary-gradient);
+    border-radius: var(--border-radius);
+    padding: 3rem;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 20px,
+        rgba(255, 255, 255, 0.05) 20px,
+        rgba(255, 255, 255, 0.05) 40px
+    );
+    animation: shimmer 20s linear infinite;
+}
+
+.profile-picture-container {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    z-index: 2;
+}
+
+.profile-picture {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: var(--transition);
+}
+
+.profile-picture:hover {
+    transform: scale(1.05);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.profile-picture-edit {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #667eea;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.profile-picture-edit:hover {
+    background: white;
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.profile-info {
+    flex: 1;
+    z-index: 2;
+    position: relative;
+}
+
+.profile-name {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: black;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(255, 255, 255, 0.5);
+}
+
+.profile-email {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+}
+
+.member-since {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    display: inline-block;
+    backdrop-filter: blur(10px);
+}
+
+.quick-stats {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.quick-stat {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.75rem 1.25rem;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: var(--transition);
+}
+
+.quick-stat:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+.quick-stat-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    display: block;
+}
+
+.quick-stat-label {
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+.profile-section h3 {
+    margin-bottom: 1.5rem;
+    color: var(--bs-dark);
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--bs-gray-200);
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.info-item {
+    margin-bottom: 1rem;
+}
+
+.info-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--bs-gray-700);
+}
+
+.info-value {
+    color: var(--bs-gray-600);
+}
+
+.order-card {
+    border: 1px solid var(--bs-gray-200);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.order-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.order-id {
+    font-weight: 600;
+    color: var(--bs-dark);
+}
+
+.order-date {
+    color: var(--bs-gray-600);
+}
+
+.order-status {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.order-status.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.order-status.processing {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.order-status.shipped {
+    background: #d4edda;
+    color: #155724;
+}
+
+.order-status.delivered {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.order-total {
+    font-weight: 600;
+    color: var(--bs-dark);
+    margin-bottom: 1rem;
+}
+
+.btn-profile {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    border-radius: 5px;
+    background: var(--bs-gray-100);
+    color: var(--bs-gray-900);
+    text-decoration: none;
+    border: 1px solid var(--bs-gray-300);
+    transition: all 0.3s ease;
+    margin: 0 0.5rem;
+}
+
+.btn-profile:hover {
+    background: var(--bs-gray-200);
+    color: var(--bs-gray-900);
+    border-color: var(--bs-gray-400);
+}
+
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    align-items: center;
+}
+
+/* New styles */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    text-align: center;
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--success-gradient);
+}
+
+.stat-card:nth-child(2)::before {
+    background: var(--warning-gradient);
+}
+
+.stat-card:nth-child(3)::before {
+    background: var(--info-gradient);
+}
+
+.stat-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--card-shadow-hover);
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: var(--success-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.stat-card:nth-child(2) .stat-value {
+    background: var(--warning-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-card:nth-child(3) .stat-value {
+    background: var(--info-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-label {
+    color: #666;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.achievement-card {
+    background: var(--bs-white);
+    border: 1px solid var(--bs-gray-200);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.achievement-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.achievement-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--bs-dark);
+    color: var(--bs-white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 1.25rem;
+}
+
+.orders-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+.order-grid-card {
+    background: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+}
+
+.order-grid-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--info-gradient);
+}
+
+.order-grid-card.processing::before {
+    background: var(--warning-gradient);
+}
+
+.order-grid-card.shipped::before {
+    background: var(--info-gradient);
+}
+
+.order-grid-card.delivered::before {
+    background: var(--success-gradient);
+}
+
+.order-grid-card.cancelled::before {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+}
+
+.order-grid-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--card-shadow-hover);
+}
+
+.order-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: var(--info-gradient);
+    transition: width 0.3s ease;
+}
+
+.order-progress.processing {
+    width: 25%;
+    background: var(--warning-gradient);
+}
+
+.order-progress.shipped {
+    width: 75%;
+    background: var(--info-gradient);
+}
+
+.order-progress.delivered {
+    width: 100%;
+    background: var(--success-gradient);
+}
+
+.order-grid-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.order-grid-body {
+    padding: 12px 0;
+}
+
+.order-date {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.order-date i {
+    margin-right: 6px;
+    color: #888;
+}
+
+.order-grid-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+    margin-top: 12px;
+}
+
+.order-grid-items {
+    background: #fcfcfc;
+    border-radius: 8px;
+    padding: 12px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .orders-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .order-grid-card {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .order-grid-card {
+        padding: 15px;
+    }
+
+    .order-grid-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .order-grid-items {
+        padding: 10px;
+    }
+
+    .items-preview {
+        gap: 6px;
+    }
+
+    .item-preview {
+        width: 50px;
+        height: 50px;
+    }
+
+    .more-items {
+        width: 50px;
+        height: 50px;
+        font-size: 12px;
+    }
+
+    .order-grid-footer {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    .order-status {
+        padding: 4px 10px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 1rem;
+    }
+    
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+    }
+    
+    .profile-picture-container {
+        margin: 0 auto;
+    }
+    
+    .profile-info {
+        text-align: center;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+      .settings-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+}
+
+.items-preview {
+    display: flex;
+    gap: 8px;
+    margin: 12px 0;
+}
+
+.item-preview {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #f8f6f3;
+    border: 1px solid #ececec;
+    transition: transform 0.2s ease;
+}
+
+.item-preview:hover {
+    transform: translateY(-2px);
+}
+
+.item-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.more-items {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background: #f8f6f3;
+    border: 1px solid #ececec;
+    border-radius: 6px;
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Quick Track Styles */
+.quick-track-card {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.quick-track-card h4 {
+    color: #333;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.quick-track-card h4 i {
+    color: #10b981;
+}
+
+.quick-track-card p {
+    color: #666;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.track-input-group {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.track-input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: #ffffff;
+    color: #111827;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.track-input:focus {
+    outline: none;
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.track-input::placeholder {
+    color: #9ca3af;
+}
+
+.track-btn {
+    background: #10b981;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.track-btn:hover {
+    background: #059669;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.track-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.quick-track-result {
+    background: #d1fae5;
+    border: 1px solid #a7f3d0;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.quick-track-error {
+    background: #fee2e2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.order-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.order-actions-grid {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.track-this-order {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+}
+
+.quick-track-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.quick-track-status i {
+    color: #10b981;
+}
+
+.quick-track-details {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+
+/* Responsive adjustments for tracking */
+@media (max-width: 768px) {
+    .order-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: stretch;
+    }
+    
+    .track-input-group {
+        flex-direction: column;
+    }
+    
+    .order-actions-grid {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .track-this-order {
+        width: 100%;
+        text-align: center;
+    }
+}
+</style>
+
+<div class="profile-layout">
+    <!-- Header -->
+    <div class="profile-section header-section">
+        <div class="profile-picture-container">
+            <img src="<%= user.profilePicture || '/images/default-profile.png' %>" alt="Profile Picture" class="profile-picture">
+            <button class="profile-picture-edit" onclick="document.getElementById('profilePicture').click()">
+                <i class="fas fa-camera"></i>
+            </button>
+            <form id="profilePictureForm" style="display: none;">
+                <input type="file" id="profilePicture" name="profilePicture" accept="image/*" onchange="this.form.submit()">
+            </form>
+        </div>
+        <div class="profile-info">
+            <h1 class="profile-name animate-fade-in"><%= user.name %></h1>
+            <p class="profile-email animate-fade-in"><%= user.email %></p>
+            <div class="quick-stats animate-slide-in">
+                <div class="quick-stat">
+                    <span class="quick-stat-value"><%= orders ? orders.length : 0 %></span>
+                    <span class="quick-stat-label">Orders</span>
+                </div>
+                <div class="quick-stat">
+                    <span class="quick-stat-value">dh<%= orders ? orders.reduce((sum, order) => sum + order.total, 0).toFixed(0) : '0' %></span>
+                    <span class="quick-stat-label">Spent</span>
+                </div>
+                <span class="member-since">Member since <%= new Date(user.createdAt).toLocaleDateString() %></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Section (Moved up) -->
+    <div class="profile-section settings-section">
+        <div class="settings-grid">
+            <div class="settings-card">
+                <h4><i class="fas fa-user-circle"></i> Account</h4>
+                <div class="settings-actions">
+                    <a href="/profile/edit" class="btn-profile">Edit Profile</a>
+                    <a href="/profile/change-password" class="btn-profile">Change Password</a>
+                </div>
+            </div>
+                        <div class="settings-card">
+                <h4><i class="fas fa-shield-alt"></i> Account Security</h4>
+                <div class="settings-actions">
+                    <a href="/auth/logout" class="btn-profile btn-logout">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="profile-section stats-section">
+        <h3>Statistics</h3>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value"><%= orders ? orders.length : 0 %></div>
+                <div class="stat-label">Orders</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">dh<%= orders ? orders.reduce((sum, order) => sum + order.total, 0).toFixed(2) : '0.00' %></div>
+                <div class="stat-label">Spent</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value"><%= user.challenges ? user.challenges.length : 0 %></div>
+                <div class="stat-label">Achievements</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Info -->
+    <div class="profile-section account-section">
+        <h3>Account Information</h3>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-label">Contact</div>
+                <div class="info-value"><%= user.contactNumber || 'Not set' %></div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Address</div>
+                <div class="info-value"><%= user.shippingAddress || 'Not set' %></div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Payment Method</div>
+                <div class="info-value"><%= user.preferredPaymentMethod ? user.preferredPaymentMethod.replace('_', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : 'Not set' %></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Orders Section -->
+    <div class="profile-section orders-section">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 style="margin: 0;">Recent Orders</h3>
+            <div class="order-actions">
+                <a href="/track-order" class="btn-profile" style="background: #3b82f6; color: white; border-color: #3b82f6;">
+                    <i class="fas fa-search"></i> Track Order
+                </a>
+                <button class="btn-profile" onclick="toggleQuickTrack()" style="background: #10b981; color: white; border-color: #10b981;">
+                    <i class="fas fa-shipping-fast"></i> Quick Track
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Track Section -->
+        <div id="quickTrackSection" class="quick-track-section" style="display: none; margin-bottom: 2rem;">
+            <div class="quick-track-card">
+                <h4><i class="fas fa-shipping-fast"></i> Quick Order Tracking</h4>
+                <p>Enter your order ID to quickly check your order status</p>
+                <form class="quick-track-form" onsubmit="quickTrackOrder(event)">
+                    <div class="track-input-group">
+                        <input 
+                            type="text" 
+                            id="quickTrackInput"
+                            placeholder="Enter Order ID (e.g., ORD-2024-ABC123)"
+                            class="track-input"
+                            required
+                        >
+                        <button type="submit" class="track-btn" id="quickTrackBtn">
+                            <i class="fas fa-search"></i> Track
+                        </button>
+                    </div>
+                </form>
+                <div id="quickTrackResult" class="quick-track-result" style="display: none;"></div>
+                <div id="quickTrackError" class="quick-track-error" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div class="orders-grid">
+            <% if (orders && orders.length > 0) { %>
+                <% orders.forEach(order => { %>
+                    <div class="order-grid-card <%= order.status %> animate-fade-in">
+                        <div class="order-grid-header">
+                            <span class="order-id">#<%= order._id.toString().slice(-6) %></span>
+                            <span class="order-status <%= order.status %>">
+                                <%= order.status.charAt(0).toUpperCase() + order.status.slice(1) %>
+                            </span>
+                        </div>
+                        <div class="order-grid-body">
+                            <div class="order-date">
+                                <i class="far fa-calendar-alt"></i>
+                                <%= new Date(order.createdAt).toLocaleDateString() %>
+                            </div>
+                            <div class="order-grid-items">
+                                <div class="items-preview">
+                                    <% order.items.slice(0, 3).forEach(item => { %>                                        <div class="item-preview" title="<%= item.product.name %>">
+                                            <img src="<%= item.product.image || '/images/default-product.png' %>" 
+                                                alt="<%= item.product.name %>"
+                                                onerror="this.onerror=null; this.src='/images/default-product.png';"
+                                                loading="lazy">
+                                        </div>
+                                    <% }) %>
+                                    <% if (order.items.length > 3) { %>
+                                        <div class="more-items">+<%= order.items.length - 3 %></div>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="order-grid-footer">
+                                <div class="order-total">dh<%= order.total.toFixed(2) %></div>
+                                <div class="order-actions-grid">
+                                    <a href="/orders/<%= order._id %>" class="btn-profile">View Details</a>
+                                    <button class="btn-profile track-this-order" 
+                                            onclick="trackSpecificOrder('ORD-<%= new Date(order.createdAt).getFullYear() %>-<%= order._id.toString().slice(-6).toUpperCase() %>')"
+                                            style="background: #f59e0b; color: white; border-color: #f59e0b;">
+                                        <i class="fas fa-truck"></i> Track
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="order-progress <%= order.status %>"></div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="no-orders">
+                    <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">No orders yet</p>
+                    <a href="/products" class="btn-profile">Start Shopping</a>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Achievements Section -->
+    <div class="profile-section achievements-section">
+        <h3>Achievements</h3>
+        <div class="achievements-grid">
+            <% if (user.challenges && user.challenges.length > 0) { %>
+                <% user.challenges.forEach(challenge => { %>
+                    <div class="achievement-card">
+                        <div class="achievement-icon">
+                            <i class="fas fa-<%= 
+                                challenge.type === 'purchase' ? 'shopping-bag' : 
+                                challenge.type === 'review' ? 'star' :
+                                challenge.type === 'profile' ? 'user-check' :
+                                'trophy' %>"></i>
+                        </div>
+                        <h4><%= challenge.name %></h4>
+                        <small class="text-success">Earned <%= new Date(challenge.completedAt).toLocaleDateString() %></small>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p class="text-muted text-center">Complete actions to earn achievements!</p>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<script>
+// Enhanced profile functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize animations
+    initializeAnimations();
+    
+    // Initialize profile picture upload
+    initializeProfilePicture();
+});
+
+function initializeAnimations() {
+    // Add staggered animation delays
+    const animatedElements = document.querySelectorAll('.animate-fade-in, .animate-slide-in');
+    animatedElements.forEach((el, index) => {
+        el.style.animationDelay = `${index * 0.1}s`;
+    });
+}
+
+
+function initializeProfilePicture() {
+    const profilePicture = document.querySelector('.profile-picture');
+    const editButton = document.querySelector('.profile-picture-edit');
+    
+    if (profilePicture && editButton) {
+        // Add loading state for profile picture changes
+        editButton.addEventListener('click', function() {
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-camera"></i>';
+            }, 2000);
+        });
+        
+        // Add hover effect to profile picture
+        profilePicture.addEventListener('mouseenter', function() {
+            editButton.style.transform = 'scale(1.1)';
+        });
+        
+        profilePicture.addEventListener('mouseleave', function() {
+            editButton.style.transform = 'scale(1)';
+        });
+    }
+}
+
+
+// Quick Track Functionality
+function toggleQuickTrack() {
+    const section = document.getElementById('quickTrackSection');
+    const isVisible = section.style.display !== 'none';
+    
+    if (isVisible) {
+        section.style.display = 'none';
+    } else {
+        section.style.display = 'block';
+        document.getElementById('quickTrackInput').focus();
+    }
+}
+
+function quickTrackOrder(event) {
+    event.preventDefault();
+    
+    const input = document.getElementById('quickTrackInput');
+    const btn = document.getElementById('quickTrackBtn');
+    const result = document.getElementById('quickTrackResult');
+    const error = document.getElementById('quickTrackError');
+    
+    const orderId = input.value.trim().toUpperCase();
+    
+    if (!orderId) {
+        showQuickTrackError('Please enter an order ID');
+        return;
+    }
+    
+    // Hide previous results
+    result.style.display = 'none';
+    error.style.display = 'none';
+    
+    // Show loading state
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Tracking...';
+    
+    // Clean the order ID
+    const cleanOrderId = orderId.replace(/[^A-Z0-9-]/g, '');
+    
+    // Make API call
+    fetch(`/api/track-order/${cleanOrderId}`)
+        .then(response => response.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-search"></i> Track';
+            
+            if (data.success && data.order) {
+                showQuickTrackResult(data.order);
+            } else {
+                showQuickTrackError(data.message || 'Order not found. Please check your order ID and try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error tracking order:', error);
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-search"></i> Track';
+            showQuickTrackError('An error occurred while tracking your order. Please try again.');
+        });
+}
+
+function showQuickTrackResult(order) {
+    const result = document.getElementById('quickTrackResult');
+    const currentStatus = order.timeline.find(item => item.status === 'current');
+    const statusIcon = getStatusIcon(order.status);
+    
+    result.innerHTML = `
+        <div class="quick-track-status">
+            <i class="fas fa-${statusIcon}"></i>
+            <strong>Order ${order.id}</strong>
+            <span class="order-status ${order.status}">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span>
+        </div>
+        <div class="quick-track-details">
+            <p><strong>Status:</strong> ${currentStatus ? currentStatus.description : 'Processing your order'}</p>
+            <p><strong>Order Date:</strong> ${order.date}</p>
+            <p><strong>Total:</strong> ${order.total}</p>
+            <p><strong>Estimated Delivery:</strong> ${order.estimatedDelivery}</p>
+        </div>
+        <div style="margin-top: 1rem;">
+            <a href="/track-order" class="btn-profile" style="background: #3b82f6; color: white; border-color: #3b82f6;">
+                <i class="fas fa-external-link-alt"></i> View Full Tracking
+            </a>
+        </div>
+    `;
+    result.style.display = 'block';
+    
+    // Add animation
+    result.style.opacity = '0';
+    result.style.transform = 'translateY(20px)';
+    setTimeout(() => {
+        result.style.transition = 'all 0.3s ease';
+        result.style.opacity = '1';
+        result.style.transform = 'translateY(0)';
+    }, 100);
+}
+
+function showQuickTrackError(message) {
+    const error = document.getElementById('quickTrackError');
+    error.textContent = message;
+    error.style.display = 'block';
+}
+
+function getStatusIcon(status) {
+    switch(status) {
+        case 'processing': return 'clock';
+        case 'shipped': return 'truck';
+        case 'delivered': return 'check-circle';
+        case 'cancelled': return 'times-circle';
+        default: return 'box';
+    }
+}
+
+function trackSpecificOrder(orderId) {
+    // Pre-fill the quick track input with this order ID
+    document.getElementById('quickTrackInput').value = orderId;
+    
+    // Show the quick track section if it's hidden
+    const section = document.getElementById('quickTrackSection');
+    if (section.style.display === 'none') {
+        section.style.display = 'block';
+    }
+    
+    // Trigger the tracking
+    const form = document.querySelector('.quick-track-form');
+    const event = new Event('submit', { bubbles: true, cancelable: true });
+    form.dispatchEvent(event);
+    
+    // Scroll to the quick track section
+    section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+</script>
+
+<%- include('partials/footer') %>
