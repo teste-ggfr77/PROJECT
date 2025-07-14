@@ -62,13 +62,17 @@ const uploadProductImages = (req, res, next) => {
         if (req.files && req.files.length > 0) {
             let mainImageFile = null;
             const colorImageFiles = [];
+            const additionalPhotoFiles = [];
+            const allFiles = [...req.files]; // Keep original files array
             
-            // Separate main image from color images
+            // Separate main image, color images, and additional photos
             req.files.forEach(file => {
                 if (file.fieldname === 'image') {
                     mainImageFile = file;
                 } else if (file.fieldname.startsWith('colorImages_')) {
                     colorImageFiles.push(file);
+                } else if (file.fieldname.startsWith('additionalPhotos_')) {
+                    additionalPhotoFiles.push(file);
                 }
             });
             
@@ -78,9 +82,14 @@ const uploadProductImages = (req, res, next) => {
                 console.log('Main image found:', mainImageFile.filename);
             }
             
-            // Set up req.files for color images
-            req.files = colorImageFiles;
-            console.log('Color images found:', colorImageFiles.length);
+            // Keep all files in req.files for processing in controller
+            req.files = allFiles;
+            console.log('Files processed:', {
+                mainImage: mainImageFile ? 1 : 0,
+                colorImages: colorImageFiles.length,
+                additionalPhotos: additionalPhotoFiles.length,
+                total: allFiles.length
+            });
         } else {
             console.log('No files received in upload middleware');
         }

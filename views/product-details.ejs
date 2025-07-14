@@ -66,6 +66,35 @@ body {
     font-weight: 400;
     opacity: 1;
 }
+
+.image-type-indicator {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-type-indicator.show {
+    opacity: 1;
+}
+
+.image-type-indicator.main {
+    background: rgba(79, 70, 229, 0.9);
+}
+
+.image-type-indicator.additional {
+    background: rgba(16, 185, 129, 0.9);
+}
+
 .product-info {
     background: #fff;
     border-left: 1px solid #ececec;
@@ -120,22 +149,29 @@ hr {
     font-weight: 600;
     color: #222;
 }
-.variant-images {
+.color-options {
     display: flex;
-    gap: 12px;
+    gap: 8px;
     margin-bottom: 18px;
+    flex-wrap: wrap;
 }
-.variant-image {
-    width: 48px;
-    height: 48px;
-    border: 2px solid transparent;
-    border-radius: 6px;
-    cursor: pointer;
-    padding: 2px;
+.color-button {
     background: #f8f6f3;
-    transition: border-color 0.2s;
+    border: 2px solid #e5e5e5;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+    color: #333;
 }
-.variant-image.selected {
+.color-button:hover {
+    border-color: #111;
+}
+.color-button.selected {
+    background: #111;
+    color: #fff;
     border-color: #111;
 }
 .size-selector {
@@ -372,13 +408,13 @@ hr {
         font-size: 14px;
     }
 
-    .variant-images {
-        gap: 8px;
+    .color-options {
+        gap: 6px;
     }
 
-    .variant-image {
-        width: 40px;
-        height: 40px;
+    .color-button {
+        padding: 6px 12px;
+        font-size: 13px;
     }
 
     .add-to-cart {
@@ -394,7 +430,9 @@ hr {
         width: 32px;
         height: 32px;
         font-size: 16px;
-    }    .related-products {
+    }
+
+    .related-products {
         padding: 40px 0;
         margin-top: 20px;
     }
@@ -632,13 +670,13 @@ hr {
         font-size: 14px;
     }
 
-    .variant-images {
-        gap: 8px;
+    .color-options {
+        gap: 6px;
     }
 
-    .variant-image {
-        width: 40px;
-        height: 40px;
+    .color-button {
+        padding: 6px 12px;
+        font-size: 13px;
     }
 
     .add-to-cart {
@@ -654,7 +692,9 @@ hr {
         width: 32px;
         height: 32px;
         font-size: 16px;
-    }    .related-products {
+    }
+
+    .related-products {
         padding: 40px 0;
         margin-top: 20px;
     }
@@ -692,44 +732,39 @@ hr {
 <div class="product-detail">
     <div class="product-image">
         <% 
-        const productImages = [];
+        // Main gallery images (main + additional photos only)
+        const mainGalleryImages = [];
         
         // Always start with the main product image
-        productImages.push(product.image);
+        mainGalleryImages.push(product.image);
         
-        // Add color variant images if they exist
-        if (product.colorVariants && product.colorVariants.length > 0) {
-            console.log('Product has colorVariants:', product.colorVariants.length);
-            product.colorVariants.forEach(variant => {
-                console.log('Processing variant:', variant.name, 'with', variant.images ? variant.images.length : 0, 'images');
-                if (variant.images && variant.images.length > 0) {
-                    variant.images.forEach(image => {
-                        productImages.push(image);
-                    });
-                } else {
-                    // If no images for this variant, use main image as fallback
-                    productImages.push(product.image);
-                }
-            });
-        } else if (product.colors && product.colors.length > 0) {
-            // Fallback: generate images based on color names (old system)
-            console.log('Using fallback color system for', product.colors.length, 'colors');
-            product.colors.forEach(color => {
-                productImages.push(`/uploads/${color.toLowerCase()}.jpg`);
+        // Add additional photos if they exist
+        if (product.additionalPhotos && product.additionalPhotos.length > 0) {
+            console.log('Product has additional photos:', product.additionalPhotos.length);
+            product.additionalPhotos.forEach(photo => {
+                mainGalleryImages.push(photo);
             });
         }
         
-        console.log('Total product images:', productImages.length);
+        console.log('Main gallery images:', mainGalleryImages.length);
         %>
-        <img src="<%= productImages[0] %>" alt="<%= product.name %>" id="mainImage">
+        <img src="<%= mainGalleryImages[0] %>" alt="<%= product.name %>" id="mainImage">
+        <div class="image-type-indicator" id="imageTypeIndicator">Main</div>
+        <% if (mainGalleryImages.length > 1) { %>
         <div class="image-navigation">
             <button class="nav-btn prev" id="prevButton">&lt;</button>
             <button class="nav-btn next" id="nextButton">&gt;</button>
         </div>
-        <div class="image-counter" id="imageCounter">01/<%= productImages.length.toString().padStart(2, '0') %></div>
+        <% } %>
+        <div class="image-counter" id="imageCounter">01/<%= mainGalleryImages.length.toString().padStart(2, '0') %></div>
     </div>
     <div class="product-info">
         <h2><%= product.name %></h2>
+n        <% if (product.description) { %>
+        <div class="product-description" style="margin: 15px 0; color: #666; font-size: 15px; line-height: 1.6;">
+            <%= product.description %>
+        </div>
+        <% } %>
         <div class="product-rating">
             <div class="rating-stars">★★★★★</div>
             <span class="rating-count">5,495</span>
@@ -737,48 +772,24 @@ hr {
         <div class="price"><%= product.price.toLocaleString() %> dh</div>
         <div class="taxes-info"><%= __('products.product_details.taxes_included') %></div>
         <hr>
-        <div class="product-variants">            <div class="variant-title"><%= __('products.product_details.color') %> <span id="selectedColorText" style="font-weight:700">
-                <% if (product.colorVariants && product.colorVariants.length > 0) { %>
-                    <%= product.colorVariants[0].name %>
-                <% } else if (product.colors && product.colors.length > 0) { %>
-                    <%= product.colors[0] %>
-                <% } else { %>
-                    Default
-                <% } %>
+        
+        <% if (product.colors && product.colors.length > 0) { %>
+        <div class="product-variants">
+            <div class="variant-title"><%= __('products.product_details.color') %> <span id="selectedColorText" style="font-weight:700">
+                <%= product.colors[0] %>
             </span></div>
-            <div class="variant-images">
-                <% if (product.colorVariants && product.colorVariants.length > 0) { %>
-                    <% product.colorVariants.forEach((variant, index) => { %>
-                        <% 
-                        // Use first image of variant, or main image as fallback
-                        const variantImage = (variant.images && variant.images.length > 0) ? variant.images[0] : product.image;
-                        const variantImagesJson = JSON.stringify(variant.images || [product.image]);
-                        %>
-                        <img src="<%= variantImage %>" 
-                             alt="<%= variant.name %>" 
-                             class="variant-image <%= index === 0 ? 'selected' : '' %>"
-                             data-color="<%= variant.name %>"
-                             data-images="<%= variantImagesJson.replace(/"/g, '&quot;') %>">
-                    <% }) %>
-                <% } else if (product.colors && product.colors.length > 0) { %>
-                    <% product.colors.forEach((color, index) => { %>
-                        <% 
-                        // Fallback for old color system
-                        const colorImage = `/uploads/${color.toLowerCase()}.jpg`;
-                        %>
-                        <img src="<%= colorImage %>" 
-                             alt="<%= color %>" 
-                             class="variant-image <%= index === 0 ? 'selected' : '' %>"
-                             data-color="<%= color %>"
-                             data-images="[\"<%= colorImage %>\"]">
-                    <% }) %>
-                <% } else { %>
-                    <!-- No color variants available -->
-                    <p class="text-muted">No color variants available</p>
-                <% } %>
+            <div class="color-options">
+                <% product.colors.forEach((color, index) => { %>
+                    <button type="button" class="color-button <%= index === 0 ? 'selected' : '' %>" 
+                            data-color="<%= color %>" onclick="selectColor(this)">
+                        <%= color %>
+                    </button>
+                <% }) %>
             </div>
         </div>
         <hr>
+        <% } %>
+        
         <div class="size-selector">
             <div class="size-title">
                 <h3><%= __('products.product_details.size') %> <span style="font-weight:400;font-size:13px;color:#888"><%= __('products.product_details.size_guide_note') %></span></h3>
@@ -793,9 +804,11 @@ hr {
                     <p>No sizes available for this product.</p>
                 <% } %>
             </div>
-        </div>        <form action="/cart/add/<%= product._id %>" method="POST" id="addToCartForm">
+        </div>
+        
+        <form action="/cart/add/<%= product._id %>" method="POST" id="addToCartForm">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-            <input type="hidden" name="color" id="selectedColor" value="<% if (product.colorVariants && product.colorVariants.length > 0) { %><%= product.colorVariants[0].name %><% } else if (product.colors && product.colors.length > 0) { %><%= product.colors[0] %><% } %>">
+            <input type="hidden" name="color" id="selectedColor" value="<% if (product.colors && product.colors.length > 0) { %><%= product.colors[0] %><% } %>">
             <input type="hidden" name="size" id="selectedSize" value="">
             <button type="submit" class="add-to-cart" disabled><%= __('products.product_details.select_size') %></button>
         </form>
@@ -911,7 +924,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('🎨 Product Details page loaded');
     
     const sizeButtons = document.querySelectorAll('.size-button');
-    const variantImages = document.querySelectorAll('.variant-image');
+    const colorButtons = document.querySelectorAll('.color-button');
     const addToCartButton = document.querySelector('.add-to-cart');
     const selectedColorInput = document.getElementById('selectedColor');
     const selectedSizeInput = document.getElementById('selectedSize');
@@ -923,42 +936,70 @@ document.addEventListener('DOMContentLoaded', function() {
     const imageCounter = document.getElementById('imageCounter');
     let currentImageIndex = 0;
 
-    // Get product images from server-side data
-    const productImages = JSON.parse('<%- JSON.stringify(productImages) %>');
-    console.log('Product images loaded:', productImages.length);
+    // Get main gallery images (main + additional photos only)
+    const mainGalleryImages = JSON.parse('<%- JSON.stringify(mainGalleryImages) %>');
+    console.log('Main gallery images loaded:', mainGalleryImages.length);
 
-    // Store original product data for color switching
-    const productData = {
-        <% if (product.colorVariants && product.colorVariants.length > 0) { %>
-            colorVariants: <%- JSON.stringify(product.colorVariants) %>,
-            hasColorVariants: true
-        <% } else { %>
-            colors: <%- JSON.stringify(product.colors || []) %>,
-            hasColorVariants: false
-        <% } %>
-    };
+    // Create image type mapping for main gallery only
+    const mainImageTypeMap = [];
+    let imageIndex = 0;
     
-    console.log('Product data:', productData);
+    // Main image
+    mainImageTypeMap[imageIndex++] = { type: 'main', label: 'Main' };
+    
+    // Additional photos
+    <% if (product.additionalPhotos && product.additionalPhotos.length > 0) { %>
+        <% product.additionalPhotos.forEach((photo, index) => { %>
+            mainImageTypeMap[imageIndex++] = { type: 'additional', label: 'Gallery' };
+        <% }) %>
+    <% } %>
+    
+    console.log('Main image type map:', mainImageTypeMap);
 
-    function updateImage() {
-        if (productImages[currentImageIndex]) {
-            mainImage.src = productImages[currentImageIndex];
-            imageCounter.textContent = `${(currentImageIndex + 1).toString().padStart(2, '0')}/${productImages.length.toString().padStart(2, '0')}`;
+    function updateMainGalleryImage() {
+        if (mainGalleryImages[currentImageIndex]) {
+            mainImage.src = mainGalleryImages[currentImageIndex];
+            imageCounter.textContent = `${(currentImageIndex + 1).toString().padStart(2, '0')}/${mainGalleryImages.length.toString().padStart(2, '0')}`;
+            
+            // Update image type indicator for main gallery
+            updateMainImageTypeIndicator();
+        }
+    }
+    
+    function updateMainImageTypeIndicator() {
+        const indicator = document.getElementById('imageTypeIndicator');
+        if (indicator && mainImageTypeMap[currentImageIndex]) {
+            const imageType = mainImageTypeMap[currentImageIndex];
+            
+            // Remove all type classes
+            indicator.classList.remove('main', 'additional', 'show');
+            
+            // Add appropriate class and show
+            indicator.classList.add(imageType.type);
+            indicator.textContent = imageType.label;
+            
+            // Show indicator briefly
+            setTimeout(() => {
+                indicator.classList.add('show');
+                setTimeout(() => {
+                    indicator.classList.remove('show');
+                }, 2000);
+            }, 100);
         }
     }
 
     // Image navigation buttons
     if (prevButton) {
         prevButton.addEventListener('click', () => {
-            currentImageIndex = (currentImageIndex - 1 + productImages.length) % productImages.length;
-            updateImage();
+            currentImageIndex = (currentImageIndex - 1 + mainGalleryImages.length) % mainGalleryImages.length;
+            updateMainGalleryImage();
         });
     }
 
     if (nextButton) {
         nextButton.addEventListener('click', () => {
-            currentImageIndex = (currentImageIndex + 1) % productImages.length;
-            updateImage();
+            currentImageIndex = (currentImageIndex + 1) % mainGalleryImages.length;
+            updateMainGalleryImage();
         });
     }
 
@@ -975,64 +1016,27 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Color variant selection
-    variantImages.forEach((img, index) => {
-        img.addEventListener('click', function() {
-            console.log('Color variant clicked:', index);
-            
-            // Update selected state
-            variantImages.forEach(image => image.classList.remove('selected'));
-            this.classList.add('selected');
-            
-            const selectedColor = this.getAttribute('data-color');
-            const colorImagesData = this.getAttribute('data-images');
-            
-            // Update selected color
-            if (selectedColorInput) {
-                selectedColorInput.value = selectedColor;
-            }
-            
-            // Update color text display
-            const selectedColorText = document.getElementById('selectedColorText');
-            if (selectedColorText) {
-                selectedColorText.textContent = selectedColor;
-            }
-            
-            console.log('Color selected:', selectedColor);
-            
-            // Update images based on color selection
-            if (productData.hasColorVariants && colorImagesData) {
-                try {
-                    const colorImages = JSON.parse(colorImagesData);
-                    console.log('Color images for', selectedColor, ':', colorImages);
-                    
-                    if (colorImages && colorImages.length > 0) {
-                        // Switch to first image of selected color
-                        const firstColorImage = colorImages[0];
-                        mainImage.src = firstColorImage;
-                        
-                        // Find the index of this image in the main productImages array
-                        const imageIndex = productImages.findIndex(img => img === firstColorImage);
-                        if (imageIndex !== -1) {
-                            currentImageIndex = imageIndex;
-                            updateImage();
-                        }
-                        
-                        console.log('Switched to color image:', firstColorImage);
-                    }
-                } catch (e) {
-                    console.error('Error parsing color images:', e);
-                    // Fallback: use index-based navigation
-                    currentImageIndex = index + 1;
-                    updateImage();
-                }
-            } else {
-                // Fallback for products without colorVariants
-                currentImageIndex = index + 1;
-                updateImage();
-            }
-        });
-    });
+    // Color selection function (global)
+    window.selectColor = function(button) {
+        // Update selected state
+        colorButtons.forEach(btn => btn.classList.remove('selected'));
+        button.classList.add('selected');
+        
+        const selectedColor = button.getAttribute('data-color');
+        
+        // Update selected color
+        if (selectedColorInput) {
+            selectedColorInput.value = selectedColor;
+        }
+        
+        // Update color text display
+        const selectedColorText = document.getElementById('selectedColorText');
+        if (selectedColorText) {
+            selectedColorText.textContent = selectedColor;
+        }
+        
+        console.log('Color selected:', selectedColor);
+    };
 
     // Form submission
     const addToCartForm = document.getElementById('addToCartForm');
@@ -1044,12 +1048,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!size) {
                 e.preventDefault();
                 alert('Please select a size');
-                return false;
-            }
-
-            if (!color) {
-                e.preventDefault();
-                alert('Please select a color');
                 return false;
             }
 
@@ -1159,15 +1157,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize the page
     console.log('✅ Product details page initialized');
-    
-    // Set initial color if available
-    if (variantImages.length > 0) {
-        const firstVariant = variantImages[0];
-        const initialColor = firstVariant.getAttribute('data-color');
-        if (selectedColorInput && initialColor) {
-            selectedColorInput.value = initialColor;
-        }
-    }
 });
 </script>
 

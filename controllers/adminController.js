@@ -90,6 +90,35 @@ exports.editProduct = async (req, res, next) => {
             }
         }
 
+        // Handle additional photos upload
+        if (req.files && Array.isArray(req.files) && req.files.length > 0) {
+            const fs = require('fs').promises;
+            const newAdditionalPhotos = [];
+            
+            for (const file of req.files) {
+                if (file.fieldname === 'additionalPhotos') {
+                    const oldPath = file.path;
+                    const newPath = path.join(__dirname, '../public/uploads/', file.filename);
+                    
+                    try {
+                        await fs.mkdir(path.dirname(newPath), { recursive: true });
+                        await fs.rename(oldPath, newPath);
+                        newAdditionalPhotos.push('/uploads/' + file.filename);
+                    } catch (err) {
+                        console.error('Error processing additional photo:', err);
+                    }
+                }
+            }
+            
+            if (newAdditionalPhotos.length > 0) {
+                // Add new photos to existing ones
+                updateData.additionalPhotos = [
+                    ...(existingProduct.additionalPhotos || []),
+                    ...newAdditionalPhotos
+                ];
+            }
+        }
+
         // Update product
         const updatedProduct = await Product.findByIdAndUpdate(
             productId,
@@ -339,7 +368,14 @@ exports.viewProducts = async (req, res) => {
 
 exports.addProductForm = async (req, res) => {
     const categories = await require('../models/Category').find().sort({ name: 1 });
-    res.render('admin/add-product', { categories });
+    res.render('admin/add-product', { 
+        categories,
+        csrfToken: req.csrfToken(),
+        messages: {
+            success: req.flash('success'),
+            error: req.flash('error')
+        }
+    });
 };
 
 // Updated addProduct function for handling multiple color images
@@ -438,7 +474,28 @@ exports.addProduct = async (req, res) => {
             }
         }
 
+        // Process additional photos
+        let additionalPhotos = [];
+        if (req.files && Array.isArray(req.files) && req.files.length > 0) {
+            console.log('Processing additional photos...');
+            
+            for (const file of req.files) {
+                if (file.fieldname.startsWith('additionalPhotos_')) {
+                    const additionalPhotoPath = path.join(__dirname, '../public/uploads/', file.filename);
+                    try {
+                        await fs.mkdir(path.dirname(additionalPhotoPath), { recursive: true });
+                        await fs.rename(file.path, additionalPhotoPath);
+                        additionalPhotos.push('/uploads/' + file.filename);
+                        console.log('Processed additional photo:', file.filename);
+                    } catch (err) {
+                        console.error('Error processing additional photo:', err);
+                    }
+                }
+            }
+        }
+
         console.log('Final color variants:', colorVariants);
+        console.log('Final additional photos:', additionalPhotos);
         
         const Product = require('../models/Product');
         const product = new Product({
@@ -450,7 +507,8 @@ exports.addProduct = async (req, res) => {
             sizes: sizes ? sizes.split(',').map(s => s.trim()).filter(s => s) : [],
             category,
             quantity: parseInt(quantity),
-            image: '/uploads/' + req.file.filename
+            image: '/uploads/' + req.file.filename,
+            additionalPhotos: additionalPhotos
         });
 
         await product.save();
@@ -465,7 +523,7 @@ exports.addProduct = async (req, res) => {
             // Don't fail the product creation if notification fails
         }
 
-        req.flash('success', `Product "${product.name}" added successfully with ${colorVariants.length} color variants`);
+        req.flash('success', `Product "${product.name}" added successfully with ${colorVariants.length} color variants and ${additionalPhotos.length} additional photos`);
         res.redirect('/admin/dashboard');
     } catch (error) {
         console.error('Error adding product:', error);
@@ -812,5 +870,86 @@ exports.deleteCategory = async (req, res) => {
             message: 'Could not delete category', 
             error: { status: 500, message: err.message }
         });
+    }
+};
+
+// Remove additional photo from product
+exports.removeAdditionalPhoto = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const { photoIndex, photoUrl } = req.body;
+
+        const product = await Product.findById(productId);
+        if (!product) {
+            return res.status(404).json({ success: false, error: 'Product not found' });
+        }
+
+        if (!product.additionalPhotos || photoIndex >= product.additionalPhotos.length) {
+            return res.status(400).json({ success: false, error: 'Invalid photo index' });
+        }
+
+        // Remove the photo from the array
+        product.additionalPhotos.splice(photoIndex, 1);
+        await product.save();
+
+        // Delete the physical file
+        if (photoUrl && photoUrl.startsWith('/uploads/')) {
+            const fs = require('fs').promises;
+            const imagePath = path.join(__dirname, '../public', photoUrl);
+            try {
+                await fs.unlink(imagePath);
+                console.log('Deleted additional photo file:', imagePath);
+            } catch (err) {
+                console.error('Error deleting additional photo file:', err);
+            }
+        }
+
+        res.json({ success: true, message: 'Photo removed successfully' });
+    } catch (error) {
+        console.error('Error removing additional photo:', error);
+        res.status(500).json({ success: false, error: 'Failed to remove photo' });
+    }
+};
+
+// Remove color variant image from product
+exports.removeColorImage = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const { variantIndex, imageIndex, imageUrl } = req.body;
+
+        const product = await Product.findById(productId);
+        if (!product) {
+            return res.status(404).json({ success: false, error: 'Product not found' });
+        }
+
+        if (!product.colorVariants || variantIndex >= product.colorVariants.length) {
+            return res.status(400).json({ success: false, error: 'Invalid variant index' });
+        }
+
+        const variant = product.colorVariants[variantIndex];
+        if (!variant.images || imageIndex >= variant.images.length) {
+            return res.status(400).json({ success: false, error: 'Invalid image index' });
+        }
+
+        // Remove the image from the variant's images array
+        variant.images.splice(imageIndex, 1);
+        await product.save();
+
+        // Delete the physical file
+        if (imageUrl && imageUrl.startsWith('/uploads/')) {
+            const fs = require('fs').promises;
+            const imagePath = path.join(__dirname, '../public', imageUrl);
+            try {
+                await fs.unlink(imagePath);
+                console.log('Deleted color variant image file:', imagePath);
+            } catch (err) {
+                console.error('Error deleting color variant image file:', err);
+            }
+        }
+
+        res.json({ success: true, message: 'Color image removed successfully' });
+    } catch (error) {
+        console.error('Error removing color image:', error);
+        res.status(500).json({ success: false, error: 'Failed to remove color image' });
     }
 };

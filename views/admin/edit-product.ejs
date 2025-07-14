@@ -156,12 +156,70 @@
                         </div>
                         <% if (product.image) { %>
                             <div class="mb-3">
-                                <label class="form-label">Current Image</label>
+                                <label class="form-label">Current Main Image</label>
                                 <div>
                                     <img src="<%= product.image %>" alt="<%= product.name %>" class="current-image">
                                 </div>
                             </div>
                         <% } %>
+                        
+                        <!-- Additional Photos Gallery -->
+                        <% if (product.additionalPhotos && product.additionalPhotos.length > 0) { %>
+                            <div class="mb-3">
+                                <label class="form-label">Additional Photos Gallery</label>
+                                <div class="row g-2">
+                                    <% product.additionalPhotos.forEach((photo, index) => { %>
+                                        <div class="col-md-3 col-sm-4 col-6">
+                                            <div class="position-relative">
+                                                <img src="<%= photo %>" alt="Additional photo <%= index + 1 %>" class="img-fluid rounded shadow-sm" style="height: 150px; object-fit: cover; width: 100%;">
+                                                <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1" onclick="removeAdditionalPhoto('<%= index %>', '<%= photo %>')">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    <% }) %>
+                                </div>
+                            </div>
+                        <% } %>
+                        
+                        <!-- Color Variants Gallery -->
+                        <% if (product.colorVariants && product.colorVariants.length > 0) { %>
+                            <div class="mb-3">
+                                <label class="form-label">Color Variants Gallery</label>
+                                <% product.colorVariants.forEach((variant, variantIndex) => { %>
+                                    <div class="card mb-3">
+                                        <div class="card-header">
+                                            <h6 class="mb-0">Color: <%= variant.name %></h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <% if (variant.images && variant.images.length > 0) { %>
+                                                <div class="row g-2">
+                                                    <% variant.images.forEach((image, imageIndex) => { %>
+                                                        <div class="col-md-3 col-sm-4 col-6">
+                                                            <div class="position-relative">
+                                                                <img src="<%= image %>" alt="<%= variant.name %> image <%= imageIndex + 1 %>" class="img-fluid rounded shadow-sm" style="height: 150px; object-fit: cover; width: 100%;">
+                                                                <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1" onclick="removeColorImage('<%= variantIndex %>', '<%= imageIndex %>', '<%= image %>')">
+                                                                    <i class="fas fa-times"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    <% }) %>
+                                                </div>
+                                            <% } else { %>
+                                                <p class="text-muted">No images for this color variant</p>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                <% }) %>
+                            </div>
+                        <% } %>
+                        
+                        <!-- Add New Images Section -->
+                        <div class="mb-3">
+                            <label for="additionalPhotos" class="form-label">Add Additional Photos</label>
+                            <input type="file" class="form-control" id="additionalPhotos" name="additionalPhotos" accept="image/*" multiple>
+                            <small class="form-text">Select multiple images to add to the gallery</small>
+                        </div>
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i> Update Product
@@ -215,6 +273,65 @@
                             }
                             
                             return true;
+                        }
+
+                        // Function to remove additional photos
+                        function removeAdditionalPhoto(index, photoUrl) {
+                            if (confirm('Are you sure you want to remove this photo?')) {
+                                fetch(`/admin/remove-additional-photo/<%= product._id %>`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-Token': document.querySelector('[name="_csrf"]').value
+                                    },
+                                    body: JSON.stringify({
+                                        photoIndex: index,
+                                        photoUrl: photoUrl
+                                    })
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        location.reload(); // Refresh the page to show updated gallery
+                                    } else {
+                                        alert('Error removing photo: ' + data.error);
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    alert('Error removing photo');
+                                });
+                            }
+                        }
+
+                        // Function to remove color variant images
+                        function removeColorImage(variantIndex, imageIndex, imageUrl) {
+                            if (confirm('Are you sure you want to remove this color image?')) {
+                                fetch(`/admin/remove-color-image/<%= product._id %>`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-Token': document.querySelector('[name="_csrf"]').value
+                                    },
+                                    body: JSON.stringify({
+                                        variantIndex: variantIndex,
+                                        imageIndex: imageIndex,
+                                        imageUrl: imageUrl
+                                    })
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        location.reload(); // Refresh the page to show updated gallery
+                                    } else {
+                                        alert('Error removing image: ' + data.error);
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    alert('Error removing image');
+                                });
+                            }
                         }
                     </script>
                 </div>

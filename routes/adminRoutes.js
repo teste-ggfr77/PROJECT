@@ -70,7 +70,10 @@ router.delete('/product/:id', adminAuth, adminCtrl.deleteProduct);
 router.get('/edit-product/:id', adminAuth, adminCtrl.editProductForm);
 router.post('/edit-product/:id', 
     adminAuth,
-    upload.single('image'),
+    upload.fields([
+        { name: 'image', maxCount: 1 },
+        { name: 'additionalPhotos', maxCount: 10 }
+    ]),
     (req, res, next) => {
         // Debug logging for form submission
         console.log('Processing edit product request:', {
@@ -78,15 +81,18 @@ router.post('/edit-product/:id',
             method: req.method,
             contentType: req.headers['content-type'],
             body: req.body,
-            file: req.file ? {
-                filename: req.file.filename,
-                mimetype: req.file.mimetype,
-                size: req.file.size
-            } : null
+            files: req.files ? Object.keys(req.files).map(key => ({
+                field: key,
+                count: req.files[key].length
+            })) : null
         });
         next();
     },
     adminCtrl.editProduct);
+
+// Image removal routes
+router.post('/remove-additional-photo/:id', adminAuth, adminCtrl.removeAdditionalPhoto);
+router.post('/remove-color-image/:id', adminAuth, adminCtrl.removeColorImage);
 router.get('/view-orders', adminAuth, adminCtrl.viewOrders);
 router.get('/view-orders/:id', adminAuth, (req, res, next) => {
     console.log('Route matched - view-orders/:id', {

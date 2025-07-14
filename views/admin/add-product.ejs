@@ -122,58 +122,13 @@
         color: #991b1b;
     }
 
-    /* Color Image Upload Styles */
-    .color-images-section {
+    /* Additional Photos Section Styles */
+    .additional-photos-section {
         background: #f8f9fa;
         border-radius: 12px;
         padding: 1.5rem;
         margin-top: 1rem;
-    }
-
-    .color-item {
-        background: white;
-        border: 2px solid #e5e7eb;
-        border-radius: 12px;
-        padding: 1rem;
         margin-bottom: 1rem;
-        transition: all 0.3s ease;
-    }
-
-    .color-item:hover {
-        border-color: #4f46e5;
-        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
-    }
-
-    .color-header {
-        display: flex;
-        justify-content: between;
-        align-items: center;
-        margin-bottom: 1rem;
-    }
-
-    .color-name {
-        font-weight: 600;
-        color: #111827;
-        font-size: 1.1rem;
-    }
-
-    .remove-color-btn {
-        background: #ef4444;
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-
-    .remove-color-btn:hover {
-        background: #dc2626;
-        transform: scale(1.1);
     }
 
     .image-upload-area {
@@ -252,25 +207,6 @@
 
     .remove-image-btn:hover {
         background: #dc2626;
-    }
-
-    .add-color-btn {
-        background: #10b981;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 0.75rem 1.5rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .add-color-btn:hover {
-        background: #059669;
-        transform: translateY(-1px);
     }
 
     .main-image-section {
@@ -395,6 +331,13 @@
                             <div class="form-text">Enter sizes separated by commas</div>
                         </div>
 
+                        <!-- Colors -->
+                        <div class="mb-3">
+                            <label for="colors" class="form-label">Available Colors (comma-separated)</label>
+                            <input type="text" class="form-control" id="colors" name="colors" placeholder="e.g., Red, Blue, Black, White">
+                            <div class="form-text">Enter available colors separated by commas</div>
+                        </div>
+
                         <!-- Main Product Image -->
                         <div class="main-image-section">
                             <h5 class="section-title">
@@ -414,28 +357,34 @@
                             </div>
                         </div>
 
-                        <!-- Color-Specific Images -->
-                        <div class="color-images-section">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="section-title mb-0">
-                                    <i class="fas fa-palette"></i>
-                                    Color Variants & Images
-                                </h5>
-                                <button type="button" class="add-color-btn" onclick="addColorVariant(); return false;">
-                                    <i class="fas fa-plus"></i>
-                                    Add Color
-                                </button>
-                            </div>
+                        <!-- Additional Product Photos -->
+                        <div class="additional-photos-section">
+                            <h5 class="section-title">
+                                <i class="fas fa-images"></i>
+                                Additional Product Photos
+                            </h5>
                             <div class="form-text mb-3">
-                                Add different colors for your product and upload specific images for each color. These images will be shown when users select different color variants.
+                                Upload additional photos to showcase your product from different angles, details, or in use. These photos will be displayed in the product gallery.
                             </div>
-                            <div id="colorVariants">
-                                <!-- Color variants will be added here dynamically -->
+                            
+                            <div class="image-upload-area" id="additionalPhotosUpload" 
+                                 onclick="triggerAdditionalPhotosInput()" 
+                                 ondrop="handleAdditionalPhotosDrop(event)" 
+                                 ondragover="handleDragOver(event)"
+                                 ondragleave="handleDragLeave(event)">
+                                <div class="upload-icon">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                </div>
+                                <div class="upload-text">Click to upload or drag and drop multiple photos</div>
+                                <div class="upload-subtext">PNG, JPG, GIF up to 5MB each. You can select multiple files at once.</div>
+                                <input type="file" id="additionalPhotosInput" multiple accept="image/*" 
+                                       style="display: none;" onchange="handleAdditionalPhotosSelect(event)">
+                            </div>
+                            
+                            <div class="image-preview-grid" id="additionalPhotosGrid">
+                                <!-- Additional photos will be displayed here -->
                             </div>
                         </div>
-
-                        <!-- Hidden input to store color data -->
-                        <input type="hidden" id="colorsData" name="colorsData">
 
                         <div class="row mt-4">
                             <div class="col-md-6">
@@ -457,132 +406,27 @@
 </div>
 
 <script>
-// Simple working version of color variants
-let colorVariants = [];
-let colorCounter = 0;
+let additionalPhotos = [];
 
-console.log('🚀 Color variants script loaded');
+console.log('🚀 Product form script loaded');
 
-// Simple add color function
-function addColorVariant() {
-    console.log('🎨 Add Color button clicked!');
-    
-    const colorName = prompt('Enter color name (e.g., Red, Blue, Black):');
-    if (!colorName || colorName.trim() === '') {
-        console.log('No color name entered');
-        return;
-    }
-    
-    const trimmedColorName = colorName.trim();
-    console.log('Adding color:', trimmedColorName);
-    
-    // Check if color already exists
-    if (colorVariants.some(variant => variant.name.toLowerCase() === trimmedColorName.toLowerCase())) {
-        alert('This color already exists!');
-        return;
-    }
-    
-    const colorId = `color_${colorCounter++}`;
-    const colorVariant = {
-        id: colorId,
-        name: trimmedColorName,
-        images: []
-    };
-    
-    colorVariants.push(colorVariant);
-    console.log('Color variants now:', colorVariants);
-    
-    renderColorVariants();
-    updateColorsData();
-    
-    alert(`Color "${trimmedColorName}" added successfully! You can now upload images for this color.`);
+// Additional Photos Functions
+function triggerAdditionalPhotosInput() {
+    document.getElementById('additionalPhotosInput').click();
 }
 
-// Render color variants
-function renderColorVariants() {
-    console.log('Rendering color variants:', colorVariants.length);
-    const container = document.getElementById('colorVariants');
-    
-    if (!container) {
-        console.error('colorVariants container not found!');
-        return;
-    }
-    
-    if (colorVariants.length === 0) {
-        container.innerHTML = `
-            <div class="text-center py-4 text-muted">
-                <i class="fas fa-palette fa-3x mb-3"></i>
-                <p>No color variants added yet.</p>
-                <p class="small">Click "Add Color" to start adding color variants with specific images.</p>
-            </div>
-        `;
-        return;
-    }
-    
-    container.innerHTML = colorVariants.map(variant => `
-        <div class="color-item" id="${variant.id}">
-            <div class="color-header d-flex justify-content-between align-items-center">
-                <div class="color-name">${variant.name}</div>
-                <button type="button" class="remove-color-btn" onclick="removeColorVariant('${variant.id}')">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <div class="image-upload-area" onclick="triggerFileInput('${variant.id}')" 
-                 ondrop="handleDrop(event, '${variant.id}')" 
-                 ondragover="handleDragOver(event)"
-                 ondragleave="handleDragLeave(event)">
-                <div class="upload-icon">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                </div>
-                <div class="upload-text">Click to upload or drag and drop</div>
-                <div class="upload-subtext">PNG, JPG, GIF up to 5MB</div>
-                <input type="file" id="fileInput_${variant.id}" multiple accept="image/*" 
-                       style="display: none;" onchange="handleFileSelect(event, '${variant.id}')">
-            </div>
-            
-            <div class="image-preview-grid" id="imageGrid_${variant.id}">
-                ${variant.images.map((image, index) => `
-                    <div class="image-preview-item">
-                        <img src="${image.url}" alt="${variant.name}">
-                        <button type="button" class="remove-image-btn" onclick="removeImage('${variant.id}', ${index})">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    `).join('');
-    
-    console.log('Color variants rendered successfully');
-}
-
-// Remove color variant
-function removeColorVariant(colorId) {
-    if (confirm('Are you sure you want to remove this color variant?')) {
-        colorVariants = colorVariants.filter(variant => variant.id !== colorId);
-        renderColorVariants();
-        updateColorsData();
-    }
-}
-
-// File handling functions
-function triggerFileInput(colorId) {
-    document.getElementById(`fileInput_${colorId}`).click();
-}
-
-function handleFileSelect(event, colorId) {
+function handleAdditionalPhotosSelect(event) {
     const files = Array.from(event.target.files);
-    processFiles(files, colorId);
+    processAdditionalPhotos(files);
 }
 
-function handleDrop(event, colorId) {
+function handleAdditionalPhotosDrop(event) {
     event.preventDefault();
     event.stopPropagation();
     event.target.classList.remove('dragover');
     
     const files = Array.from(event.dataTransfer.files);
-    processFiles(files, colorId);
+    processAdditionalPhotos(files);
 }
 
 function handleDragOver(event) {
@@ -594,10 +438,7 @@ function handleDragLeave(event) {
     event.target.classList.remove('dragover');
 }
 
-function processFiles(files, colorId) {
-    const variant = colorVariants.find(v => v.id === colorId);
-    if (!variant) return;
-    
+function processAdditionalPhotos(files) {
     files.forEach(file => {
         if (file.size > 5 * 1024 * 1024) {
             alert(`File ${file.name} is too large. Maximum size is 5MB.`);
@@ -612,35 +453,38 @@ function processFiles(files, colorId) {
         
         const reader = new FileReader();
         reader.onload = function(e) {
-            variant.images.push({
+            additionalPhotos.push({
                 file: file,
                 url: e.target.result,
                 name: file.name
             });
-            renderColorVariants();
-            updateColorsData();
+            renderAdditionalPhotos();
         };
         reader.readAsDataURL(file);
     });
 }
 
-function removeImage(colorId, imageIndex) {
-    const variant = colorVariants.find(v => v.id === colorId);
-    if (variant) {
-        variant.images.splice(imageIndex, 1);
-        renderColorVariants();
-        updateColorsData();
+function renderAdditionalPhotos() {
+    const grid = document.getElementById('additionalPhotosGrid');
+    
+    if (additionalPhotos.length === 0) {
+        grid.innerHTML = '';
+        return;
     }
+    
+    grid.innerHTML = additionalPhotos.map((photo, index) => `
+        <div class="image-preview-item">
+            <img src="${photo.url}" alt="Additional Photo ${index + 1}">
+            <button type="button" class="remove-image-btn" onclick="removeAdditionalPhoto(${index})">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `).join('');
 }
 
-function updateColorsData() {
-    const colorsData = colorVariants.map(variant => ({
-        name: variant.name,
-        images: variant.images.map(img => img.name)
-    }));
-    
-    document.getElementById('colorsData').value = JSON.stringify(colorsData);
-    console.log('Colors data updated:', colorsData);
+function removeAdditionalPhoto(index) {
+    additionalPhotos.splice(index, 1);
+    renderAdditionalPhotos();
 }
 
 // Main image preview functions
@@ -687,22 +531,6 @@ function clearImage() {
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Page loaded, initializing...');
     
-    // Initialize empty color variants
-    renderColorVariants();
-    
-    // Test button functionality
-    const addColorBtn = document.querySelector('.add-color-btn');
-    console.log('Add Color Button found:', !!addColorBtn);
-    
-    if (addColorBtn) {
-        // Add click event listener as backup
-        addColorBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log('🎨 Button clicked via event listener!');
-            addColorVariant();
-        });
-    }
-    
     // Form submission handler
     const form = document.getElementById('productForm');
     if (form) {
@@ -716,7 +544,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            console.log('Submitting form with color variants:', colorVariants.length);
+            console.log('Submitting form...');
             
             const formData = new FormData();
             
@@ -726,8 +554,8 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.append('price', document.getElementById('price').value);
             formData.append('quantity', document.getElementById('quantity').value);
             formData.append('sizes', document.getElementById('sizes').value);
+            formData.append('colors', document.getElementById('colors').value);
             formData.append('category', document.getElementById('category').value);
-            formData.append('colorsData', document.getElementById('colorsData').value);
             
             // Add CSRF token
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -738,19 +566,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 formData.append('image', fileInput.files[0]);
             }
             
-            // Add color images
-            let totalColorImages = 0;
-            colorVariants.forEach((variant, variantIndex) => {
-                variant.images.forEach((image, imageIndex) => {
-                    if (image.file) {
-                        const fieldName = `colorImages_${variant.name}_${imageIndex}`;
-                        formData.append(fieldName, image.file);
-                        totalColorImages++;
-                    }
-                });
+            // Add additional photos
+            let totalAdditionalPhotos = 0;
+            additionalPhotos.forEach((photo, index) => {
+                if (photo.file) {
+                    const fieldName = `additionalPhotos_${index}`;
+                    formData.append(fieldName, photo.file);
+                    totalAdditionalPhotos++;
+                }
             });
             
-            console.log(`Uploading ${totalColorImages} color images`);
+            console.log(`Uploading ${totalAdditionalPhotos} additional photos`);
             
             // Show loading
             const submitBtn = this.querySelector('button[type="submit"]');
@@ -780,13 +606,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Global test function
-window.testAddColor = function() {
-    console.log('🧪 Testing Add Color...');
-    addColorVariant();
-};
-
-console.log('✅ All functions loaded. Try clicking "Add Color" or type testAddColor() in console.');
+console.log('✅ Product form script loaded successfully.');
 </script>
 
 <%- include('../partials/admin-footer') %>
