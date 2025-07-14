@@ -1173,12 +1173,21 @@ body {
                             </div>
                             <div class="order-grid-items">
                                 <div class="items-preview">
-                                    <% order.items.slice(0, 3).forEach(item => { %>                                        <div class="item-preview" title="<%= item.product.name %>">
-                                            <img src="<%= item.product.image || '/images/default-product.png' %>" 
-                                                alt="<%= item.product.name %>"
-                                                onerror="this.onerror=null; this.src='/images/default-product.png';"
-                                                loading="lazy">
-                                        </div>
+                                    <% order.items.slice(0, 3).forEach(item => { %>
+                                        <% if (item.product && item.product.name) { %>
+                                            <div class="item-preview" title="<%= item.product.name %>">
+                                                <img src="<%= item.product.image || '/images/default-product.png' %>" 
+                                                    alt="<%= item.product.name %>"
+                                                    onerror="this.onerror=null; this.src='/images/default-product.png';"
+                                                    loading="lazy">
+                                            </div>
+                                        <% } else { %>
+                                            <div class="item-preview" title="<%= __('profile.unknown_product') %>">
+                                                <img src="/images/default-product.png" 
+                                                    alt="<%= __('profile.unknown_product') %>"
+                                                    loading="lazy">
+                                            </div>
+                                        <% } %>
                                     <% }) %>
                                     <% if (order.items.length > 3) { %>
                                         <div class="more-items">+<%= order.items.length - 3 %></div>
