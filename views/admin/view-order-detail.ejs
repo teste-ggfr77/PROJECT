@@ -1,4 +1,4 @@
-<%- include('../partials/admin-header', { title: 'Order Details' }) %>
+<%- include('../partials/admin-header', { title: __('admin.order_details') }) %>
 
 <style>
     .admin-container {
@@ -170,15 +170,23 @@
     <div class="page-header d-flex justify-content-between align-items-center">
         <div class="d-flex flex-column">
             <div class="d-flex align-items-center gap-3 mb-2">
-                <h2 class="page-title"><i class="fas fa-file-invoice me-2"></i>Order Details</h2>
+                <h2 class="page-title"><i class="fas fa-file-invoice me-2"></i><%= __('admin.order_details') %></h2>
                 <span class="order-id">#<%= order._id.toString().slice(-6) %></span>
             </div>
             <div class="status-badge">
-                <%= order.status ? (order.status.charAt(0).toUpperCase() + order.status.slice(1)) : 'Processing' %>
+                <% 
+                let statusKey = 'admin.processing';
+                if (order.status === 'processing') statusKey = 'admin.processing';
+                else if (order.status === 'shipped') statusKey = 'admin.shipped';
+                else if (order.status === 'delivered') statusKey = 'admin.delivered';
+                else if (order.status === 'cancelled') statusKey = 'admin.cancelled';
+                else if (order.status === 'completed') statusKey = 'admin.completed';
+                %>
+                <%= __(statusKey) %>
             </div>
         </div>
         <a href="/admin/view-orders" class="btn btn-back">
-            <i class="fas fa-arrow-left"></i> Back to Orders
+            <i class="fas fa-arrow-left"></i> <%= __('admin.back_to_orders') %>
         </a>
     </div>
 
@@ -187,25 +195,53 @@
                 <div class="col-md-6">
                     <div class="info-section">
                         <h5 class="section-title">
-                            <i class="fas fa-user me-2"></i>Customer Information
+                            <i class="fas fa-user me-2"></i><%= __('admin.customer_information') %>
                         </h5>
+                        <% if (order.userDeleted) { %>
+                            <div class="alert alert-warning mb-3">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <%= __('admin.note_customer_deleted') %>
+                            </div>
+                        <% } else if (order.isGuestOrder) { %>
+                            <div class="alert alert-info mb-3">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <%= __('admin.guest_order_info') %>
+                            </div>
+                        <% } %>
                         <ul class="info-list">
                             <li class="info-item">
-                                <span class="info-label">Customer Name</span>
-                                <span class="info-value"><%= order.user ? order.user.name : 'Unknown User' %></span>
+                                <span class="info-label"><%= __('admin.customer_name') %></span>
+                                <span class="info-value">
+                                    <%= order.customerName || (order.user ? order.user.name : __('admin.unknown_user')) %>
+                                    <% if (order.userDeleted) { %>
+                                        <small class="text-muted">(<%= __('admin.account_deleted') %>)</small>
+                                    <% } else if (order.isGuestOrder) { %>
+                                        <small class="text-muted">(<%= __('admin.guest_customer') %>)</small>
+                                    <% } %>
+                                </span>
                             </li>
                             <li class="info-item">
-                                <span class="info-label">Phone Number</span>
-                                <span class="info-value"><%= order.phone || 'Not provided' %></span>
+                                <span class="info-label"><%= __('admin.phone_number') %></span>
+                                <span class="info-value"><%= order.phone || __('admin.not_provided') %></span>
                             </li>
                             <li class="info-item">
-                                <span class="info-label">Email</span>
-                                <span class="info-value"><%= order.user && order.user.email ? order.user.email : '' %></span>
+                                <span class="info-label"><%= __('admin.email') %></span>
+                                <span class="info-value">
+                                    <% if (order.user && order.user.email) { %>
+                                        <%= order.user.email %>
+                                    <% } else if (order.userDeleted) { %>
+                                        <%= __('admin.account_deleted') %>
+                                    <% } else if (order.isGuestOrder) { %>
+                                        <%= __('admin.guest_order_no_email') %>
+                                    <% } else { %>
+                                        <%= __('admin.not_available') %>
+                                    <% } %>
+                                </span>
                             </li>
                             <li class="info-item align-items-start">
-                                <span class="info-label">Shipping Address</span>
+                                <span class="info-label"><%= __('admin.shipping_address') %></span>
                                 <span class="info-value">
-                                    <%= order.shippingAddress || 'Not provided' %>
+                                    <%= order.shippingAddress || __('admin.not_provided') %>
                                 </span>
                             </li>
                         </ul>
@@ -214,11 +250,11 @@
                 <div class="col-md-6">
                     <div class="info-section">
                         <h5 class="section-title">
-                            <i class="fas fa-info-circle me-2"></i>Order Summary
+                            <i class="fas fa-info-circle me-2"></i><%= __('admin.order_summary') %>
                         </h5>
                         <ul class="info-list">
                             <li class="info-item">
-                                <span class="info-label">Order Date</span>
+                                <span class="info-label"><%= __('admin.order_date') %></span>
                                 <span class="info-value">
                                     <%= new Date(order.createdAt).toLocaleDateString('en-US', {
                                         month: 'long',
@@ -228,21 +264,29 @@
                                 </span>
                             </li>
                             <li class="info-item">
-                                <span class="info-label">Status</span>
+                                <span class="info-label"><%= __('admin.status') %></span>
                                 <span class="info-value">
                                     <span class="status-badge">
-                                        <%= order.status ? (order.status.charAt(0).toUpperCase() + order.status.slice(1)) : 'Processing' %>
+                                        <% 
+                                        let statusKey2 = 'admin.processing';
+                                        if (order.status === 'processing') statusKey2 = 'admin.processing';
+                                        else if (order.status === 'shipped') statusKey2 = 'admin.shipped';
+                                        else if (order.status === 'delivered') statusKey2 = 'admin.delivered';
+                                        else if (order.status === 'cancelled') statusKey2 = 'admin.cancelled';
+                                        else if (order.status === 'completed') statusKey2 = 'admin.completed';
+                                        %>
+                                        <%= __(statusKey2) %>
                                     </span>
                                 </span>
                             </li>
                             <li class="info-item">
-                                <span class="info-label">Total Amount</span>
+                                <span class="info-label"><%= __('admin.total_amount') %></span>
                                 <span class="info-value price">$<%= order.total.toFixed(2) %></span>
                             </li>
                             <li class="info-item">
-                                <span class="info-label">Items Count</span>
+                                <span class="info-label"><%= __('admin.items_count') %></span>
                                 <span class="info-value">
-                                    <%= order.items.length %> <%= order.items.length === 1 ? 'item' : 'items' %>
+                                    <%= order.items.length %> <%= order.items.length === 1 ? __('admin.item') : __('admin.items') %>
                                 </span>
                             </li>
                         </ul>
@@ -252,16 +296,16 @@
 
             <div class="table-responsive mt-4">
                 <h5 class="section-title">
-                    <i class="fas fa-shopping-cart me-2"></i>Order Items
+                    <i class="fas fa-shopping-cart me-2"></i><%= __('admin.order_items') %>
                 </h5>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Product</th>
-                            <th>Specifications</th>
-                            <th class="text-center">Quantity</th>
-                            <th class="text-end">Price</th>
-                            <th class="text-end">Total</th>
+                            <th><%= __('admin.product') %></th>
+                            <th><%= __('admin.specifications') %></th>
+                            <th class="text-center"><%= __('admin.quantity') %></th>
+                            <th class="text-end"><%= __('admin.price') %></th>
+                            <th class="text-end"><%= __('admin.total') %></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -283,7 +327,7 @@
                             </tr>
                         <% }) %>
                         <tr class="total-row">
-                            <td colspan="4" class="text-end">Total Amount:</td>
+                            <td colspan="4" class="text-end"><%= __('admin.total_amount_label') %></td>
                             <td class="text-end price">$<%= order.total.toFixed(2) %></td>
                         </tr>
                     </tbody>

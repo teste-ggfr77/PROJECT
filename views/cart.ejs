@@ -1,941 +1,9 @@
 <%- include('partials/header') %>
-
-<style>
-/* Enhanced Modern Cart Design */
-.cart-page {
-    max-width: 1200px;
-    margin: 120px auto 60px;
-    padding: 0 20px;
-    font-family: Helvetica, Arial, sans-serif;
-    background: #fff;
-}
-
-.cart-header {
-    text-align: center;
-    margin-bottom: 50px;
-    position: relative;
-    padding-bottom: 30px;
-}
-
-.cart-header::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 4px;
-    background: linear-gradient(135deg, #000 0%, #333 100%);
-    border-radius: 2px;
-}
-
-.cart-title {
-    font-size: 42px;
-    font-weight: 900;
-    color: #000;
-    margin-bottom: 15px;
-    letter-spacing: -0.02em;
-    text-transform: uppercase;
-    background: linear-gradient(135deg, #000 0%, #333 50%, #000 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: titleGlow 3s ease-in-out infinite;
-}
-
-@keyframes titleGlow {
-    0%, 100% { filter: drop-shadow(0 0 0 transparent); }
-    50% { filter: drop-shadow(0 0 8px rgba(0,0,0,0.3)); }
-}
-
-.cart-empty {
-    text-align: center;
-    padding: 100px 40px;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border: 3px solid #000;
-    border-radius: 12px;
-    margin: 40px 0;
-    position: relative;
-    overflow: hidden;
-}
-
-.cart-empty::before {
-    content: '🛒';
-    font-size: 80px;
-    display: block;
-    margin-bottom: 20px;
-    animation: emptyCartFloat 3s ease-in-out infinite;
-}
-
-@keyframes emptyCartFloat {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-}
-
-.cart-empty-message {
-    font-size: 24px;
-    color: #000;
-    margin-bottom: 30px;
-    font-weight: 700;
-}
-
-.cart-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin-bottom: 40px;
-    border: 3px solid #000;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-
-.cart-table th {
-    text-align: left;
-    padding: 25px 20px;
-    background: linear-gradient(135deg, #000 0%, #333 100%);
-    color: #fff;
-    font-weight: 800;
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    position: relative;
-}
-
-.cart-table th::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-}
-
-.cart-item {
-    background: #fff;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    border-bottom: 2px solid #f0f0f0;
-    position: relative;
-}
-
-.cart-item::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 0;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(0,0,0,0.05), rgba(0,0,0,0.02));
-    transition: width 0.4s ease;
-}
-
-.cart-item:hover::before {
-    width: 100%;
-}
-
-.cart-item:hover {
-    background: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-}
-
-.cart-item:last-child {
-    border-bottom: none;
-}
-
-.cart-item td {
-    padding: 30px 20px;
-    vertical-align: middle;
-    border-right: 1px solid #f0f0f0;
-    position: relative;
-    z-index: 2;
-}
-
-.cart-item td:last-child {
-    border-right: none;
-}
-
-.product-info {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-}
-
-.product-image {
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
-    border: 3px solid #000;
-    border-radius: 8px;
-    background: #f8f8f8;
-    transition: all 0.3s ease;
-}
-
-.product-image:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-}
-
-.product-details h3 {
-    font-size: 20px;
-    font-weight: 800;
-    color: #000;
-    margin-bottom: 10px;
-    line-height: 1.3;
-}
-
-.product-color {
-    color: #666;
-    font-size: 14px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin-bottom: 5px;
-}
-
-.quantity-control {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    border: 3px solid #000;
-    border-radius: 25px;
-    width: fit-content;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.qty-btn {
-    background: #fff;
-    border: none;
-    width: 45px;
-    height: 45px;
-    cursor: pointer;
-    font-size: 20px;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #000;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-}
-
-.qty-btn:hover {
-    background: #000;
-    color: #fff;
-    transform: scale(1.1);
-}
-
-.qty-btn:active {
-    transform: scale(0.95);
-}
-
-.qty-display {
-    font-size: 18px;
-    font-weight: 800;
-    color: #000;
-    min-width: 60px;
-    text-align: center;
-    padding: 0 15px;
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #fff;
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-}
-
-.price {
-    font-size: 22px;
-    font-weight: 800;
-    color: #000;
-    background: linear-gradient(135deg, #000 0%, #333 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.remove-btn {
-    background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%);
-    border: 3px solid #ff4757;
-    color: #fff;
-    cursor: pointer;
-    padding: 0;
-    font-size: 20px;
-    font-weight: 800;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    width: 45px;
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    position: relative;
-    overflow: hidden;
-}
-
-.remove-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    transition: left 0.5s ease;
-}
-
-.remove-btn:hover::before {
-    left: 100%;
-}
-
-.remove-btn:hover {
-    background: #fff;
-    color: #ff4757;
-    border-color: #ff4757;
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(255, 71, 87, 0.3);
-}
-
-.remove-btn:active {
-    transform: scale(0.95);
-}
-
-.cart-summary {
-    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-    border: 3px solid #000;
-    border-radius: 12px;
-    padding: 50px;
-    margin-top: 50px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-    position: relative;
-    overflow: hidden;
-}
-
-.cart-summary::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, #000, #333, #000);
-}
-
-.summary-title {
-    font-size: 28px;
-    font-weight: 900;
-    color: #000;
-    margin-bottom: 35px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    position: relative;
-    padding-bottom: 20px;
-}
-
-.summary-title::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(135deg, #000 0%, #333 100%);
-    border-radius: 2px;
-}
-
-.summary-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px 0;
-    color: #000;
-    font-weight: 600;
-    font-size: 17px;
-    border-bottom: 1px solid #e0e0e0;
-    transition: all 0.3s ease;
-}
-
-.summary-row:hover {
-    background: rgba(0,0,0,0.02);
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-left: -10px;
-    margin-right: -10px;
-    border-radius: 6px;
-}
-
-.summary-row:last-child {
-    border-bottom: none;
-}
-
-.summary-row.total {
-    border-top: 3px solid #000;
-    margin-top: 25px;
-    padding-top: 30px;
-    font-weight: 900;
-    color: #000;
-    font-size: 26px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    background: linear-gradient(135deg, rgba(0,0,0,0.05), rgba(0,0,0,0.02));
-    padding: 25px 15px;
-    margin-left: -15px;
-    margin-right: -15px;
-    border-radius: 8px;
-}
-
-.promo-form {
-    margin: 35px 0;
-    display: flex;
-    gap: 0;
-    border: 3px solid #000;
-    border-radius: 25px;
-    overflow: hidden;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-    position: relative;
-}
-
-.promo-form::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.05), transparent);
-    transition: left 0.5s ease;
-}
-
-.promo-form:focus-within::before {
-    left: 100%;
-}
-
-.promo-input {
-    flex: 1;
-    padding: 18px 25px;
-    border: none;
-    font-size: 16px;
-    outline: none;
-    font-weight: 600;
-    background: #fff;
-    transition: all 0.3s ease;
-}
-
-.promo-input:focus {
-    background: #f8f9fa;
-}
-
-.promo-input::placeholder {
-    color: #999;
-    font-weight: 500;
-}
-
-.promo-submit {
-    background: linear-gradient(135deg, #000 0%, #333 100%);
-    color: #fff;
-    border: none;
-    padding: 18px 35px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    font-size: 14px;
-    position: relative;
-    overflow: hidden;
-}
-
-.promo-submit::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s ease;
-}
-
-.promo-submit:hover::before {
-    left: 100%;
-}
-
-.promo-submit:hover {
-    background: linear-gradient(135deg, #333 0%, #000 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-}
-
-.checkout-btn {
-    display: block;
-    width: 100%;
-    background: linear-gradient(135deg, #000 0%, #333 100%);
-    color: #fff;
-    padding: 25px;
-    border: 3px solid #000;
-    border-radius: 12px;
-    font-size: 20px;
-    font-weight: 900;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-top: 35px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-}
-
-.checkout-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.6s ease;
-}
-
-.checkout-btn:hover::before {
-    left: 100%;
-}
-
-.checkout-btn:hover {
-    background: #fff;
-    color: #000;
-    text-decoration: none;
-    transform: translateY(-3px);
-    box-shadow: 0 12px 35px rgba(0,0,0,0.3);
-}
-
-.checkout-btn:active {
-    transform: translateY(-1px);
-}
-
-.continue-shopping {
-    display: block;
-    text-align: center;
-    margin-top: 25px;
-    color: #000;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 700;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    border: 2px solid transparent;
-    padding: 15px 20px;
-    border-radius: 8px;
-    position: relative;
-}
-
-.continue-shopping::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 100%;
-    background: rgba(0,0,0,0.05);
-    transition: width 0.3s ease;
-    z-index: -1;
-}
-
-.continue-shopping:hover::before {
-    width: 100%;
-}
-
-.continue-shopping:hover {
-    color: #000;
-    text-decoration: none;
-    border-color: #000;
-    transform: translateY(-2px);
-}
-
-.flash-message {
-    padding: 25px 30px;
-    margin-bottom: 35px;
-    font-size: 16px;
-    font-weight: 700;
-    animation: flashSlideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 3px solid;
-    border-radius: 12px;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-}
-
-.flash-message::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    animation: flashShine 2s ease-in-out infinite;
-}
-
-@keyframes flashShine {
-    0% { left: -100%; }
-    50% { left: 100%; }
-    100% { left: 100%; }
-}
-
-.flash-success {
-    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-    color: #000;
-    border-color: #000;
-}
-
-.flash-error {
-    background: linear-gradient(135deg, #000 0%, #333 100%);
-    color: #fff;
-    border-color: #000;
-}
-
-@keyframes flashSlideIn {
-    from { 
-        opacity: 0; 
-        transform: translateY(-20px) scale(0.95); 
-    }
-    to { 
-        opacity: 1; 
-        transform: translateY(0) scale(1); 
-    }
-}
-
-/* Loading states and animations */
-.loading-state {
-    opacity: 0.7;
-    pointer-events: none;
-    position: relative;
-}
-
-.loading-state::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    margin: -10px 0 0 -10px;
-    border: 2px solid transparent;
-    border-top: 2px solid #000;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Enhanced hover effects for interactive elements */
-.cart-item:hover .product-image {
-    transform: scale(1.05);
-}
-
-.cart-item:hover .product-details h3 {
-    color: #333;
-}
-
-/* Smooth transitions for all interactive elements */
-* {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Custom scrollbar for cart table on mobile */
-.cart-table::-webkit-scrollbar {
-    height: 8px;
-}
-
-.cart-table::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
-}
-
-.cart-table::-webkit-scrollbar-thumb {
-    background: #000;
-    border-radius: 4px;
-}
-
-.cart-table::-webkit-scrollbar-thumb:hover {
-    background: #333;
-}
-
-/* Size Guide Section in Cart */
-.size-guide-section {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border: 2px solid #000;
-    border-radius: 12px;
-    padding: 25px;
-    margin: 30px 0;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.size-guide-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="cart-dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(0,0,0,0.03)"/></pattern></defs><rect width="100" height="100" fill="url(%23cart-dots)"/></svg>');
-    opacity: 0.5;
-}
-
-.size-guide-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    margin-bottom: 20px;
-    position: relative;
-    z-index: 2;
-}
-
-.size-guide-section .size-guide-icon {
-    width: 24px;
-    height: 24px;
-    color: #000;
-    stroke-width: 2.5;
-}
-
-.size-guide-header span {
-    font-size: 18px;
-    font-weight: 700;
-    color: #000;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.size-guide-links {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    flex-wrap: wrap;
-    position: relative;
-    z-index: 2;
-}
-
-.size-guide-section .size-guide-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: #fff;
-    color: #000;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 12px 20px;
-    border: 2px solid #000;
-    border-radius: 25px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-    min-width: 140px;
-    justify-content: center;
-}
-
-.size-guide-section .size-guide-link::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
-    transition: left 0.5s ease;
-}
-
-.size-guide-section .size-guide-link:hover::before {
-    left: 100%;
-}
-
-.size-guide-section .size-guide-link:hover {
-    background: #000;
-    color: #fff;
-    text-decoration: none;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-}
-
-.size-guide-section .link-icon {
-    width: 16px;
-    height: 16px;
-    stroke-width: 2.5;
-    transition: transform 0.3s ease;
-}
-
-.size-guide-section .size-guide-link:hover .link-icon {
-    transform: scale(1.1);
-}
-
-@media (max-width: 768px) {
-    .cart-page {
-        margin: 100px auto 40px;
-        padding: 0 15px;
-    }
-
-    .cart-title {
-        font-size: 28px;
-    }
-
-    .cart-table {
-        display: block;
-        overflow-x: auto;
-        border: 2px solid #000;
-    }
-
-    .cart-table th {
-        padding: 15px 10px;
-        font-size: 12px;
-    }
-
-    .cart-item td {
-        padding: 20px 10px;
-    }
-
-    .product-info {
-        gap: 12px;
-    }
-
-    .product-image {
-        width: 80px;
-        height: 80px;
-    }
-
-    .product-details h3 {
-        font-size: 16px;
-    }
-
-    .cart-summary {
-        padding: 25px;
-    }
-
-    .summary-title {
-        font-size: 20px;
-    }
-
-    .qty-btn {
-        width: 35px;
-        height: 35px;
-        font-size: 16px;
-    }
-
-    .qty-display {
-        min-width: 40px;
-        height: 35px;
-        font-size: 14px;
-    }
-
-    .price {
-        font-size: 16px;
-    }
-
-    .remove-btn {
-        width: 35px;
-        height: 35px;
-        font-size: 14px;
-    }
-
-    .checkout-btn {
-        padding: 18px;
-        font-size: 16px;
-    }
-    
-    .size-guide-section {
-        padding: 20px;
-        margin: 20px 0;
-    }
-    
-    .size-guide-header span {
-        font-size: 16px;
-    }
-    
-    .size-guide-links {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .size-guide-section .size-guide-link {
-        width: 100%;
-        max-width: 200px;
-    }
-}
-
-@media (max-width: 480px) {
-    .cart-table,
-    .cart-table thead,
-    .cart-table tbody,
-    .cart-table th,
-    .cart-table td,
-    .cart-table tr {
-        display: block;
-    }
-
-    .cart-table thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-    }
-
-    .cart-item {
-        border: 2px solid #000;
-        margin-bottom: 15px;
-        padding: 20px;
-    }
-
-    .cart-item td {
-        border: none;
-        padding: 10px 0;
-        position: relative;
-        padding-left: 50%;
-    }
-
-    .cart-item td:before {
-        content: attr(data-label);
-        position: absolute;
-        left: 6px;
-        width: 45%;
-        padding-right: 10px;
-        white-space: nowrap;
-        font-weight: 700;
-        color: #000;
-        text-transform: uppercase;
-        font-size: 12px;
-        letter-spacing: 0.5px;
-    }
-
-    .product-info {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-
-    .quantity-control {
-        margin-left: 0;
-    }
-}
-</style>
+<link rel="stylesheet" href="/css/cart.css">
 
 <div class="cart-page">
     <div class="cart-header">
-        <h1 class="cart-title">Shopping Cart</h1>
+        <h1 class="cart-title"><%= __('cart.title') %></h1>
     </div>
     
     <% if (messages.error && messages.error.length > 0) { %>
@@ -947,75 +15,80 @@
 
     <% if (!products || products.length === 0) { %>
         <div class="cart-empty">
-            <p class="cart-empty-message">Your cart is empty</p>
-            <a href="/products" class="checkout-btn">Start Shopping</a>
+            <p class="cart-empty-message"><%= __('cart.empty') %></p>
+            <a href="/products" class="checkout-btn"><%= __('cart.start_shopping') %></a>
         </div>
     <% } else { %>
-        <table class="cart-table">
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Remove</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% products.forEach(p => { %>
-                    <tr class="cart-item">
-                        <td data-label="Product">
-                            <div class="product-info">
-                                <img src="<%= p.image || 'https://via.placeholder.com/100x100/f8f8f8/000000?text=No+Image' %>" alt="<%= p.name %>" class="product-image">
-                                <div class="product-details">
-                                    <h3><%= p.name %></h3>
-                                    <div class="product-color">Color: <%= p.color %></div>
-                                    <% if (p.size) { %>
-                                        <div class="product-color">Size: <%= p.size %></div>
-                                    <% } %>
-                                </div>
+        <div class="cart-items-container">
+             <% products.forEach(p => { %>
+                <div class="cart-item-card">
+                    <div class="cart-item-image-wrapper">
+                        <img src="<%= p.image || 'https://via.placeholder.com/400x400/f8f8f8/000000?text=No+Image' %>" alt="<%= p.name %>" class="product-photo">
+                    </div>
+                    <div class="cart-item-details">
+                        <h3 class="product-name"><%= p.name %></h3>
+                        
+                        <div class="product-meta">
+                            <div class="product-spec">
+                                <strong><%= __('products.color') %>:</strong> <%= p.color %>
                             </div>
-                        </td>
-                        <td data-label="Quantity">
+                            <% if (p.size) { %>
+                                <div class="product-spec">
+                                    <strong><%= __('products.size') %>:</strong> <%= p.size %>
+                                </div>
+                            <% } %>
+                        </div>
+
+                        <div class="product-pricing">
+                            <div class="unit-price">
+                                <strong><%= __('common.price') %>:</strong> <%= p.price.toLocaleString() %> <%= __('common.currency').toUpperCase() %>
+                            </div>
+                            <div class="total-price">
+                                <strong><%= __('common.total') %>:</strong> <%= (p.price * p.qty).toLocaleString() %> <%= __('common.currency').toUpperCase() %>
+                            </div>
+                        </div>
+
+                        <div class="cart-actions">
                             <div class="quantity-control">
                                 <button class="qty-btn" onclick="updateQuantity('<%= p.id %>', -1)">-</button>
                                 <span class="qty-display"><%= p.qty %></span>
                                 <button class="qty-btn" onclick="updateQuantity('<%= p.id %>', 1)">+</button>
                             </div>
-                        </td>
-                        <td data-label="Price" class="price"><%= (p.price * p.qty).toLocaleString() %> DH</td>
-                        <td data-label="Remove">
-                            <button class="remove-btn" onclick="removeItem('<%= p.id %>')" title="Remove item">×</button>
-                        </td>
-                    </tr>
-                <% }) %>
-            </tbody>
-        </table>
+                            <button class="remove-btn" onclick="removeItem('<%= p.id %>')" title="<%= __('cart.remove_item') %>">
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                <span><%= __('common.remove') %></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
 
         <div class="cart-summary">
-            <div class="summary-title">Order Summary</div>
+            <div class="summary-title"><%= __('cart.cart_summary') %></div>
             <div class="summary-row">
-                <span>Subtotal</span>
-                <span><%= subtotal.toLocaleString() %> DH</span>
+                <span><%= __('common.subtotal') %></span>
+                <span><%= subtotal.toLocaleString() %> <%= __('common.currency').toUpperCase() %></span>
             </div>
             <% if (discount > 0) { %>
                 <div class="summary-row">
-                    <span>Discount</span>
-                    <span>-<%= discount.toLocaleString() %> DH</span>
+                    <span><%= __('common.discount') %></span>
+                    <span>-<%= discount.toLocaleString() %> <%= __('common.currency').toUpperCase() %></span>
                 </div>
             <% } %>
             <div class="summary-row">
-                <span>Shipping</span>
-                <span>Free</span>
+                <span><%= __('common.shipping') %></span>
+                <span><%= __('common.free') %></span>
             </div>
             <div class="summary-row total">
-                <span>Total</span>
-                <span><%= total.toLocaleString() %> DH</span>
+                <span><%= __('common.total') %></span>
+                <span><%= total.toLocaleString() %> <%= __('common.currency').toUpperCase() %></span>
             </div>
 
             <form action="/cart/apply-promo" method="POST" class="promo-form">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                <input type="text" name="promoCode" class="promo-input" placeholder="Enter promo code" value="<%= promo?.code || '' %>">
-                <button type="submit" class="promo-submit">Apply</button>
+                <input type="text" name="promoCode" class="promo-input" placeholder="<%= __('cart.promo_code') %>" value="<%= promo?.code || '' %>">
+                <button type="submit" class="promo-submit"><%= __('cart.apply_promo') %></button>
             </form>
 
             <!-- Size Guide Section -->
@@ -1024,26 +97,26 @@
                     <svg class="size-guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    <span>Need help with sizing?</span>
+                    <span><%= __('products.find_perfect_fit') %>?</span>
                 </div>
                 <div class="size-guide-links">
                     <a href="/size-guide" class="size-guide-link" target="_blank">
                         <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                             <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        Size Guide
+                        <%= __('products.size_guide') %>
                     </a>
                     <a href="/fit-guarantee" class="size-guide-link" target="_blank">
                         <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                         </svg>
-                        Fit Guarantee
+                        <%= __('footer.fit_guarantee') %>
                     </a>
                 </div>
             </div>
 
-            <a href="/cart/checkout" class="checkout-btn">Proceed to Checkout</a>
-            <a href="/products" class="continue-shopping">Continue Shopping</a>
+            <a href="/cart/checkout" class="checkout-btn"><%= __('cart.proceed_to_checkout') %></a>
+            <a href="/products" class="continue-shopping"><%= __('cart.continue_shopping') %></a>
         </div>
     <% } %>
 </div>

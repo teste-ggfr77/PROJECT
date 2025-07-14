@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: 'User' },
+    customerName: { type: String, required: true },
     items: [{
         product: { type: Schema.Types.ObjectId, ref: 'Product' },
         color: String,
@@ -13,7 +14,7 @@ const OrderSchema = new Schema({
     total: Number,
     shippingAddress: { type: String },
     phone: { type: String },
-    status: { type: String, enum: ['processing', 'shipped', 'delivered', 'cancelled'], default: 'processing' },
+    status: { type: String, enum: ['processing', 'shipped', 'delivered', 'cancelled', 'completed'], default: 'processing' },
     createdAt: { type: Date, default: Date.now }
 });
 

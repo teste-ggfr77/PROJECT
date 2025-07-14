@@ -13,6 +13,10 @@ const methodOverride = require('method-override');
 const csrf = require('csurf');
 require('dotenv').config();
 
+// System Error Logger
+const { errorNotificationMiddleware, createSystemNotification } = require('./middleware/systemErrorLogger');
+
+
 const app = express();
 
 // Connect to MongoDB
@@ -45,6 +49,10 @@ app.use(session({
 // Auth middleware to set up req.user from session
 const authMiddleware = require('./middleware/authMiddleware');
 app.use(authMiddleware);
+
+// Translation middleware
+const translationMiddleware = require('./middleware/translationMiddleware');
+app.use(translationMiddleware);
 
 // Initialize Passport
 app.use(passport.initialize());
@@ -191,6 +199,7 @@ const contactRoutes = require('./routes/contactRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const newsletterRoutes = require('./routes/newsletterRoutes');
 const communityRoutes = require('./routes/communityRoutes');
+const languageRoutes = require('./routes/languageRoutes');
 
 // Use routes (removing duplicate admin routes)
 app.use('/auth', authRoutes);
@@ -201,6 +210,7 @@ app.use('/contact', contactRoutes);
 app.use('/profile', profileRoutes);
 app.use('/newsletter', newsletterRoutes);
 app.use('/community', communityRoutes);
+app.use('/language', languageRoutes);
 app.use('/', mainRoutes); // Main routes last to avoid conflicts
 
 // Error handling middleware
@@ -270,8 +280,28 @@ const startServer = async () => {
         console.log('MongoDB connected successfully');
         
         await tryPort(PORT);
+        
+        // Log successful server startup
+        await createSystemNotification(
+            'Server Started',
+            `Server started successfully on port ${PORT}`,
+            'low',
+            { port: PORT, environment: process.env.NODE_ENV || 'development' }
+        );
     } catch (error) {
         console.error('Server startup failed:', error);
+        
+        // Log startup failure notification
+        try {
+            await createSystemNotification(
+                'Server Startup Failed',
+                `Server failed to start: ${error.message}`,
+                'high',
+                { error: error.message, port: PORT }
+            );
+        } catch (notifError) {
+            console.error('Failed to log startup error notification:', notifError);
+        }
         process.exit(1);
     }
 };

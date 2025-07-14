@@ -318,6 +318,9 @@
                         <a href="/admin/add-product" class="list-group-item list-group-item-action">
                             <i class="fas fa-plus"></i> Add New Product
                         </a>
+                        <a href="/admin/products" class="list-group-item list-group-item-action">
+                            <i class="fas fa-edit"></i> Edit Products
+                        </a>
                         <a href="/admin/categories" class="list-group-item list-group-item-action">
                             <i class="fas fa-tags"></i> Manage Categories
                         </a>
@@ -570,7 +573,7 @@
                                         <td>
                                             <div class="d-flex align-items-center gap-2">
                                                 <div class="user-info">
-                                                    <div class="fw-semibold"><%= order.user ? order.user.name : 'Unknown User' %></div>
+                                                    <div class="fw-semibold"><%= order.customerName || (order.user ? order.user.name : 'Unknown User') %></div>
                                                     <small class="text-muted">Order #<%= order._id.toString().slice(-6) %></small>
                                                 </div>
                                             </div>

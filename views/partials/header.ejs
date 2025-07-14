@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<%= language %>" dir="<%= isRTL ? 'rtl' : 'ltr' %>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROJECT | Footwear Built for Performance: In and Out of the Gym</title>    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">    <link rel="stylesheet" href="/css/style.css">
+    <title>SABILS | Footwear Built for Performance: In and Out of the Gym</title>    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">    <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/page-content.css">
     <link rel="stylesheet" href="/css/nobull-theme.css">    <link rel="stylesheet" href="/css/content-types/hero.css">
     <link rel="stylesheet" href="/css/content-types/event.css">
@@ -205,7 +205,7 @@
         }
 
         .mobile-nav-item {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .mobile-dropdown {
@@ -244,13 +244,14 @@
         .mobile-dropdown-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease;
+            transition: max-height 0.4s ease-in-out;
             margin-top: 10px;
-            padding-left: 20px;
+            padding-left: 15px;
+            border-left: 2px solid #eee;
         }
 
         .mobile-dropdown-content.active {
-            max-height: 300px;
+            max-height: 500px; /* Increased to ensure content is not clipped */
         }
 
         .mobile-dropdown-link {
@@ -579,6 +580,353 @@
             background: #0056b3;
         }
 
+        /* Language Button */
+        .language-btn {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .language-indicator {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--secondary-color);
+        }
+
+        /* Language Selection Modal */
+        .language-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .language-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .language-modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: translateY(30px);
+            transition: transform 0.3s ease;
+        }
+
+        .language-modal.active .language-modal-content {
+            transform: translateY(0);
+        }
+
+        .language-modal-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .language-modal-subtitle {
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .language-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .language-option {
+            background: #f8f9fa;
+            border: 3px solid transparent;
+            border-radius: 12px;
+            padding: 25px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--primary-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .language-option:hover {
+            background: #e9ecef;
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .language-flag {
+            font-size: 3rem;
+            margin-bottom: 5px;
+        }
+
+        .language-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .language-native {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+        }
+
+        .language-modal-footer {
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+
+        /* Enhanced Cart Panel Styles */
+        .cart-panel {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .cart-panel-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #555 100%);
+            color: white;
+            border-bottom: none;
+        }
+
+        .cart-panel-title {
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cart-panel-close {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .cart-panel-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .cart-item {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+
+        .cart-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-item img {
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        .cart-item-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .cart-item-price {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .cart-item-meta {
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+            margin-top: 5px;
+        }
+
+        .cart-item-remove {
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .cart-item-remove:hover {
+            background: #ff3742;
+            transform: scale(1.1);
+        }
+
+        .cart-panel-footer {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-top: 2px solid #dee2e6;
+        }
+
+        .cart-total {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+
+        .cart-checkout-btn {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #555 100%);
+            border-radius: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .cart-checkout-btn:hover {
+            background: linear-gradient(135deg, #555 0%, var(--primary-color) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--secondary-color);
+        }
+
+        .cart-empty::before {
+            content: '🛒';
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        /* RTL Support */
+        [dir="rtl"] .header-container {
+            direction: rtl;
+        }
+
+        [dir="rtl"] .nav-menu {
+            direction: rtl;
+        }
+
+        [dir="rtl"] .mega-menu {
+            left: auto;
+            right: 0;
+        }
+
+        [dir="rtl"] .cart-panel {
+            right: auto;
+            left: 0;
+            transform: translateX(-100%);
+            box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+            border-right: 3px solid var(--primary-color);
+            border-left: none;
+        }
+
+        [dir="rtl"] .cart-panel.active {
+            transform: translateX(0);
+        }
+
+        [dir="rtl"] .cart-item {
+            direction: rtl;
+        }
+
+        [dir="rtl"] .cart-item img {
+            margin-right: 0;
+            margin-left: 10px;
+        }
+
+        [dir="rtl"] .language-btn {
+            flex-direction: row-reverse;
+        }
+
+        [dir="rtl"] .mobile-menu {
+            direction: rtl;
+        }
+
+        [dir="rtl"] .mobile-dropdown-content {
+            padding-right: 15px;
+            padding-left: 0;
+            border-right: 2px solid #eee;
+            border-left: none;
+        }
+
+        @media (max-width: 992px) {
+            .language-options {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .language-modal-content {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+
+            .language-options {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .language-option {
+                padding: 20px 15px;
+            }
+
+            .language-flag {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .language-options {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .language-option {
+                padding: 15px 10px;
+            }
+            
+            .language-flag {
+                font-size: 2rem;
+            }
+            
+            .language-name {
+                font-size: 1rem;
+            }
+        }
+
         @media (max-width: 768px) {
             .nav-menu {
                 display: none;
@@ -621,123 +969,126 @@
                 <i class="fas fa-bars"></i>
             </button>
             
-            <a href="/" class="logo">PROJECT</a>
+            <a href="/" class="logo">SABILS</a>
 
             <nav>
                 <ul class="nav-menu" role="menubar">
                     <li class="nav-item">
-                        <a href="/men" class="nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">Men</a>
+                        <a href="/men" class="nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false"><%= t('header.men') %></a>
                         <div class="mega-menu">
                             <div class="mega-menu-content">
                                 <div class="mega-menu-column">
-                                    <h3 class="mega-menu-title">Footwear</h3>
-                                    <a href="/trainers?gender=men" class="mega-menu-link">Trainers</a>
-                                    <a href="/outwork?gender=men" class="mega-menu-link">Outwork</a>
-                                    <a href="/allday?gender=men" class="mega-menu-link">Allday</a>
-                                    <a href="/drive?gender=men" class="mega-menu-link">Gym</a>
-                                    <a href="/journey?gender=men" class="mega-menu-link">Journey</a>
+                                    <h3 class="mega-menu-title"><%= t('header.footwear') %></h3>
+                                    <a href="/trainers?gender=men" class="mega-menu-link"><%= t('navigation.trainers') %></a>
+                                    <a href="/outwork?gender=men" class="mega-menu-link"><%= t('navigation.outwork') %></a>
+                                    <a href="/allday?gender=men" class="mega-menu-link"><%= t('navigation.allday') %></a>
+                                    <a href="/drive?gender=men" class="mega-menu-link"><%= t('navigation.gym') %></a>
+                                    <a href="/journey?gender=men" class="mega-menu-link"><%= t('navigation.journey') %></a>
                                 </div>
                                 <div class="mega-menu-column">
-                                    <h3 class="mega-menu-title">Apparel</h3>
-                                    <a href="/men/tops" class="mega-menu-link">Tops</a>
-                                    <a href="/men/shorts" class="mega-menu-link">Shorts</a>
-                                    <a href="/men/pants" class="mega-menu-link">Pants</a>
-                                    <a href="/men/hoodies" class="mega-menu-link">Hoodies</a>
+                                    <h3 class="mega-menu-title"><%= t('header.apparel') %></h3>
+                                    <a href="/men/tops" class="mega-menu-link"><%= t('navigation.tops') %></a>
+                                    <a href="/men/shorts" class="mega-menu-link"><%= t('navigation.shorts') %></a>
+                                    <a href="/men/pants" class="mega-menu-link"><%= t('navigation.pants') %></a>
+                                    <a href="/men/hoodies" class="mega-menu-link"><%= t('navigation.hoodies') %></a>
                                 </div>
                                 <div class="mega-menu-column">
-                                    <h3 class="mega-menu-title">Accessories</h3>
-                                    <a href="/men/socks" class="mega-menu-link">Socks</a>
-                                    <a href="/men/bags" class="mega-menu-link">Bags</a>
-                                    <a href="/men/hats" class="mega-menu-link">Hats</a>
-                                    <a href="/men/equipment" class="mega-menu-link">Equipment</a>
+                                    <h3 class="mega-menu-title"><%= t('header.accessories') %></h3>
+                                    <a href="/men/socks" class="mega-menu-link"><%= t('navigation.socks') %></a>
+                                    <a href="/men/bags" class="mega-menu-link"><%= t('navigation.bags') %></a>
+                                    <a href="/men/hats" class="mega-menu-link"><%= t('navigation.hats') %></a>
+                                    <a href="/men/equipment" class="mega-menu-link"><%= t('navigation.equipment') %></a>
                                 </div>
                                 <div class="mega-menu-column">
                                     <h3 class="mega-menu-title">Collections</h3>
-                                    <a href="/men/new-arrivals" class="mega-menu-link">New Arrivals</a>
-                                    <a href="/men/bestsellers" class="mega-menu-link">Best Sellers</a>
-                                    <a href="/men/sale" class="mega-menu-link">Sale</a>
+                                    <a href="/men/new-arrivals" class="mega-menu-link"><%= t('navigation.new_arrivals') %></a>
+                                    <a href="/men/bestsellers" class="mega-menu-link"><%= t('navigation.bestsellers') %></a>
+                                    <a href="/men/sale" class="mega-menu-link"><%= t('navigation.sale') %></a>
                                 </div>
                             </div>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a href="/women" class="nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">Women</a>
+                        <a href="/women" class="nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false"><%= t('header.women') %></a>
                         <div class="mega-menu">
                             <div class="mega-menu-content">
                                 <div class="mega-menu-column">
-                                    <h3 class="mega-menu-title">Footwear</h3>
-                                    <a href="/trainers?gender=women" class="mega-menu-link">Trainers</a>
-                                    <a href="/outwork?gender=women" class="mega-menu-link">Outwork</a>
-                                    <a href="/allday?gender=women" class="mega-menu-link">Allday</a>
-                                    <a href="/drive?gender=women" class="mega-menu-link">Gym</a>
-                                    <a href="/journey?gender=women" class="mega-menu-link">Journey</a>
+                                    <h3 class="mega-menu-title"><%= t('header.footwear') %></h3>
+                                    <a href="/trainers?gender=women" class="mega-menu-link"><%= t('navigation.trainers') %></a>
+                                    <a href="/outwork?gender=women" class="mega-menu-link"><%= t('navigation.outwork') %></a>
+                                    <a href="/allday?gender=women" class="mega-menu-link"><%= t('navigation.allday') %></a>
+                                    <a href="/drive?gender=women" class="mega-menu-link"><%= t('navigation.gym') %></a>
+                                    <a href="/journey?gender=women" class="mega-menu-link"><%= t('navigation.journey') %></a>
                                 </div>
                                 <div class="mega-menu-column">
-                                    <h3 class="mega-menu-title">Apparel</h3>
-                                    <a href="/women/tops" class="mega-menu-link">Tops</a>
-                                    <a href="/women/leggings" class="mega-menu-link">Leggings</a>
-                                    <a href="/women/shorts" class="mega-menu-link">Shorts</a>
-                                    <a href="/women/sports-bras" class="mega-menu-link">Sports Bras</a>
+                                    <h3 class="mega-menu-title"><%= t('header.apparel') %></h3>
+                                    <a href="/women/tops" class="mega-menu-link"><%= t('navigation.tops') %></a>
+                                    <a href="/women/leggings" class="mega-menu-link"><%= t('navigation.leggings') %></a>
+                                    <a href="/women/shorts" class="mega-menu-link"><%= t('navigation.shorts') %></a>
+                                    <a href="/women/sports-bras" class="mega-menu-link"><%= t('navigation.sports_bras') %></a>
                                 </div>
                                 <div class="mega-menu-column">
-                                    <h3 class="mega-menu-title">Accessories</h3>
-                                    <a href="/women/socks" class="mega-menu-link">Socks</a>
-                                    <a href="/women/bags" class="mega-menu-link">Bags</a>
-                                    <a href="/women/hats" class="mega-menu-link">Hats</a>
-                                    <a href="/women/equipment" class="mega-menu-link">Equipment</a>
+                                    <h3 class="mega-menu-title"><%= t('header.accessories') %></h3>
+                                    <a href="/women/socks" class="mega-menu-link"><%= t('navigation.socks') %></a>
+                                    <a href="/women/bags" class="mega-menu-link"><%= t('navigation.bags') %></a>
+                                    <a href="/women/hats" class="mega-menu-link"><%= t('navigation.hats') %></a>
+                                    <a href="/women/equipment" class="mega-menu-link"><%= t('navigation.equipment') %></a>
                                 </div>
                                 <div class="mega-menu-column">
                                     <h3 class="mega-menu-title">Collections</h3>
-                                    <a href="/women/new-arrivals" class="mega-menu-link">New Arrivals</a>
-                                    <a href="/women/bestsellers" class="mega-menu-link">Best Sellers</a>
-                                    <a href="/women/sale" class="mega-menu-link">Sale</a>
+                                    <a href="/women/new-arrivals" class="mega-menu-link"><%= t('navigation.new_arrivals') %></a>
+                                    <a href="/women/bestsellers" class="mega-menu-link"><%= t('navigation.bestsellers') %></a>
+                                    <a href="/women/sale" class="mega-menu-link"><%= t('navigation.sale') %></a>
                                 </div>
                             </div>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a href="/footwear" class="nav-link" role="menuitem">Footwear</a>
+                        <a href="/footwear" class="nav-link" role="menuitem"><%= t('header.footwear') %></a>
                     </li>
                     <li class="nav-item">
-                        <a href="/apparel" class="nav-link" role="menuitem">Apparel</a>
+                        <a href="/apparel" class="nav-link" role="menuitem"><%= t('header.apparel') %></a>
                     </li>
                     <li class="nav-item">
-                        <a href="/accessories" class="nav-link" role="menuitem">Accessories</a>
+                        <a href="/accessories" class="nav-link" role="menuitem"><%= t('header.accessories') %></a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">Legal</a>
+                        <a href="/products" class="nav-link" role="menuitem"><%= t('header.products') %></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false"><%= t('header.legal') %></a>
                         <div class="mega-menu">
                             <div class="mega-menu-content">
                                 <div class="mega-menu-column">
-                                    <h3 class="mega-menu-title">Policies</h3>
-                                    <a href="/privacy" class="mega-menu-link">Privacy Policy</a>
-                                    <a href="/terms" class="mega-menu-link">Terms of Service</a>
-                                    <a href="/accessibility" class="mega-menu-link">Accessibility Statement</a>
-                                    <a href="/fit-guarantee" class="mega-menu-link">Fit Guarantee</a>
+                                    <h3 class="mega-menu-title"><%= t('footer.policies') %></h3>
+                                    <a href="/privacy" class="mega-menu-link"><%= t('footer.privacy_policy') %></a>
+                                    <a href="/terms" class="mega-menu-link"><%= t('footer.terms_of_service') %></a>
+                                    <a href="/accessibility" class="mega-menu-link"><%= t('footer.accessibility') %></a>
+                                    <a href="/fit-guarantee" class="mega-menu-link"><%= t('footer.fit_guarantee') %></a>
                                 </div>
                                 <div class="mega-menu-column">
-                                    <h3 class="mega-menu-title">Support</h3>
-                                    <a href="/faq" class="mega-menu-link">FAQ</a>
-                                    <a href="/help" class="mega-menu-link">Help Center</a>
-                                    <a href="/contact" class="mega-menu-link">Contact Us</a>
-                                    <a href="/track-order" class="mega-menu-link">Track Order</a>
+                                    <h3 class="mega-menu-title"><%= t('footer.support') %></h3>
+                                    <a href="/faq" class="mega-menu-link"><%= t('footer.faq') %></a>
+                                    <a href="/help" class="mega-menu-link"><%= t('footer.help_center') %></a>
+                                    <a href="/contact" class="mega-menu-link"><%= t('footer.contact_us') %></a>
+                                    <a href="/track-order" class="mega-menu-link"><%= t('footer.track_order') %></a>
                                 </div>
                                 <div class="mega-menu-column">
-                                    <h3 class="mega-menu-title">Programs</h3>
-                                    <a href="/student-discount" class="mega-menu-link">Student Discount</a>
-                                    <a href="/military-discount" class="mega-menu-link">Military Discount</a>
-                                    <a href="/gift-cards" class="mega-menu-link">Gift Cards</a>
-                                    <a href="/affiliate" class="mega-menu-link">Affiliate Program</a>
+                                    <h3 class="mega-menu-title"><%= t('footer.programs') %></h3>
+                                    <a href="/student-discount" class="mega-menu-link"><%= t('footer.student_discount') %></a>
+                                    <a href="/military-discount" class="mega-menu-link"><%= t('footer.military_discount') %></a>
+                                    <a href="/gift-cards" class="mega-menu-link"><%= t('footer.gift_cards') %></a>
+                                    <a href="/affiliate" class="mega-menu-link"><%= t('footer.affiliate') %></a>
                                 </div>
                                 <div class="mega-menu-column">
-                                    <h3 class="mega-menu-title">Company</h3>
-                                    <a href="/about" class="mega-menu-link">About Us</a>
-                                    <a href="/careers" class="mega-menu-link">Careers</a>
-                                    <a href="/press" class="mega-menu-link">Press</a>
-                                    <a href="/athletes" class="mega-menu-link">Athletes</a>
-                                    <a href="/sustainability" class="mega-menu-link">Sustainability</a>
-                                    <a href="/community" class="mega-menu-link">Community</a>
-                                    <a href="/blog" class="mega-menu-link">Blog</a>
+                                    <h3 class="mega-menu-title"><%= t('footer.company') %></h3>
+                                    <a href="/about" class="mega-menu-link"><%= t('footer.about_us') %></a>
+                                    <a href="/careers" class="mega-menu-link"><%= t('footer.careers') %></a>
+                                    <a href="/press" class="mega-menu-link"><%= t('footer.press') %></a>
+                                    <a href="/athletes" class="mega-menu-link"><%= t('footer.athletes') %></a>
+                                    <a href="/sustainability" class="mega-menu-link"><%= t('footer.sustainability') %></a>
+                                    <a href="/community" class="mega-menu-link"><%= t('footer.community') %></a>
+                                    <a href="/blog" class="mega-menu-link"><%= t('footer.blog') %></a>
                                 </div>
                             </div>
                         </div>
@@ -750,9 +1101,19 @@
                 <button class="icon-btn" aria-label="Search">
                     <i class="fas fa-search"></i>
                 </button>
-                <a href="/profile" class="icon-btn" aria-label="User account">
-                    <i class="fas fa-user"></i>
-                </a>
+                <button class="icon-btn language-btn" aria-label="Language" id="languageBtn" onclick="showLanguageModal()" title="Change Language">
+                    <i class="fas fa-globe"></i>
+                    <span class="language-indicator" id="languageIndicator">EN</span>
+                </button>
+                <% if (user) { %>
+                    <a href="/profile" class="icon-btn" aria-label="User account" title="<%= user.name %>">
+                        <i class="fas fa-user"></i>
+                    </a>
+                <% } else { %>
+                    <a href="/auth/login" class="icon-btn" aria-label="Login">
+                        <i class="fas fa-sign-in-alt"></i>
+                    </a>
+                <% } %>
                 <button class="icon-btn cart-btn" aria-label="Shopping cart" id="cartBtn">
                     <i class="fas fa-shopping-cart"></i>
                 </button>
@@ -762,22 +1123,31 @@
         <div class="mobile-menu" aria-hidden="true">
             <nav>
                 <ul class="mobile-nav">
-                    <li class="mobile-nav-item"><a href="/men" class="nav-link">Men</a></li>
-                    <li class="mobile-nav-item"><a href="/women" class="nav-link">Women</a></li>
-                    <li class="mobile-nav-item"><a href="/footwear" class="nav-link">Footwear</a></li>
-                    <li class="mobile-nav-item"><a href="/apparel" class="nav-link">Apparel</a></li>
-                    <li class="mobile-nav-item"><a href="/accessories" class="nav-link">Accessories</a></li>
+                    <li class="mobile-nav-item"><a href="/men" class="nav-link"><%= t('header.men') %></a></li>
+                    <li class="mobile-nav-item"><a href="/women" class="nav-link"><%= t('header.women') %></a></li>
+                    <li class="mobile-nav-item"><a href="/footwear" class="nav-link"><%= t('header.footwear') %></a></li>
+                    <li class="mobile-nav-item"><a href="/apparel" class="nav-link"><%= t('header.apparel') %></a></li>
+                    <li class="mobile-nav-item"><a href="/accessories" class="nav-link"><%= t('header.accessories') %></a></li>
+                    <li class="mobile-nav-item"><a href="/products" class="nav-link"><%= t('header.products') %></a></li>
                     <li class="mobile-nav-item">
                         <div class="mobile-dropdown">
-                            <button class="mobile-dropdown-btn">Legal & Support</button>
+                            <button class="mobile-dropdown-btn"><%= t('header.legal') %></button>
                             <div class="mobile-dropdown-content">
-                                <a href="/privacy" class="mobile-dropdown-link">Privacy Policy</a>
-                                <a href="/terms" class="mobile-dropdown-link">Terms of Service</a>
-                                <a href="/accessibility" class="mobile-dropdown-link">Accessibility</a>
-                                <a href="/fit-guarantee" class="mobile-dropdown-link">Fit Guarantee</a>
-                                <a href="/faq" class="mobile-dropdown-link">FAQ</a>
-                                <a href="/help" class="mobile-dropdown-link">Help Center</a>
-                                <a href="/contact" class="mobile-dropdown-link">Contact Us</a>
+                                <a href="/privacy" class="mobile-dropdown-link"><%= t('footer.privacy_policy') %></a>
+                                <a href="/terms" class="mobile-dropdown-link"><%= t('footer.terms_of_service') %></a>
+                                <a href="/accessibility" class="mobile-dropdown-link"><%= t('footer.accessibility') %></a>
+                                <a href="/fit-guarantee" class="mobile-dropdown-link"><%= t('footer.fit_guarantee') %></a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mobile-nav-item">
+                        <div class="mobile-dropdown">
+                            <button class="mobile-dropdown-btn"><%= t('footer.support') %></button>
+                            <div class="mobile-dropdown-content">
+                                <a href="/faq" class="mobile-dropdown-link"><%= t('footer.faq') %></a>
+                                <a href="/help" class="mobile-dropdown-link"><%= t('footer.help_center') %></a>
+                                <a href="/contact" class="mobile-dropdown-link"><%= t('footer.contact_us') %></a>
+                                <a href="/track-order" class="mobile-dropdown-link"><%= t('footer.track_order') %></a>
                             </div>
                         </div>
                     </li>
@@ -790,15 +1160,15 @@
     <div class="search-overlay" id="searchOverlay">
         <div class="search-header">
             <div class="search-container">
-                <input type="text" class="search-input" placeholder="Search products..." autofocus>
-                <button class="search-close" aria-label="Close search">
+                <input type="text" class="search-input" placeholder="<%= t('search.placeholder') %>" autofocus>
+                <button class="search-close" aria-label="<%= t('common.close') %>">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
         </div>
         <div class="search-content">
             <div class="search-suggestions">
-                <h3 class="suggestions-title">Popular Searches</h3>
+                <h3 class="suggestions-title"><%= t('search.popular_searches') %></h3>
                 <div class="popular-searches">
                     <a href="/search?q=outwork" class="popular-search-tag">Outwork</a>
                     <a href="/search?q=allday" class="popular-search-tag">Allday</a>
@@ -809,14 +1179,14 @@
                     <a href="/search?q=socks" class="popular-search-tag">Socks</a>
                     <a href="/search?q=apparel" class="popular-search-tag">Apparel</a>
                 </div>
-                  <h3 class="suggestions-title">Trending Now</h3>
+                  <h3 class="suggestions-title"><%= t('search.trending_now') %></h3>
                 <div class="trending-products">
                     <% if (typeof trendingProducts !== 'undefined' && trendingProducts.length > 0) { %>
                         <% trendingProducts.forEach(product => { %>
                             <a href="/products/<%= product._id %>" class="trending-product">
                                 <img src="<%= product.image || 'https://via.placeholder.com/200x200' %>" alt="<%= product.name %>">
                                 <h4 class="trending-product-title"><%= product.name %></h4>
-                                <div class="trending-product-price"><%= product.price.toLocaleString() %> dh</div>
+                                <div class="trending-product-price"><%= product.price.toLocaleString() %> <%= t('common.currency') %></div>
                             </a>
                         <% }); %>
                     <% } else { %>
@@ -831,18 +1201,72 @@
     <div class="cart-overlay" id="cartOverlay"></div>
     <aside class="cart-panel" id="cartPanel" aria-hidden="true">
         <div class="cart-panel-header">
-            <span class="cart-panel-title">Your Cart</span>
-            <button class="cart-panel-close" id="cartCloseBtn" aria-label="Close cart">&times;</button>
+            <span class="cart-panel-title"><%= t('header.your_cart') %></span>
+            <button class="cart-panel-close" id="cartCloseBtn" aria-label="<%= t('common.close') %>">&times;</button>
         </div>
         <div class="cart-panel-content" id="cartPanelContent">
-            <div class="cart-empty">Your cart is empty.</div>
+            <div class="cart-empty"><%= t('cart.empty') %></div>
             <!-- Cart items will be dynamically inserted here -->
         </div>
         <div class="cart-panel-footer">
-            <div class="cart-total" id="cartTotal">Total: 0 dh</div>
-            <button class="cart-checkout-btn">Checkout</button>
+            <div class="cart-total" id="cartTotal"><%= t('common.total') %>: 0 <%= t('common.currency') %></div>
+            <button class="cart-checkout-btn"><%= t('header.checkout') %></button>
+            <a href="/cart" class="cart-to-page-btn" style="
+            display: block;
+            margin: 18px auto 0 auto;
+            padding: 14px 0;
+            width: 100%;
+            background: linear-gradient(135deg, #000 0%, #333 100%);
+            color: #fff;
+            font-weight: 800;
+            font-size: 1.1rem;
+            border: 2px solid #000;
+            border-radius: 8px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+        "
+        onmouseover="this.style.background='#fff';this.style.color='#000';this.style.transform='translateY(-2px)';"
+        onmouseout="this.style.background='linear-gradient(135deg, #000 0%, #333 100%)';this.style.color='#fff';this.style.transform='none';"
+        >Go to Cart Page</a>
         </div>
     </aside>
+
+    <!-- Language Selection Modal -->
+    <div class="language-modal" id="languageModal">
+        <div class="language-modal-content">
+            <h2 class="language-modal-title"><%= t('language.welcome_title') %></h2>
+            <p class="language-modal-subtitle"><%= t('language.select_language') %></p>
+            
+            <div class="language-options">
+                <a href="#" class="language-option" onclick="selectLanguage('en')">
+                    <div class="language-flag">🇺🇸</div>
+                    <div class="language-name"><%= t('language.english') %></div>
+                    <div class="language-native">English</div>
+                </a>
+                
+                <a href="#" class="language-option" onclick="selectLanguage('fr')">
+                    <div class="language-flag">🇫🇷</div>
+                    <div class="language-name"><%= t('language.french') %></div>
+                    <div class="language-native">French</div>
+                </a>
+                
+                <a href="#" class="language-option" onclick="selectLanguage('ar')">
+                    <div class="language-flag">🇲🇦</div>
+                    <div class="language-name"><%= t('language.arabic') %></div>
+                    <div class="language-native">Arabic</div>
+                </a>
+            </div>
+            
+            <div class="language-modal-footer">
+                <%= t('language.change_later') %>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Header scroll behavior
@@ -889,22 +1313,30 @@
         });
 
         // Mobile dropdown functionality
-        const mobileDropdownBtn = document.querySelector('.mobile-dropdown-btn');
-        const mobileDropdownContent = document.querySelector('.mobile-dropdown-content');
+        const mobileDropdownBtns = document.querySelectorAll('.mobile-dropdown-btn');
 
-        if (mobileDropdownBtn && mobileDropdownContent) {
-            mobileDropdownBtn.addEventListener('click', () => {
-                const isActive = mobileDropdownBtn.classList.contains('active');
-                
+        mobileDropdownBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const dropdownContent = btn.nextElementSibling;
+                const isActive = btn.classList.contains('active');
+
+                // Close all other dropdowns
+                mobileDropdownBtns.forEach(otherBtn => {
+                    if (otherBtn !== btn) {
+                        otherBtn.classList.remove('active');
+                        otherBtn.nextElementSibling.classList.remove('active');
+                    }
+                });
+
                 if (isActive) {
-                    mobileDropdownBtn.classList.remove('active');
-                    mobileDropdownContent.classList.remove('active');
+                    btn.classList.remove('active');
+                    dropdownContent.classList.remove('active');
                 } else {
-                    mobileDropdownBtn.classList.add('active');
-                    mobileDropdownContent.classList.add('active');
+                    btn.classList.add('active');
+                    dropdownContent.classList.add('active');
                 }
             });
-        }
+        });
 
         // Handle keyboard navigation
         const focusableElements = header.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
@@ -1125,6 +1557,208 @@
         document.querySelector('.cart-checkout-btn').addEventListener('click', function() {
             window.location.href = '/cart/checkout';
         });
+
+        // Language Selection Modal Functionality
+        function checkFirstVisit() {
+            const hasVisited = localStorage.getItem('hasVisited');
+            const selectedLanguage = localStorage.getItem('selectedLanguage');
+            
+            if (!hasVisited || !selectedLanguage) {
+                showLanguageModal();
+            }
+        }
+
+        function showLanguageModal() {
+            const modal = document.getElementById('languageModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideLanguageModal() {
+            const modal = document.getElementById('languageModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function selectLanguage(language) {
+            // Store the selected language locally
+            localStorage.setItem('selectedLanguage', language);
+            localStorage.setItem('hasVisited', 'true');
+            
+            // Hide the modal immediately
+            hideLanguageModal();
+            
+            // Save to server and redirect with language parameter
+            fetch('/language/set', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ language })
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      console.log('Language preference saved:', language);
+                      // Redirect to current page with language parameter
+                      const url = new URL(window.location);
+                      url.searchParams.set('lang', language);
+                      window.location.href = url.toString();
+                  }
+              }).catch(error => {
+                  console.error('Error saving language preference:', error);
+                  // Even if server save fails, redirect with language parameter
+                  const url = new URL(window.location);
+                  url.searchParams.set('lang', language);
+                  window.location.href = url.toString();
+              });
+        }
+
+        function updateLanguageIndicator(language) {
+            const indicator = document.getElementById('languageIndicator');
+            const languageCodes = {
+                'en': 'EN',
+                'fr': 'FR',
+                'ar': 'AR'
+            };
+            
+            if (indicator) {
+                indicator.textContent = languageCodes[language] || 'EN';
+            }
+        }
+
+        function showLanguageConfirmation(language) {
+            const languageNames = {
+                'en': 'English',
+                'fr': 'Français',
+                'ar': 'العربية'
+            };
+            
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: linear-gradient(135deg, var(--primary-color) 0%, #555 100%);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                z-index: 4000;
+                font-weight: 600;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            `;
+            notification.textContent = `Language set to ${languageNames[language]}`;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize language on page load
+        function initializeLanguage() {
+            const savedLanguage = localStorage.getItem('selectedLanguage');
+            if (savedLanguage) {
+                updateLanguageIndicator(savedLanguage);
+            } else {
+                // Try to get from server
+                fetch('/language/current')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.language) {
+                            updateLanguageIndicator(data.language);
+                            localStorage.setItem('selectedLanguage', data.language);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error getting language preference:', error);
+                    });
+            }
+        }
+
+        // Check for first visit when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if we need to apply a language from localStorage
+            checkAndApplyLanguage();
+            
+            // Initialize language indicator
+            initializeLanguage();
+            
+            // Small delay to ensure page is fully loaded, then check for first visit
+            setTimeout(checkFirstVisit, 1000);
+        });
+
+        // Check if we need to apply language from localStorage
+        function checkAndApplyLanguage() {
+            const savedLanguage = localStorage.getItem('selectedLanguage');
+            const currentLanguage = '<%= language %>';
+            
+            // If saved language is different from current, reload with correct language
+            if (savedLanguage && savedLanguage !== currentLanguage) {
+                // Add language parameter to URL and reload
+                const url = new URL(window.location);
+                url.searchParams.set('lang', savedLanguage);
+                window.location.href = url.toString();
+            }
+        }
+
+        // Close language modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('languageModal');
+                if (modal.classList.contains('active')) {
+                    hideLanguageModal();
+                }
+            }
+        });
+
+        // Enhanced cart panel rendering with better styling
+        function renderCartPanel(items) {
+            const cartPanelContent = document.getElementById('cartPanelContent');
+            const cartTotal = document.getElementById('cartTotal');
+            
+            if (!items || items.length === 0) {
+                cartPanelContent.innerHTML = '<div class="cart-empty">Your cart is empty</div>';
+                cartTotal.textContent = 'Total: 0 dh';
+                return;
+            }
+            
+            let total = 0;
+            let html = '';
+            
+            items.forEach(item => {
+                total += item.price * item.qty;
+                html += `
+                <div class="cart-item">
+                    <img src="${item.image || 'https://via.placeholder.com/60'}" alt="${item.name}">
+                    <div class="cart-item-details">
+                        <div class="cart-item-title">${item.name}</div>
+                        <div class="cart-item-price">${item.price.toLocaleString()} dh × ${item.qty}</div>
+                        <div class="cart-item-meta">
+                            ${item.color ? 'Color: ' + item.color : ''} 
+                            ${item.size ? 'Size: ' + item.size : ''}
+                        </div>
+                    </div>
+                    <button class="cart-item-remove" data-id="${item.id}" aria-label="Remove">×</button>
+                </div>`;
+            });
+            
+            cartPanelContent.innerHTML = html;
+            cartTotal.textContent = `Total: ${total.toLocaleString()} dh`;
+        }
     </script>
 </body>
 </html>

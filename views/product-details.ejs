@@ -693,10 +693,33 @@ hr {
     <div class="product-image">
         <% 
         const productImages = [];
+        
+        // Always start with the main product image
         productImages.push(product.image);
-        product.colors.forEach(color => {
-            productImages.push(`/uploads/${color.toLowerCase()}.jpg`);
-        });
+        
+        // Add color variant images if they exist
+        if (product.colorVariants && product.colorVariants.length > 0) {
+            console.log('Product has colorVariants:', product.colorVariants.length);
+            product.colorVariants.forEach(variant => {
+                console.log('Processing variant:', variant.name, 'with', variant.images ? variant.images.length : 0, 'images');
+                if (variant.images && variant.images.length > 0) {
+                    variant.images.forEach(image => {
+                        productImages.push(image);
+                    });
+                } else {
+                    // If no images for this variant, use main image as fallback
+                    productImages.push(product.image);
+                }
+            });
+        } else if (product.colors && product.colors.length > 0) {
+            // Fallback: generate images based on color names (old system)
+            console.log('Using fallback color system for', product.colors.length, 'colors');
+            product.colors.forEach(color => {
+                productImages.push(`/uploads/${color.toLowerCase()}.jpg`);
+            });
+        }
+        
+        console.log('Total product images:', productImages.length);
         %>
         <img src="<%= productImages[0] %>" alt="<%= product.name %>" id="mainImage">
         <div class="image-navigation">
@@ -712,47 +735,84 @@ hr {
             <span class="rating-count">5,495</span>
         </div>
         <div class="price"><%= product.price.toLocaleString() %> dh</div>
-        <div class="taxes-info">Taxes included.</div>
+        <div class="taxes-info"><%= __('products.product_details.taxes_included') %></div>
         <hr>
-        <div class="product-variants">            <div class="variant-title">Color: <span id="selectedColorText" style="font-weight:700"><%= product.colors[0] %></span></div>
+        <div class="product-variants">            <div class="variant-title"><%= __('products.product_details.color') %> <span id="selectedColorText" style="font-weight:700">
+                <% if (product.colorVariants && product.colorVariants.length > 0) { %>
+                    <%= product.colorVariants[0].name %>
+                <% } else if (product.colors && product.colors.length > 0) { %>
+                    <%= product.colors[0] %>
+                <% } else { %>
+                    Default
+                <% } %>
+            </span></div>
             <div class="variant-images">
-                <% product.colors.forEach(color => { %>
-                    <img src="/uploads/<%= color.toLowerCase() %>" 
-                         alt="<%= color %>" 
-                         class="variant-image <%= color === product.colors[0] ? 'selected' : '' %>">
-                <% }) %>
+                <% if (product.colorVariants && product.colorVariants.length > 0) { %>
+                    <% product.colorVariants.forEach((variant, index) => { %>
+                        <% 
+                        // Use first image of variant, or main image as fallback
+                        const variantImage = (variant.images && variant.images.length > 0) ? variant.images[0] : product.image;
+                        const variantImagesJson = JSON.stringify(variant.images || [product.image]);
+                        %>
+                        <img src="<%= variantImage %>" 
+                             alt="<%= variant.name %>" 
+                             class="variant-image <%= index === 0 ? 'selected' : '' %>"
+                             data-color="<%= variant.name %>"
+                             data-images="<%= variantImagesJson.replace(/"/g, '&quot;') %>">
+                    <% }) %>
+                <% } else if (product.colors && product.colors.length > 0) { %>
+                    <% product.colors.forEach((color, index) => { %>
+                        <% 
+                        // Fallback for old color system
+                        const colorImage = `/uploads/${color.toLowerCase()}.jpg`;
+                        %>
+                        <img src="<%= colorImage %>" 
+                             alt="<%= color %>" 
+                             class="variant-image <%= index === 0 ? 'selected' : '' %>"
+                             data-color="<%= color %>"
+                             data-images="[\"<%= colorImage %>\"]">
+                    <% }) %>
+                <% } else { %>
+                    <!-- No color variants available -->
+                    <p class="text-muted">No color variants available</p>
+                <% } %>
             </div>
         </div>
         <hr>
         <div class="size-selector">
             <div class="size-title">
-                <h3>Size: <span style="font-weight:400;font-size:13px;color:#888">(US Size - Select size guide for other metrics)</span></h3>
-                <a href="#" class="size-guide" id="sizeGuideLink">Size Guide</a>
+                <h3><%= __('products.product_details.size') %> <span style="font-weight:400;font-size:13px;color:#888"><%= __('products.product_details.size_guide_note') %></span></h3>
+                <a href="#" class="size-guide" id="sizeGuideLink"><%= __('products.product_details.size_guide') %></a>
             </div>
-            <div class="size-options">                <% ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'].forEach(size => { %>
-                    <button type="button" class="size-button" data-size="<%= size %>"><%= size %></button>
-                <% }) %>
+            <div class="size-options">
+                <% if (product.sizes && product.sizes.length > 0) { %>
+                    <% product.sizes.forEach(size => { %>
+                        <button type="button" class="size-button" data-size="<%= size %>"><%= size %></button>
+                    <% }) %>
+                <% } else { %>
+                    <p>No sizes available for this product.</p>
+                <% } %>
             </div>
         </div>        <form action="/cart/add/<%= product._id %>" method="POST" id="addToCartForm">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-            <input type="hidden" name="color" id="selectedColor" value="<%= product.colors[0] %>">
+            <input type="hidden" name="color" id="selectedColor" value="<% if (product.colorVariants && product.colorVariants.length > 0) { %><%= product.colorVariants[0].name %><% } else if (product.colors && product.colors.length > 0) { %><%= product.colors[0] %><% } %>">
             <input type="hidden" name="size" id="selectedSize" value="">
-            <button type="submit" class="add-to-cart" disabled>Select Your Size</button>
+            <button type="submit" class="add-to-cart" disabled><%= __('products.product_details.select_size') %></button>
         </form>
-        <div class="shipping-info">Free standard shipping on all orders 990 DH and over.</div>
+        <div class="shipping-info"><%= __('products.product_details.free_shipping') %></div>
     </div>
 </div>
 
 <div class="related-products">
     <div class="container">
-        <h3 class="related-title">You May Also Like</h3>
+        <h3 class="related-title"><%= __('products.product_details.you_may_like') %></h3>
         <div class="products-grid">
             <% relatedProducts.forEach(product => { %>
                 <a href="/products/<%= product._id %>" class="product-link">
                     <div class="product-card">
                         <div class="nb-image-section">
                             <% if (product.price === 99) { %>
-                                <div class="nb-badge">NOW 990 DH</div>
+                                <div class="nb-badge"><%= __('products.product_details.now_price') %></div>
                             <% } %>
                             <img src="<%= product.image %>" alt="<%= product.name %>" class="nb-image">
                         </div>
@@ -774,12 +834,12 @@ hr {
 <div class="modal-backdrop" id="modalBackdrop"></div>
 <div class="size-guide-modal" id="sizeGuideModal">
     <div class="modal-header">
-        <h3 class="modal-title">Size Guide</h3>
+        <h3 class="modal-title"><%= __('products.product_details.size_guide') %></h3>
         <button class="modal-close" id="modalClose">&times;</button>
     </div>
     <div class="modal-tabs">
-        <button class="modal-tab active" data-tab="size-chart">Size Chart</button>
-        <button class="modal-tab" data-tab="how-to-measure">How to Measure</button>
+        <button class="modal-tab active" data-tab="size-chart"><%= __('products.product_details.size_chart') %></button>
+        <button class="modal-tab" data-tab="how-to-measure"><%= __('products.product_details.how_to_measure') %></button>
     </div>
     <div class="unit-toggle">
         <button class="unit-btn active" data-unit="in">IN</button>
@@ -797,7 +857,7 @@ hr {
                 <th>XXL</th>
             </tr>
             <tr>
-                <th>Chest</th>
+                <th><%= __('products.product_details.chest') %></th>
                 <td>32-34</td>
                 <td>34-36</td>
                 <td>36-38</td>
@@ -806,7 +866,7 @@ hr {
                 <td>42-44</td>
             </tr>
             <tr>
-                <th>Waist</th>
+                <th><%= __('products.product_details.waist') %></th>
                 <td>26-28</td>
                 <td>28-30</td>
                 <td>30-32</td>
@@ -815,7 +875,7 @@ hr {
                 <td>36-38</td>
             </tr>
             <tr>
-                <th>Hips</th>
+                <th><%= __('products.product_details.hips') %></th>
                 <td>34-36</td>
                 <td>36-38</td>
                 <td>38-40</td>
@@ -827,17 +887,17 @@ hr {
     </div>
     <div class="tab-content" id="how-to-measure" style="display: none;">
         <div class="measurement-guide">
-            <h4>How to Take Your Measurements</h4>
-            <p>For best results, take measurements while wearing lightweight clothing or just underwear. Use a flexible measuring tape and keep it level around your body.</p>
+            <h4><%= __('products.product_details.measurements_title') %></h4>
+            <p><%= __('products.product_details.measurements_intro') %></p>
             
-            <h5>Chest</h5>
-            <p>Measure around the fullest part of your chest, keeping the tape horizontal.</p>
+            <h5><%= __('products.product_details.chest') %></h5>
+            <p><%= __('products.product_details.chest_instruction') %></p>
             
-            <h5>Waist</h5>
-            <p>Measure around your natural waistline, keeping the tape comfortably loose.</p>
+            <h5><%= __('products.product_details.waist') %></h5>
+            <p><%= __('products.product_details.waist_instruction') %></p>
             
-            <h5>Hips</h5>
-            <p>Measure around the fullest part of your hips, usually about 8 inches below your waistline.</p>
+            <h5><%= __('products.product_details.hips') %></h5>
+            <p><%= __('products.product_details.hips_instruction') %></p>
         </div>
     </div>
     <div class="modal-pagination">
@@ -848,6 +908,8 @@ hr {
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('🎨 Product Details page loaded');
+    
     const sizeButtons = document.querySelectorAll('.size-button');
     const variantImages = document.querySelectorAll('.variant-image');
     const addToCartButton = document.querySelector('.add-to-cart');
@@ -861,84 +923,172 @@ document.addEventListener('DOMContentLoaded', function() {
     const imageCounter = document.getElementById('imageCounter');
     let currentImageIndex = 0;
 
+    // Get product images from server-side data
     const productImages = JSON.parse('<%- JSON.stringify(productImages) %>');
+    console.log('Product images loaded:', productImages.length);
+
+    // Store original product data for color switching
+    const productData = {
+        <% if (product.colorVariants && product.colorVariants.length > 0) { %>
+            colorVariants: <%- JSON.stringify(product.colorVariants) %>,
+            hasColorVariants: true
+        <% } else { %>
+            colors: <%- JSON.stringify(product.colors || []) %>,
+            hasColorVariants: false
+        <% } %>
+    };
+    
+    console.log('Product data:', productData);
 
     function updateImage() {
-        mainImage.src = productImages[currentImageIndex];
-        imageCounter.textContent = `${(currentImageIndex + 1).toString().padStart(2, '0')}/${productImages.length.toString().padStart(2, '0')}`;
+        if (productImages[currentImageIndex]) {
+            mainImage.src = productImages[currentImageIndex];
+            imageCounter.textContent = `${(currentImageIndex + 1).toString().padStart(2, '0')}/${productImages.length.toString().padStart(2, '0')}`;
+        }
     }
 
-    prevButton.addEventListener('click', () => {
-        currentImageIndex = (currentImageIndex - 1 + productImages.length) % productImages.length;
-        updateImage();
-    });
+    // Image navigation buttons
+    if (prevButton) {
+        prevButton.addEventListener('click', () => {
+            currentImageIndex = (currentImageIndex - 1 + productImages.length) % productImages.length;
+            updateImage();
+        });
+    }
 
-    nextButton.addEventListener('click', () => {
-        currentImageIndex = (currentImageIndex + 1) % productImages.length;
-        updateImage();
-    });    sizeButtons.forEach(button => {
+    if (nextButton) {
+        nextButton.addEventListener('click', () => {
+            currentImageIndex = (currentImageIndex + 1) % productImages.length;
+            updateImage();
+        });
+    }
+
+    // Size selection
+    sizeButtons.forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
             sizeButtons.forEach(btn => btn.classList.remove('selected'));
             this.classList.add('selected');
             selectedSizeInput.value = this.dataset.size;
             console.log('Size selected:', this.dataset.size);
-            addToCartButton.textContent = 'Add to Cart';
+            addToCartButton.textContent = '<%= __("products.product_details.add_to_cart") %>';
             addToCartButton.disabled = false;
-        });
-    });    // Handle form submission
-    document.getElementById('addToCartForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const size = selectedSizeInput.value;
-        const color = selectedColorInput.value;
-
-        if (!size || !color) {
-            alert('Please select both size and color');
-            return false;
-        }
-
-        // If validation passes, submit the form
-        this.submit();
-    });variantImages.forEach((img, index) => {
-        img.addEventListener('click', function() {
-            variantImages.forEach(image => image.classList.remove('selected'));
-            this.classList.add('selected');
-            const selectedColor = this.alt;
-            selectedColorInput.value = selectedColor;
-            document.getElementById('selectedColorText').textContent = selectedColor;
-            console.log('Color selected:', selectedColor);
-            // Update main image to show the selected color
-            currentImageIndex = index;
-            updateImage();
         });
     });
 
-    // Size Guide Modal
+    // Color variant selection
+    variantImages.forEach((img, index) => {
+        img.addEventListener('click', function() {
+            console.log('Color variant clicked:', index);
+            
+            // Update selected state
+            variantImages.forEach(image => image.classList.remove('selected'));
+            this.classList.add('selected');
+            
+            const selectedColor = this.getAttribute('data-color');
+            const colorImagesData = this.getAttribute('data-images');
+            
+            // Update selected color
+            if (selectedColorInput) {
+                selectedColorInput.value = selectedColor;
+            }
+            
+            // Update color text display
+            const selectedColorText = document.getElementById('selectedColorText');
+            if (selectedColorText) {
+                selectedColorText.textContent = selectedColor;
+            }
+            
+            console.log('Color selected:', selectedColor);
+            
+            // Update images based on color selection
+            if (productData.hasColorVariants && colorImagesData) {
+                try {
+                    const colorImages = JSON.parse(colorImagesData);
+                    console.log('Color images for', selectedColor, ':', colorImages);
+                    
+                    if (colorImages && colorImages.length > 0) {
+                        // Switch to first image of selected color
+                        const firstColorImage = colorImages[0];
+                        mainImage.src = firstColorImage;
+                        
+                        // Find the index of this image in the main productImages array
+                        const imageIndex = productImages.findIndex(img => img === firstColorImage);
+                        if (imageIndex !== -1) {
+                            currentImageIndex = imageIndex;
+                            updateImage();
+                        }
+                        
+                        console.log('Switched to color image:', firstColorImage);
+                    }
+                } catch (e) {
+                    console.error('Error parsing color images:', e);
+                    // Fallback: use index-based navigation
+                    currentImageIndex = index + 1;
+                    updateImage();
+                }
+            } else {
+                // Fallback for products without colorVariants
+                currentImageIndex = index + 1;
+                updateImage();
+            }
+        });
+    });
+
+    // Form submission
+    const addToCartForm = document.getElementById('addToCartForm');
+    if (addToCartForm) {
+        addToCartForm.addEventListener('submit', function(e) {
+            const size = selectedSizeInput ? selectedSizeInput.value : '';
+            const color = selectedColorInput ? selectedColorInput.value : '';
+
+            if (!size) {
+                e.preventDefault();
+                alert('Please select a size');
+                return false;
+            }
+
+            if (!color) {
+                e.preventDefault();
+                alert('Please select a color');
+                return false;
+            }
+
+            console.log('Adding to cart:', { size, color });
+            // Form will submit normally if validation passes
+        });
+    }
+
+    // Size Guide Modal functionality
     const modalBackdrop = document.getElementById('modalBackdrop');
     const sizeGuideModal = document.getElementById('sizeGuideModal');
     const modalClose = document.getElementById('modalClose');
     const sizeGuideButton = document.getElementById('sizeGuideLink');
 
-    // Show modal
-    sizeGuideButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        modalBackdrop.classList.add('active');
-        sizeGuideModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    });
+    if (sizeGuideButton && modalBackdrop && sizeGuideModal) {
+        // Show modal
+        sizeGuideButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            modalBackdrop.classList.add('active');
+            sizeGuideModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
 
-    // Close modal functions
-    const closeModal = () => {
-        modalBackdrop.classList.remove('active');
-        sizeGuideModal.classList.remove('active');
-        document.body.style.overflow = '';
-    };
+        // Close modal functions
+        const closeModal = () => {
+            modalBackdrop.classList.remove('active');
+            sizeGuideModal.classList.remove('active');
+            document.body.style.overflow = '';
+        };
 
-    modalClose.addEventListener('click', closeModal);
-    modalBackdrop.addEventListener('click', closeModal);
-    sizeGuideModal.addEventListener('click', e => e.stopPropagation());
+        if (modalClose) {
+            modalClose.addEventListener('click', closeModal);
+        }
+        
+        modalBackdrop.addEventListener('click', closeModal);
+        sizeGuideModal.addEventListener('click', e => e.stopPropagation());
+    }
 
-    // Tab Controls
+    // Tab Controls for size guide
     const tabs = document.querySelectorAll('.modal-tab');
     const tabContents = document.querySelectorAll('.tab-content');
 
@@ -956,13 +1106,15 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Show selected tab content
             const tabId = tab.dataset.tab;
-            document.getElementById(tabId).style.display = 'block';
+            const targetContent = document.getElementById(tabId);
+            if (targetContent) {
+                targetContent.style.display = 'block';
+            }
         });
     });
 
-    // Unit Toggle
+    // Unit Toggle for size guide
     const unitButtons = document.querySelectorAll('.unit-btn');
-    const sizeTableCells = document.querySelectorAll('.size-table td');
     const measurements = {
         in: {
             chest: ['32-34', '34-36', '36-38', '38-40', '40-42', '42-44'],
@@ -988,47 +1140,34 @@ document.addEventListener('DOMContentLoaded', function() {
             
             rows.forEach((row, rowIndex) => {
                 if (rowIndex > 0) { // Skip header row
-                    const measurementType = row.querySelector('th').textContent.toLowerCase();
-                    const cells = row.querySelectorAll('td');
-                    cells.forEach((cell, cellIndex) => {
-                        cell.textContent = measurements[unit][measurementType][cellIndex];
-                    });
+                    const measurementType = row.querySelector('th');
+                    if (measurementType) {
+                        const type = measurementType.textContent.toLowerCase();
+                        const cells = row.querySelectorAll('td');
+                        if (measurements[unit][type]) {
+                            cells.forEach((cell, cellIndex) => {
+                                if (measurements[unit][type][cellIndex]) {
+                                    cell.textContent = measurements[unit][type][cellIndex];
+                                }
+                            });
+                        }
+                    }
                 }
             });
         });
     });
 
-    // Modal Pagination Controls
-    const modalPrevBtn = document.getElementById('prevPage');
-    const modalNextBtn = document.getElementById('nextPage');
-    const tables = document.querySelectorAll('.size-table');
-    let currentTableIndex = 0;
-
-    const updateTableVisibility = () => {
-        tables.forEach((table, index) => {
-            table.style.display = index === currentTableIndex ? 'table' : 'none';
-        });
-        
-        // Update button states
-        modalPrevBtn.style.opacity = currentTableIndex === 0 ? '0.5' : '1';
-        modalNextBtn.style.opacity = currentTableIndex === tables.length - 1 ? '0.5' : '1';
-    };
-
-    modalPrevBtn.addEventListener('click', () => {
-        if (currentTableIndex > 0) {
-            currentTableIndex--;
-            updateTableVisibility();
+    // Initialize the page
+    console.log('✅ Product details page initialized');
+    
+    // Set initial color if available
+    if (variantImages.length > 0) {
+        const firstVariant = variantImages[0];
+        const initialColor = firstVariant.getAttribute('data-color');
+        if (selectedColorInput && initialColor) {
+            selectedColorInput.value = initialColor;
         }
-    });
-
-    modalNextBtn.addEventListener('click', () => {
-        if (currentTableIndex < tables.length - 1) {
-            currentTableIndex++;
-            updateTableVisibility();
-        }
-    });
-
-    updateTableVisibility();
+    }
 });
 </script>
 

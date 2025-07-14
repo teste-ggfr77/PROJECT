@@ -6,5 +6,184 @@
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Notification System
+        let notifications = [];
+        let unreadCount = 0;
+
+        // Initialize notification system
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeNotifications();
+            loadNotifications();
+            
+            // Set up periodic refresh
+            setInterval(loadNotifications, 30000); // Check every 30 seconds
+        });
+
+        // Toggle notification dropdown
+        document.getElementById('notificationBell').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const dropdown = document.getElementById('notificationDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('notificationDropdown');
+            const bell = document.getElementById('notificationBell');
+            if (!bell.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+
+        function initializeNotifications() {
+            // Load notifications from localStorage if available
+            const stored = localStorage.getItem('adminNotifications');
+            if (stored) {
+                notifications = JSON.parse(stored);
+                updateNotificationDisplay();
+            }
+        }
+
+        async function loadNotifications() {
+            try {
+                console.log('Loading notifications...');
+                const response = await fetch('/admin/api/notifications');
+                console.log('Response status:', response.status);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Notifications data:', data);
+                    notifications = data.notifications || [];
+                    unreadCount = data.unreadCount || 0;
+                    console.log('Loaded notifications:', notifications.length, 'Unread:', unreadCount);
+                    updateNotificationDisplay();
+                    
+                    // Store in localStorage
+                    localStorage.setItem('adminNotifications', JSON.stringify(notifications));
+                } else {
+                    console.error('Failed to load notifications:', response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error('Error loading notifications:', error);
+            }
+        }
+
+        function updateNotificationDisplay() {
+            const badge = document.getElementById('notificationBadge');
+            const list = document.getElementById('notificationList');
+            
+            // Update badge
+            if (unreadCount > 0) {
+                badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+            
+            // Update notification list
+            if (notifications.length === 0) {
+                list.innerHTML = `
+                    <div class="text-center py-3 text-muted">
+                        <i class="fas fa-bell-slash fa-2x mb-2"></i>
+                        <p>No new notifications</p>
+                    </div>
+                `;
+            } else {
+                list.innerHTML = notifications.map(notification => `
+                    <a href="${notification.link || '#'}" class="notification-item d-flex ${notification.read ? '' : 'unread'}" 
+                       onclick="markAsRead('${notification._id}')">
+                        <div class="notification-icon ${notification.type}">
+                            <i class="fas ${getNotificationIcon(notification.type)}"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">${notification.title}</div>
+                            <div class="notification-text">${notification.message}</div>
+                            <div class="notification-time">${formatTime(notification.createdAt)}</div>
+                        </div>
+                    </a>
+                `).join('');
+            }
+        }
+
+        function getNotificationIcon(type) {
+            const icons = {
+                'order': 'fa-shopping-cart',
+                'user': 'fa-user-plus',
+                'message': 'fa-envelope',
+                'product': 'fa-box',
+                'system': 'fa-cog'
+            };
+            return icons[type] || 'fa-bell';
+        }
+
+        function formatTime(timestamp) {
+            const now = new Date();
+            const time = new Date(timestamp);
+            const diff = now - time;
+            
+            if (diff < 60000) return 'Just now';
+            if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+            if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
+            return `${Math.floor(diff / 86400000)}d ago`;
+        }
+
+        async function markAsRead(notificationId) {
+            try {
+                await fetch(`/admin/api/notifications/${notificationId}/read`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                });
+                
+                // Update local state
+                const notification = notifications.find(n => n._id === notificationId);
+                if (notification && !notification.read) {
+                    notification.read = true;
+                    unreadCount--;
+                    updateNotificationDisplay();
+                }
+            } catch (error) {
+                console.error('Error marking notification as read:', error);
+            }
+        }
+
+        async function markAllAsRead() {
+            try {
+                await fetch('/admin/api/notifications/mark-all-read', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                });
+                
+                // Update local state
+                notifications.forEach(n => n.read = true);
+                unreadCount = 0;
+                updateNotificationDisplay();
+                
+                // Close dropdown
+                document.getElementById('notificationDropdown').style.display = 'none';
+            } catch (error) {
+                console.error('Error marking all notifications as read:', error);
+            }
+        }
+
+        // Add notification (for real-time updates)
+        function addNotification(notification) {
+            notifications.unshift(notification);
+            if (!notification.read) {
+                unreadCount++;
+            }
+            updateNotificationDisplay();
+            
+            // Store in localStorage
+            localStorage.setItem('adminNotifications', JSON.stringify(notifications));
+        }
+    </script>
 </body>
 </html>

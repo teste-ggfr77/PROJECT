@@ -20,6 +20,19 @@ const ProductSchema = new Schema({
         type: [String],
         default: []
     },
+    colorVariants: [{
+        name: {
+            type: String,
+            required: true
+        },
+        images: [{
+            type: String
+        }]
+    }],
+    sizes: {
+        type: [String],
+        default: []
+    },
     category: { 
         type: String, 
         required: true,
@@ -51,6 +64,11 @@ ProductSchema.pre('save', async function(next) {
             .map(c => c.trim())
             .filter(Boolean);
     }
+    if (this.isModified('sizes')) {
+        this.sizes = this.sizes
+            .map(s => s.trim())
+            .filter(Boolean);
+    }
     next();
 });
 
@@ -66,6 +84,11 @@ ProductSchema.pre(['updateOne', 'findOneAndUpdate'], async function(next) {
     if (update.colors) {
         update.colors = update.colors
             .map(c => c.trim())
+            .filter(Boolean);
+    }
+    if (update.sizes) {
+        update.sizes = update.sizes
+            .map(s => s.trim())
             .filter(Boolean);
     }
 

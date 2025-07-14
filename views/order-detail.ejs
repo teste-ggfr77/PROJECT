@@ -49,6 +49,7 @@
                                     <tr>
                                         <th class="ps-4">Product</th>
                                         <th>Color</th>
+                                        <th>Size</th>
                                         <th class="text-center">Quantity</th>
                                         <th class="text-end">Price</th>
                                         <th class="text-end pe-4">Total</th>
@@ -65,6 +66,7 @@
                                                 </div>
                                             </td>
                                             <td><span class="badge bg-light text-dark"><%= item.color %></span></td>
+                                            <td><span class="badge bg-light text-dark"><%= item.size %></span></td>
                                             <td class="text-center fw-medium"><%= item.quantity %></td>
                                             <td class="text-end">$<%= item.price.toFixed(2) %></td>
                                             <td class="text-end pe-4">$<%= (item.price * item.quantity).toFixed(2) %></td>

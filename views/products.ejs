@@ -6,8 +6,8 @@
 <div class="top-banner">
     <div class="banner-content">
         <div class="shimmer-overlay"></div>
-        <span class="banner-text">Premium Collection. Built to Last.</span>
-        <a href="#products-grid" class="banner-cta">Shop Now →</a>
+        <span class="banner-text"><%= __('products.premium_collection') %></span>
+        <a href="#products-grid" class="banner-cta"><%= __('products.shop_now') %></a>
     </div>
 </div>
 
@@ -20,10 +20,10 @@
         <div class="floating-square square-2"></div>
     </div>
     <div class="hero-content">
-        <h1 class="hero-title gradient-text">Premium Products</h1>
-        <p class="hero-description">Discover our curated collection of high-quality products designed for excellence and crafted with precision.</p>
+        <h1 class="hero-title gradient-text"><%= __('products.premium_products') %></h1>
+        <p class="hero-description"><%= __('products.discover_collection') %></p>
         <a href="#products-grid" class="hero-cta pulse-btn">
-            <span>Browse Collection</span>
+            <span><%= __('products.browse_collection') %></span>
             <div class="btn-ripple"></div>
         </a>
     </div>
@@ -32,7 +32,7 @@
 <div class="products-page">
     <div class="sidebar">
         <div class="filter-section">
-            <div class="filter-title">MODELS</div>
+            <div class="filter-title"><%= __('products.models') %></div>
             <form id="model-filter-form">                <% 
                     const selectedCategories = query.category ? query.category.split(',') : [];
                     categories.forEach(category => { 
@@ -45,12 +45,12 @@
                     </label>
                 <% }) %>
             </form>
-            <div class="filter-title" style="margin-top:2.5rem;">OUR PRODUCTS</div>
+            <div class="filter-title" style="margin-top:2.5rem;"><%= __('products.our_products') %></div>
             <div class="sidebar-sort-filter">
                 <select name="sort" id="sort" onchange="window.location.href=this.value">
-                    <option value="/products?sort=newest" <%= sort === 'newest' ? 'selected' : '' %>>Newest First</option>
-                    <option value="/products?sort=price-low" <%= sort === 'price-low' ? 'selected' : '' %>>Price: Low to High</option>
-                    <option value="/products?sort=price-high" <%= sort === 'price-high' ? 'selected' : '' %>>Price: High to Low</option>
+                    <option value="/products?sort=newest" <%= sort === 'newest' ? 'selected' : '' %>><%= __('products.newest_first') %></option>
+                    <option value="/products?sort=price-low" <%= sort === 'price-low' ? 'selected' : '' %>><%= __('products.price_low_to_high') %></option>
+                    <option value="/products?sort=price-high" <%= sort === 'price-high' ? 'selected' : '' %>><%= __('products.price_high_to_low') %></option>
                 </select>
             </div>
             
@@ -60,9 +60,9 @@
                     <svg class="size-guide-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    <span>Size Guide</span>
+                    <span><%= __('products.size_guide') %></span>
                 </a>
-                <p class="size-guide-text">Find your perfect fit</p>
+                <p class="size-guide-text"><%= __('products.find_perfect_fit') %></p>
             </div>
         </div>
     </div>
@@ -82,11 +82,11 @@
                         <div class="image-overlay">
                             <div class="overlay-content">
                                 <button class="quick-add-btn modern-btn" onclick="quickAddToCart('<%= product._id %>')">
-                                    <span>Quick Add</span>
+                                    <span><%= __('products.quick_add') %></span>
                                     <div class="btn-bg"></div>
                                 </button>
-                                <button class="quick-view-btn modern-btn" onclick="quickView('<%= product._id %>')">
-                                    <span>Quick View</span>
+                                <button class="quick-view-btn modern-btn" onclick='quickView(<%- JSON.stringify(product).replace(/'/g, "\\'") %>)'>
+                                    <span><%= __('products.quick_view') %></span>
                                     <div class="btn-bg"></div>
                                 </button>
                             </div>
@@ -98,7 +98,7 @@
                         <% if (product.variants && product.variants.length) { %>
                             <% product.variants.forEach((variant, vIndex) => { %>
                                 <div class="nb-swatch <%= vIndex === 0 ? 'active' : '' %>" 
-                                     style="background-color: <%= variant.color %>" 
+                                     style="background-color: <%= variant.color ? variant.color : '#000' %>;" 
                                      title="<%= variant.color %>"
                                      data-image="<%= variant.image || product.image %>">
                                     <div class="swatch-ripple"></div>
@@ -125,7 +125,7 @@
                         <div class="rating-section">
                             <div class="stars">
                                 <% for(let i = 1; i <= 5; i++) { %>
-                                    <span class="star <%= i <= 4 ? 'filled' : '' %>" style="animation-delay: <%= i * 0.1 %>s">★</span>
+                                    <span class="star <%= i <= 4 ? 'filled' : '' %>" style="animation-delay: <%= (i * 0.1) + 's' %>">★</span>
                                 <% } %>
                             </div>
                             <span class="rating-count">(127)</span>
@@ -142,7 +142,7 @@
                                             <circle cx="20" cy="21" r="1"></circle>
                                             <path d="m1 1 4 4 2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                                         </svg>
-                                        <span>Add</span>
+                                        <span><%= __('products.add') %></span>
                                     </div>
                                     <div class="btn-loading">
                                         <div class="loading-spinner"></div>
@@ -158,7 +158,7 @@
         <% if (pages > 1) { %>
             <div class="pagination">
                 <% if (currentPage > 1) { %>
-                    <a href="/products?page=<%= currentPage - 1 %>" class="btn">&laquo; Previous</a>
+                    <a href="/products?page=<%= currentPage - 1 %>" class="btn">&laquo; <%= __('products.previous') %></a>
                 <% } %>
                 
                 <% for(let i = 1; i <= pages; i++) { %>
@@ -169,7 +169,7 @@
                 <% } %>
                 
                 <% if (currentPage < pages) { %>
-                    <a href="/products?page=<%= currentPage + 1 %>" class="btn">Next &raquo;</a>
+                    <a href="/products?page=<%= currentPage + 1 %>" class="btn"><%= __('products.next') %> &raquo;</a>
                 <% } %>
             </div>
         <% } %>
@@ -1220,6 +1220,17 @@
 // Get CSRF token from meta tag (global scope)
 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
+// Translation function for client-side
+const translations = {
+    color: '<%= __("products.quick_view_modal.color") %>',
+    size: '<%= __("products.quick_view_modal.size") %>',
+    add_to_cart: '<%= __("products.quick_view_modal.add_to_cart") %>',
+    view_full_details: '<%= __("products.quick_view_modal.view_full_details") %>',
+    reviews_count: '<%= __("products.quick_view_modal.reviews_count") %>',
+    adding: '<%= __("products.adding") %>',
+    close: '<%= __("products.quick_view_modal.close") %>'
+};
+
 // Debug: Log CSRF token
 console.log('CSRF Token:', csrfToken);
 
@@ -1594,29 +1605,31 @@ function updateCartCount(count) {
     });
 }
 
-function quickView(productId) {
-    // Find the product data
-    const productCard = document.querySelector(`[data-product-id="${productId}"]`);
-    const productName = productCard.querySelector('.nb-title').textContent;
-    const productImage = productCard.querySelector('.nb-image').src;
-    const productPrice = productCard.querySelector('.nb-price').textContent;
-    const productCategory = productCard.querySelector('.nb-category').textContent;
-    
+function quickView(product) {
     // Create modal
     const modal = document.createElement('div');
     modal.className = 'quick-view-modal';
+
+    const colorsHtml = product.colors.map((color, index) => `
+        <div class="color-option ${index === 0 ? 'active' : ''}" style="background: ${color}" data-color="${color}"></div>
+    `).join('');
+
+    const sizesHtml = product.sizes.map((size, index) => `
+        <div class="size-option ${index === 0 ? 'active' : ''}" data-size="${size}">${size}</div>
+    `).join('');
+
     modal.innerHTML = `
         <div class="modal-overlay" onclick="closeQuickView()"></div>
         <div class="modal-content">
             <button class="modal-close" onclick="closeQuickView()">×</button>
             <div class="modal-body">
                 <div class="modal-image-section">
-                    <img src="${productImage}" alt="${productName}" class="modal-image">
+                    <img src="${product.image}" alt="${product.name}" class="modal-image">
                 </div>
                 <div class="modal-info">
-                    <div class="modal-category">${productCategory}</div>
-                    <h2 class="modal-title">${productName}</h2>
-                    <div class="modal-price">${productPrice}</div>
+                    <div class="modal-category">${product.category}</div>
+                    <h2 class="modal-title">${product.name}</h2>
+                    <div class="modal-price">${product.price.toLocaleString()} DH</div>
                     <div class="modal-rating">
                         <div class="stars">
                             <span class="star filled">★</span>
@@ -1625,41 +1638,36 @@ function quickView(productId) {
                             <span class="star filled">★</span>
                             <span class="star">★</span>
                         </div>
-                        <span class="rating-count">(127 reviews)</span>
+                        <span class="rating-count">(127 ${translations.reviews_count})</span>
                     </div>
                     <div class="modal-description">
-                        <p>Premium quality product designed for excellence and durability. Features modern design with superior materials and craftsmanship.</p>
+                        <p>${product.description}</p>
                     </div>
                     <div class="modal-options">
                         <div class="option-group">
-                            <label>Color:</label>
+                            <label>${translations.color}</label>
                             <div class="color-options">
-                                <div class="color-option active" style="background: #000" data-color="Black"></div>
-                                <div class="color-option" style="background: #fff; border: 2px solid #ddd" data-color="White"></div>
-                                <div class="color-option" style="background: #666" data-color="Gray"></div>
+                                ${colorsHtml}
                             </div>
                         </div>
                         <div class="option-group">
-                            <label>Size:</label>
+                            <label>${translations.size}</label>
                             <div class="size-options">
-                                <div class="size-option" data-size="S">S</div>
-                                <div class="size-option active" data-size="M">M</div>
-                                <div class="size-option" data-size="L">L</div>
-                                <div class="size-option" data-size="XL">XL</div>
+                                ${sizesHtml}
                             </div>
                         </div>
                     </div>
                     <div class="modal-actions">
-                        <button class="modal-add-to-cart" onclick="addToCartFromModal('${productId}')">
+                        <button class="modal-add-to-cart" onclick="addToCartFromModal('${product._id}')">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="9" cy="21" r="1"></circle>
                                 <circle cx="20" cy="21" r="1"></circle>
                                 <path d="m1 1 4 4 2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                             </svg>
-                            Add to Cart
+                            ${translations.add_to_cart}
                         </button>
-                        <button class="modal-view-details" onclick="window.location.href='/products/${productId}'">
-                            View Full Details
+                        <button class="modal-view-details" onclick="window.location.href='/products/${product._id}'">
+                            ${translations.view_full_details}
                         </button>
                     </div>
                 </div>
@@ -1962,7 +1970,7 @@ function addToCartFromModal(productId) {
     const button = modal.querySelector('.modal-add-to-cart');
     
     // Show loading state
-    button.innerHTML = '<div class="loading-spinner"></div> Adding...';
+    button.innerHTML = `<div class="loading-spinner"></div> ${translations.adding}`;
     button.disabled = true;
     
     const formData = new FormData();

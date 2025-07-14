@@ -38,7 +38,7 @@ exports.editProduct = async (req, res, next) => {
         });
 
         const productId = req.params.id;
-        const { name, description, price, colors, category, quantity } = req.body;
+        const { name, description, price, colors, sizes, category, quantity } = req.body;
 
         // Validate product exists
         const existingProduct = await Product.findById(productId);
@@ -59,6 +59,7 @@ exports.editProduct = async (req, res, next) => {
             description: description.trim(),
             price: parseFloat(price),
             colors: colors ? colors.split(',').map(c => c.trim()).filter(Boolean) : [],
+            sizes: sizes ? sizes.split(',').map(s => s.trim()).filter(Boolean) : [],
             category: category.trim(),
             quantity: parseInt(quantity) || 0
         };
@@ -122,21 +123,111 @@ exports.viewOrders = async (req, res) => {
             .populate('user', 'name email')
             .populate('items.product')
             .sort({ createdAt: -1 }); // Most recent orders first
-        // Filter out orders with missing user
-        const filteredOrders = orders.filter(order => order.user);
-        res.render('admin/view-orders', { orders: filteredOrders });
+        
+        // Don't filter out guest orders - show all orders
+        // Add flags to identify guest orders vs registered user orders
+        const ordersWithFlags = orders.map(order => ({
+            ...order.toObject(),
+            isGuestOrder: !order.user,
+            customerDisplayName: order.customerName || (order.user ? order.user.name : 'Guest Customer')
+        }));
+        
+        res.render('admin/view-orders', { orders: ordersWithFlags });
     } catch (error) {
         console.error('Error fetching orders:', error);
-        res.status(500).render('error', { error });
+        res.status(500).render('error', { 
+            message: 'Error loading orders',
+            error: { status: 500, message: error.message }
+        });
     }
 };
 
 exports.viewOrderDetail = async (req, res) => {
-    const order = await require('../models/Order').findById(req.params.id).populate('items.product user');
-    if (!order || !order.user) {
-        return res.status(404).render('error', { message: 'Order or user not found.' });
+    try {
+        console.log('viewOrderDetail - Debug info:', {
+            params: req.params,
+            url: req.url,
+            originalUrl: req.originalUrl,
+            route: req.route,
+            method: req.method,
+            baseUrl: req.baseUrl
+        });
+        
+        const orderId = req.params.id;
+        console.log('Extracted order ID:', orderId);
+        
+        if (!orderId) {
+            console.log('No order ID found in params');
+            return res.status(400).render('error', { 
+                message: 'Order ID is required.',
+                error: { status: 400, message: 'Order ID is required.' }
+            });
+        }
+        
+        // Validate MongoDB ObjectId format
+        const mongoose = require('mongoose');
+        if (!mongoose.Types.ObjectId.isValid(orderId)) {
+            console.log('Invalid ObjectId format:', orderId);
+            return res.status(400).render('error', { 
+                message: 'Invalid order ID format.',
+                error: { status: 400, message: 'Invalid order ID format.' }
+            });
+        }
+        
+        const order = await require('../models/Order').findById(orderId).populate('items.product user');
+        console.log('Found order:', order ? 'Yes' : 'No');
+        
+        if (!order) {
+            console.log('Order not found in database');
+            return res.status(404).render('error', { 
+                message: 'Order not found.',
+                error: { status: 404, message: 'Order not found.' }
+            });
+        }
+        
+        // Debug order details
+        console.log('Order details:', {
+            orderId: order._id,
+            userId: order.user ? order.user._id : 'null',
+            userExists: !!order.user,
+            customerName: order.customerName,
+            phone: order.phone,
+            shippingAddress: order.shippingAddress,
+            orderStatus: order.status,
+            orderTotal: order.total,
+            itemsCount: order.items ? order.items.length : 0
+        });
+        
+        if (!order.user) {
+            console.log('Order found but no user account - this is likely a guest order');
+            console.log('Guest order details:', {
+                customerName: order.customerName,
+                phone: order.phone,
+                shippingAddress: order.shippingAddress
+            });
+            
+            // This is a guest order, render it with guest order flag
+            const guestOrder = {
+                ...order.toObject(),
+                user: null,
+                isGuestOrder: true
+            };
+            
+            console.log('Rendering guest order detail page');
+            return res.render('admin/view-order-detail', { 
+                order: guestOrder
+            });
+        }
+        
+        console.log('Rendering order detail page for order:', order._id);
+        res.render('admin/view-order-detail', { order });
+    } catch (error) {
+        console.error('Error viewing order detail:', error);
+        res.status(500).render('error', { 
+            message: 'Error loading order details',
+            error: { status: 500, message: error.message }
+        });
     }
-    res.render('admin/view-order-detail', { order });
 };
 
 exports.addCategoryForm = (req, res) => {
@@ -197,7 +288,52 @@ exports.dashboard = async (req, res) => {
         res.render('admin/dashboard', templateData);
     } catch (error) {
         console.error('Dashboard error:', error);
-        res.render('error', { error });
+        res.render('error', { 
+            message: 'Error loading dashboard',
+            error: { status: 500, message: error.message }
+        });
+    }
+};
+
+exports.viewProducts = async (req, res) => {
+    try {
+        console.log('viewProducts method called');
+        const page = parseInt(req.query.page) || 1;
+        const limit = 10;
+        const skip = (page - 1) * limit;
+
+        const totalProducts = await Product.countDocuments();
+        const totalPages = Math.ceil(totalProducts / limit);
+
+        const products = await Product.find()
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        const categories = await require('../models/Category').find().sort({ name: 1 });
+
+        console.log('Products data:', {
+            totalProducts,
+            productsCount: products.length,
+            categoriesCount: categories.length
+        });
+
+        res.render('admin/products', {
+            title: 'Manage Products',
+            products,
+            categories,
+            currentPage: page,
+            totalPages,
+            csrfToken: req.csrfToken(),
+            messages: {
+                success: req.flash('success'),
+                error: req.flash('error')
+            }
+        });
+    } catch (error) {
+        console.error('Error getting products:', error);
+        req.flash('error', 'Error loading products');
+        res.redirect('/admin/dashboard');
     }
 };
 
@@ -206,8 +342,15 @@ exports.addProductForm = async (req, res) => {
     res.render('admin/add-product', { categories });
 };
 
+// Updated addProduct function for handling multiple color images
 exports.addProduct = async (req, res) => {
     try {
+        console.log('Add product request:', {
+            body: req.body,
+            files: req.files ? req.files.length : 0,
+            file: req.file ? req.file.filename : 'none'
+        });
+
         if (req.fileValidationError) {
             req.flash('error', req.fileValidationError);
             return res.redirect('/admin/add-product');
@@ -218,7 +361,7 @@ exports.addProduct = async (req, res) => {
             return res.redirect('/admin/add-product');
         }
 
-        const { name, description, price, colors, category, quantity } = req.body;
+        const { name, description, price, sizes, category, quantity, colorsData } = req.body;
 
         // Client-side validation backup
         if (!name || !description || !price || !category || !quantity) {
@@ -226,55 +369,149 @@ exports.addProduct = async (req, res) => {
             return res.redirect('/admin/add-product');
         }
 
-        // Move file from temp to final location
         const fs = require('fs').promises;
+        
+        // Process main product image
         const oldPath = req.file.path;
         const newPath = path.join(__dirname, '../public/uploads/', req.file.filename);
         
         try {
             await fs.mkdir(path.dirname(newPath), { recursive: true });
             await fs.rename(oldPath, newPath);
+            console.log('Main image processed:', req.file.filename);
         } catch (err) {
-            console.error('Error processing image:', err);
-            req.flash('error', 'Error uploading image');
+            console.error('Error processing main image:', err);
+            req.flash('error', 'Error uploading main image');
             return res.redirect('/admin/add-product');
         }
+
+        // Process color data and images
+        let colorVariants = [];
+        let colorNames = [];
         
+        if (colorsData) {
+            try {
+                const parsedColorsData = JSON.parse(colorsData);
+                console.log('Parsed colors data:', parsedColorsData);
+                
+                colorNames = parsedColorsData.map(color => color.name);
+                
+                // Process color-specific images from req.files
+                if (req.files && Array.isArray(req.files) && req.files.length > 0) {
+                    console.log('Processing color images:', req.files.length);
+                    
+                    for (const colorData of parsedColorsData) {
+                        const colorImages = [];
+                        
+                        // Look for uploaded files for this color
+                        for (const file of req.files) {
+                            if (file.fieldname.startsWith(`colorImages_${colorData.name}_`)) {
+                                const colorImagePath = path.join(__dirname, '../public/uploads/', file.filename);
+                                try {
+                                    await fs.mkdir(path.dirname(colorImagePath), { recursive: true });
+                                    await fs.rename(file.path, colorImagePath);
+                                    colorImages.push('/uploads/' + file.filename);
+                                    console.log(`Processed color image for ${colorData.name}:`, file.filename);
+                                } catch (err) {
+                                    console.error('Error processing color image:', err);
+                                }
+                            }
+                        }
+                        
+                        colorVariants.push({
+                            name: colorData.name,
+                            images: colorImages
+                        });
+                    }
+                } else {
+                    console.log('No color images to process');
+                    // Create color variants without images
+                    for (const colorData of parsedColorsData) {
+                        colorVariants.push({
+                            name: colorData.name,
+                            images: []
+                        });
+                    }
+                }
+            } catch (err) {
+                console.error('Error parsing colors data:', err);
+            }
+        }
+
+        console.log('Final color variants:', colorVariants);
+        
+        const Product = require('../models/Product');
         const product = new Product({
             name: name.trim(),
             description: description.trim(),
             price: parseFloat(price),
-            colors: colors ? colors.split(',').map(c => c.trim()).filter(c => c) : [],
+            colors: colorNames,
+            colorVariants: colorVariants,
+            sizes: sizes ? sizes.split(',').map(s => s.trim()).filter(s => s) : [],
             category,
             quantity: parseInt(quantity),
             image: '/uploads/' + req.file.filename
         });
 
         await product.save();
-        req.flash('success', 'Product added successfully');
-        res.redirect('/admin');
+        console.log('Product saved successfully:', product._id);
+
+        // Create notification for new product
+        try {
+            const notificationCtrl = require('./notificationController');
+            await notificationCtrl.createProductNotification(product, 'created');
+        } catch (notificationError) {
+            console.error('Error creating product notification:', notificationError);
+            // Don't fail the product creation if notification fails
+        }
+
+        req.flash('success', `Product "${product.name}" added successfully with ${colorVariants.length} color variants`);
+        res.redirect('/admin/dashboard');
     } catch (error) {
         console.error('Error adding product:', error);
-        // Clean up uploaded file if it exists
+        
+        // Clean up uploaded files if they exist
         if (req.file) {
             try {
-                await fs.unlink(req.file.path);
+                await require('fs').promises.unlink(req.file.path).catch(() => {});
             } catch (err) {
-                console.error('Error deleting failed upload:', err);
+                console.error('Error deleting failed main upload:', err);
             }
         }
+        if (req.files && Array.isArray(req.files)) {
+            for (const file of req.files) {
+                try {
+                    await require('fs').promises.unlink(file.path).catch(() => {});
+                } catch (err) {
+                    console.error('Error deleting failed color upload:', err);
+                }
+            }
+        }
+        
         req.flash('error', error.message || 'Error adding product');
         res.redirect('/admin/add-product');
     }
-};
+}
 
 exports.deleteProduct = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id);
+        console.log('Delete product request:', {
+            method: req.method,
+            productId: req.params.id,
+            body: req.body,
+            query: req.query
+        });
+
+        const productId = req.params.id;
+        const product = await Product.findById(productId);
+        
         if (!product) {
+            console.log('Product not found:', productId);
             req.flash('error', 'Product not found');
-            return res.redirect('/admin');
+            return res.redirect('/admin/products');
         }
+
+        console.log('Found product to delete:', product.name);
 
         // Delete the product's image file if it exists
         if (product.image && product.image.startsWith('/uploads/')) {
@@ -282,18 +519,21 @@ exports.deleteProduct = async (req, res) => {
             const imagePath = path.join(__dirname, '../public', product.image);
             try {
                 await fs.unlink(imagePath);
+                console.log('Deleted product image:', imagePath);
             } catch (err) {
                 console.error('Error deleting product image:', err);
             }
         }
 
-        await Product.findByIdAndDelete(req.params.id);
+        await Product.findByIdAndDelete(productId);
+        console.log('Product deleted successfully:', productId);
+        
         req.flash('success', 'Product deleted successfully');
-        res.redirect('/admin');
+        res.redirect('/admin/products');
     } catch (error) {
         console.error('Error deleting product:', error);
         req.flash('error', 'Error deleting product');
-        res.redirect('/admin');
+        res.redirect('/admin/products');
     }
 };
 
@@ -313,27 +553,30 @@ exports.loginForm = (req, res) => {
 };
 
 exports.logout = async (req, res) => {
-    try {
-        if (req.session) {
-            req.session.destroy((err) => {
-                if (err) {
-                    console.error('Session destruction error:', err);
-                    return res.redirect('/admin/dashboard');
-                }
-                
-                // Clear the session cookie
-                res.clearCookie('connect.sid');
-                
-                // Redirect to login page
-                res.redirect('/admin/login');
-            });
-        } else {
-            res.redirect('/admin/login');
-        }
-    } catch (error) {
-        console.error('Logout error:', error);
-        res.redirect('/admin/login');
-    }
+try {
+// Simple logout - just destroy the session
+if (req.session) {
+// Clear user data first
+req.session.user = null;
+
+// Destroy the session
+req.session.destroy((err) => {
+if (err) {
+console.error('Session destruction error:', err);
+}
+// Clear the session cookie
+res.clearCookie('connect.sid', { path: '/' });
+res.redirect('/admin/login');
+});
+} else {
+// No session, just clear cookie and redirect
+res.clearCookie('connect.sid', { path: '/' });
+res.redirect('/admin/login');
+}
+} catch (error) {
+console.error('Logout error:', error);
+res.redirect('/admin/login');
+}
 };
 
 exports.login = async (req, res) => {
@@ -389,16 +632,51 @@ exports.login = async (req, res) => {
 
 exports.updateOrderStatus = async (req, res) => {
     try {
+        console.log('Updating order status:', {
+            orderId: req.params.id,
+            newStatus: req.body.status,
+            body: req.body
+        });
+        
         const { id } = req.params;
         const { status } = req.body;
         
-        const Order = require('../models/Order');
-        await Order.findByIdAndUpdate(id, { status });
+        // Validate status
+        const validStatuses = ['processing', 'shipped', 'delivered', 'cancelled', 'completed'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ 
+                success: false, 
+                error: 'Invalid status. Must be one of: ' + validStatuses.join(', ') 
+            });
+        }
         
-        res.json({ success: true });
+        const Order = require('../models/Order');
+        const updatedOrder = await Order.findByIdAndUpdate(
+            id, 
+            { status }, 
+            { new: true }
+        );
+        
+        if (!updatedOrder) {
+            return res.status(404).json({ 
+                success: false, 
+                error: 'Order not found' 
+            });
+        }
+        
+        console.log('Order status updated successfully:', {
+            orderId: id,
+            oldStatus: updatedOrder.status,
+            newStatus: status
+        });
+        
+        res.json({ success: true, order: updatedOrder });
     } catch (error) {
         console.error('Error updating order status:', error);
-        res.status(500).json({ error: 'Failed to update order status' });
+        res.status(500).json({ 
+            success: false, 
+            error: 'Failed to update order status: ' + error.message 
+        });
     }
 };
 
@@ -530,6 +808,9 @@ exports.deleteCategory = async (req, res) => {
         await require('../models/Category').findByIdAndDelete(req.params.id);
         res.redirect('/admin/categories');
     } catch (err) {
-        res.status(500).render('error', { message: 'Could not delete category', error: err });
+        res.status(500).render('error', { 
+            message: 'Could not delete category', 
+            error: { status: 500, message: err.message }
+        });
     }
 };

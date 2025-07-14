@@ -19,7 +19,7 @@
             <div class="image-overlay">
               <div class="overlay-content">
                 <a href="/products/<%= product._id || product.id || '' %>" class="quick-add-btn modern-btn">
-                  <span>View Product</span>
+                  <span><%= t('gender_pages.view_product') %></span>
                   <div class="btn-bg"></div>
                 </a>
               </div>
@@ -35,7 +35,7 @@
             <div class="nb-bottom-row">
               <span class="nb-price price-counter" data-price="<%= product.price %>">$<%= product.price %></span>
               <a href="/products/<%= product._id || product.id || '' %>" class="add-to-cart-btn modern-cart-btn">
-                <span>Shop</span>
+                <span><%= t('gender_pages.shop') %></span>
               </a>
             </div>
           </div>
@@ -43,7 +43,7 @@
       <% }) %>
     </div>
     <% } else { %>
-      <div class="text-center text-gray-500 py-20 text-lg">No products found in this category.</div>
+      <div class="text-center text-gray-500 py-20 text-lg"><%= t('gender_pages.no_products_found') %></div>
     <% } %>
   </div>
 </div>

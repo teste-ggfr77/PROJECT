@@ -336,8 +336,8 @@ hr {
 <div class="edit-profile-container">
     <div class="edit-profile-section">
         <div class="edit-profile-header">
-            <h3 class="edit-profile-title">Edit Profile</h3>
-            <a href="/profile" class="btn-edit-profile btn-cancel">Back</a>
+            <h3 class="edit-profile-title"><%= __('profile.edit_profile') %></h3>
+            <a href="/profile" class="btn-edit-profile btn-cancel"><%= __('common.back') %></a>
         </div>
           <% if (messages && messages.success && messages.success.length > 0) { %>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -383,7 +383,7 @@ hr {
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="form-label" for="name">Full Name</label>
+                        <label class="form-label" for="name"><%= __('auth.full_name') %></label>
                         <input type="text" 
                                class="form-control" 
                                id="name" 
@@ -398,14 +398,14 @@ hr {
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="form-label" for="email">Email Address</label>
+                        <label class="form-label" for="email"><%= __('auth.email') %></label>
                         <input type="email" 
                                class="form-control" 
                                id="email" 
                                name="email" 
                                value="<%= user.email %>" 
                                required>
-                        <div class="invalid-feedback">Please enter a valid email address</div>
+                        <div class="invalid-feedback"><%= __('profile.email_validation') %></div>
                     </div>
                 </div>
             </div>
@@ -413,23 +413,23 @@ hr {
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="form-label" for="contactNumber">Contact Number</label>
+                        <label class="form-label" for="contactNumber"><%= __('auth.phone_number') %></label>
                         <input type="tel" 
                                class="form-control" 
                                id="contactNumber" 
                                name="contactNumber" 
                                value="<%= user.contactNumber || '' %>"
                                pattern="[0-9+\-\(\) ]*">
-                        <div class="invalid-feedback">Please enter a valid phone number</div>
+                        <div class="invalid-feedback"><%= __('profile.phone_validation') %></div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="form-label" for="preferredPaymentMethod">Preferred Payment Method</label>
+                        <label class="form-label" for="preferredPaymentMethod"><%= __('checkout.payment_method') %></label>
                         <select class="form-control" id="preferredPaymentMethod" name="preferredPaymentMethod">
-                            <option value="">Select payment method</option>
-                            <option value="credit_card" <%= user.preferredPaymentMethod === 'credit_card' ? 'selected' : '' %>>Credit Card</option>
-                            <option value="debit_card" <%= user.preferredPaymentMethod === 'debit_card' ? 'selected' : '' %>>Debit Card</option>
+                            <option value=""><%= __('profile.select_payment_method') %></option>
+                            <option value="credit_card" <%= user.preferredPaymentMethod === 'credit_card' ? 'selected' : '' %>><%= __('profile.credit_card') %></option>
+                            <option value="debit_card" <%= user.preferredPaymentMethod === 'debit_card' ? 'selected' : '' %>><%= __('profile.debit_card') %></option>
                             <option value="paypal" <%= user.preferredPaymentMethod === 'paypal' ? 'selected' : '' %>>PayPal</option>
                         </select>
                     </div>
@@ -437,7 +437,7 @@ hr {
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="shippingAddress">Shipping Address</label>
+                <label class="form-label" for="shippingAddress"><%= __('checkout.shipping_address') %></label>
                 <textarea class="form-control" 
                           id="shippingAddress" 
                           name="shippingAddress" 
@@ -448,7 +448,7 @@ hr {
 
             <div class="row mb-4">
                 <div class="col-12">
-                    <h4 class="mb-3">Achievements & Challenges</h4>
+                    <h4 class="mb-3"><%= __('profile.achievements_challenges') %></h4>
                     <div class="achievements-grid">
                         <% if (user.challenges && user.challenges.length > 0) { %>
                             <% user.challenges.forEach(challenge => { %>
@@ -467,12 +467,12 @@ hr {
                                     <h5><%= challenge.name %></h5>
                                     <p class="text-muted"><%= challenge.description %></p>
                                     <small class="text-success">
-                                        Completed on <%= new Date(challenge.completedAt).toLocaleDateString() %>
+                                        <%= __('profile.completed_on') %> <%= new Date(challenge.completedAt).toLocaleDateString() %>
                                     </small>
                                 </div>
                             <% }) %>
                         <% } else { %>
-                            <p class="text-muted">No challenges completed yet. Start shopping and reviewing products to earn achievements!</p>
+                            <p class="text-muted"><%= __('profile.no_challenges_message') %></p>
                         <% } %>
                     </div>
                 </div>
@@ -481,42 +481,42 @@ hr {
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label class="form-label" for="currentPassword">Current Password</label>
+                        <label class="form-label" for="currentPassword"><%= __('profile.current_password') %></label>
                         <input type="password" 
                                class="form-control"                               id="currentPassword" 
                                name="currentPassword" 
-                               placeholder="Required for changing email or password">
-                        <div class="invalid-feedback">Password required to change email or password</div>
+                               placeholder="<%= __('profile.current_password_placeholder') %>">
+                        <div class="invalid-feedback"><%= __('profile.current_password_required') %></div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label class="form-label" for="newPassword">New Password (Optional)</label>
+                        <label class="form-label" for="newPassword"><%= __('profile.new_password_optional') %></label>
                         <input type="password" 
                                class="form-control" 
                                id="newPassword" 
                                name="newPassword" 
                                minlength="6"
-                               placeholder="Leave blank to keep current">
-                        <div class="invalid-feedback">Password must be at least 6 characters</div>
+                               placeholder="<%= __('profile.new_password_placeholder') %>">
+                        <div class="invalid-feedback"><%= __('profile.password_length_validation') %></div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label class="form-label" for="confirmPassword">Confirm New Password</label>
+                        <label class="form-label" for="confirmPassword"><%= __('profile.confirm_new_password') %></label>
                         <input type="password" 
                                class="form-control" 
                                id="confirmPassword" 
                                name="confirmPassword" 
-                               placeholder="Confirm new password">
-                        <div class="invalid-feedback">Passwords do not match</div>
+                               placeholder="<%= __('profile.confirm_password_placeholder') %>">
+                        <div class="invalid-feedback"><%= __('profile.passwords_no_match') %></div>
                     </div>
                 </div>
             </div>
 
             <div class="text-end mt-4">
-                <button type="submit" class="btn-edit-profile">Save Changes</button>
-                <a href="/profile" class="btn-edit-profile btn-cancel">Cancel</a>
+                <button type="submit" class="btn-edit-profile"><%= __('common.save') %> <%= __('common.changes') %></button>
+                <a href="/profile" class="btn-edit-profile btn-cancel"><%= __('common.cancel') %></a>
             </div>
         </form>
     </div>

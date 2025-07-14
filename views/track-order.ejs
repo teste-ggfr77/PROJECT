@@ -434,8 +434,8 @@
     <!-- Hero Section -->
     <section class="track-hero">
         <div class="track-hero-content">
-            <h1 class="track-hero-title">Track Your Order</h1>
-            <p class="track-hero-subtitle">Enter your order ID to get real-time updates on your PROJECT gear</p>
+            <h1 class="track-hero-title"><%= t('track_order.hero_title') %></h1>
+            <p class="track-hero-subtitle"><%= t('track_order.hero_subtitle') %></p>
         </div>
     </section>
 
@@ -444,8 +444,8 @@
         <!-- Search Form -->
         <div class="track-form-section">
             <div class="form-header">
-                <h2>Find Your Order</h2>
-                <p>Enter your order ID below to track your shipment and view order details</p>
+                <h2><%= t('track_order.find_your_order') %></h2>
+                <p><%= t('track_order.find_description') %></p>
             </div>
 
             <form class="track-form" id="trackForm">
@@ -453,26 +453,26 @@
                     type="text" 
                     class="track-input" 
                     id="orderIdInput"
-                    placeholder="Enter Order ID (e.g., ORD-2024-001234)"
+                    placeholder="<%= t('track_order.order_id_placeholder') %>"
                     required
                 >
                 <button type="submit" class="track-btn" id="trackBtn">
-                    Track Order
+                    <%= t('track_order.track_order_button') %>
                 </button>
             </form>
 
             <div class="loading" id="loading">
                 <div class="spinner"></div>
-                Searching for your order...
+                <%= t('track_order.searching') %>
             </div>
 
             <div class="error-message" id="errorMessage">
-                Order not found. Please check your order ID and try again.
+                <%= t('track_order.order_not_found') %>
             </div>
 
             <div class="sample-orders">
-                <h5>Order ID Format:</h5>
-                <p>Enter your full order ID (e.g., ORD-2024-ABC123) or just the last 6 characters (e.g., ABC123)</p>
+                <h5><%= t('track_order.order_id_format') %></h5>
+                <p><%= t('track_order.order_id_format_description') %></p>
             </div>
         </div>
 
@@ -480,16 +480,16 @@
         <div class="order-result" id="orderResult">
             <div class="order-header">
                 <div class="order-info">
-                    <h3 id="orderTitle">Order #ORD-2024-001234</h3>
+                    <h3 id="orderTitle"><%= t('track_order.order_hash') %>6846fbe33626bee39dfb2392</h3>
                     <div class="order-meta">
-                        <p>Placed on <span id="orderDate">March 15, 2024</span></p>
-                        <p>Total: <span id="orderTotal">$156.99</span></p>
+                        <p><%= t('track_order.placed_on') %> <span id="orderDate">March 15, 2024</span></p>
+                        <p><%= t('track_order.total') %> <span id="orderTotal">$156.99</span></p>
                     </div>
                 </div>
                 <div class="order-status">
-                    <div class="status-badge" id="statusBadge">Shipped</div>
+                    <div class="status-badge" id="statusBadge"><%= t('track_order.status_shipped') %></div>
                     <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
-                        Estimated delivery: <span id="estimatedDelivery">March 20, 2024</span>
+                        <%= t('track_order.estimated_delivery') %> <span id="estimatedDelivery">March 20, 2024</span>
                     </p>
                 </div>
             </div>
@@ -501,7 +501,7 @@
 
             <!-- Order Items -->
             <div class="order-items">
-                <h4>Order Items</h4>
+                <h4><%= t('track_order.order_items') %></h4>
                 <div id="orderItemsList">
                     <!-- Order items will be inserted here -->
                 </div>
@@ -511,6 +511,21 @@
 </main>
 
 <script>
+// Translation strings
+const translations = {
+    pleaseEnterOrderId: '<%= t("track_order.please_enter_order_id") %>',
+    orderNotFound: '<%= t("track_order.order_not_found") %>',
+    trackingError: '<%= t("track_order.tracking_error") %>',
+    orderHash: '<%= t("track_order.order_hash") %>',
+    size: '<%= t("track_order.size") %>',
+    color: '<%= t("track_order.color") %>',
+    qty: '<%= t("track_order.qty") %>',
+    statusProcessing: '<%= t("track_order.status_processing") %>',
+    statusShipped: '<%= t("track_order.status_shipped") %>',
+    statusDelivered: '<%= t("track_order.status_delivered") %>',
+    statusCancelled: '<%= t("track_order.status_cancelled") %>'
+};
+
 // Form handling
 document.getElementById('trackForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -519,7 +534,7 @@ document.getElementById('trackForm').addEventListener('submit', function(e) {
     const orderId = orderIdInput.value.trim().toUpperCase();
     
     if (!orderId) {
-        showError('Please enter an order ID');
+        showError(translations.pleaseEnterOrderId);
         return;
     }
     
@@ -540,8 +555,8 @@ function trackOrder(orderId) {
     loading.classList.add('show');
     trackBtn.disabled = true;
     
-    // Clean the order ID - remove any non-alphanumeric characters except hyphens
-    const cleanOrderId = orderId.replace(/[^A-Z0-9-]/g, '');
+    // Clean the order ID - for MongoDB ObjectId format, allow lowercase letters and numbers
+    const cleanOrderId = orderId.replace(/[^A-Za-z0-9]/g, '').toLowerCase();
     
     // Make API call to track order
     fetch(`/api/track-order/${cleanOrderId}`)
@@ -553,27 +568,28 @@ function trackOrder(orderId) {
             if (data.success && data.order) {
                 displayOrder(data.order);
             } else {
-                showError(data.message || 'Order not found. Please check your order ID and try again.');
+                showError(data.message || translations.orderNotFound);
             }
         })
         .catch(error => {
             console.error('Error tracking order:', error);
             loading.classList.remove('show');
             trackBtn.disabled = false;
-            showError('An error occurred while tracking your order. Please try again.');
+            showError(translations.trackingError);
         });
 }
 
 function displayOrder(order) {
     // Update order header
-    document.getElementById('orderTitle').textContent = `Order #${order.id}`;
+    document.getElementById('orderTitle').textContent = `${translations.orderHash}${order.id}`;
     document.getElementById('orderDate').textContent = order.date;
     document.getElementById('orderTotal').textContent = order.total;
     document.getElementById('estimatedDelivery').textContent = order.estimatedDelivery;
     
     // Update status badge
     const statusBadge = document.getElementById('statusBadge');
-    statusBadge.textContent = order.status.charAt(0).toUpperCase() + order.status.slice(1);
+    const statusText = getStatusText(order.status);
+    statusBadge.textContent = statusText;
     statusBadge.className = `status-badge status-${order.status}`;
     
     // Update timeline
@@ -609,7 +625,7 @@ function displayOrder(order) {
             </div>
             <div class="item-details">
                 <div class="item-name">${item.name}</div>
-                <div class="item-meta">Size: ${item.size} • Color: ${item.color} • Qty: ${item.quantity}</div>
+                <div class="item-meta">${translations.size} ${item.size} • ${translations.color} ${item.color} • ${translations.qty} ${item.quantity}</div>
             </div>
             <div class="item-price">${item.price}</div>
         `;
@@ -618,6 +634,16 @@ function displayOrder(order) {
     
     // Show order result
     document.getElementById('orderResult').classList.add('show');
+}
+
+function getStatusText(status) {
+    switch(status) {
+        case 'processing': return translations.statusProcessing;
+        case 'shipped': return translations.statusShipped;
+        case 'delivered': return translations.statusDelivered;
+        case 'cancelled': return translations.statusCancelled;
+        default: return status.charAt(0).toUpperCase() + status.slice(1);
+    }
 }
 
 function getTimelineIcon(status) {

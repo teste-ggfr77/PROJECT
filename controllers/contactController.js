@@ -16,12 +16,22 @@ exports.getContactPage = (req, res) => {
 exports.submitContact = async (req, res) => {
     try {
         const { name, email, subject, message } = req.body;
-        await Contact.create({
+        const contact = await Contact.create({
             name,
             email,
             subject,
             message
         });
+
+        // Create notification for new contact message
+        try {
+            const notificationCtrl = require('./notificationController');
+            await notificationCtrl.createContactNotification(contact);
+        } catch (notificationError) {
+            console.error('Error creating contact notification:', notificationError);
+            // Don't fail the contact submission if notification fails
+        }
+
         req.flash('success', 'Your message has been sent successfully!');
         res.redirect('/contact');
     } catch (error){

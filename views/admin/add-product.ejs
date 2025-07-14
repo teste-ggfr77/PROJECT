@@ -122,6 +122,164 @@
         color: #991b1b;
     }
 
+    /* Color Image Upload Styles */
+    .color-images-section {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .color-item {
+        background: white;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .color-item:hover {
+        border-color: #4f46e5;
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+    }
+
+    .color-header {
+        display: flex;
+        justify-content: between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .color-name {
+        font-weight: 600;
+        color: #111827;
+        font-size: 1.1rem;
+    }
+
+    .remove-color-btn {
+        background: #ef4444;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .remove-color-btn:hover {
+        background: #dc2626;
+        transform: scale(1.1);
+    }
+
+    .image-upload-area {
+        border: 2px dashed #d1d5db;
+        border-radius: 8px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .image-upload-area:hover {
+        border-color: #4f46e5;
+        background: #f8f9ff;
+    }
+
+    .image-upload-area.dragover {
+        border-color: #4f46e5;
+        background: #f0f9ff;
+    }
+
+    .upload-icon {
+        font-size: 3rem;
+        color: #9ca3af;
+        margin-bottom: 1rem;
+    }
+
+    .upload-text {
+        color: #6b7280;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .upload-subtext {
+        color: #9ca3af;
+        font-size: 0.875rem;
+    }
+
+    .image-preview-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .image-preview-item {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        aspect-ratio: 1;
+        border: 2px solid #e5e7eb;
+    }
+
+    .image-preview-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .remove-image-btn {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        background: rgba(239, 68, 68, 0.9);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 0.75rem;
+    }
+
+    .remove-image-btn:hover {
+        background: #dc2626;
+    }
+
+    .add-color-btn {
+        background: #10b981;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .add-color-btn:hover {
+        background: #059669;
+        transform: translateY(-1px);
+    }
+
+    .main-image-section {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
     #imagePreview {
         background: #f8f9fa;
         border-radius: 12px;
@@ -152,6 +310,16 @@
     .clear-image-btn:hover {
         background: #dc2626;
     }
+
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
 </style>
 
 <div class="admin-container">
@@ -163,7 +331,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-8 offset-md-2">
+        <div class="col-md-10 offset-md-1">
             <div class="content-card card">
                 <div class="card-body">
                     <% if (messages.error) { %>
@@ -178,10 +346,27 @@
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
                     <% } %>
-                    <form method="POST" enctype="multipart/form-data">
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Product Name</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
+                    
+                    <form method="POST" enctype="multipart/form-data" id="productForm">
+                        <!-- Basic Product Information -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Product Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="category" class="form-label">Category</label>
+                                    <select class="form-select" id="category" name="category" required>
+                                        <option value="">Select a category</option>
+                                        <% categories.forEach(category => { %>
+                                            <option value="<%= category.name %>"><%= category.name %></option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="mb-3">
@@ -189,42 +374,70 @@
                             <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="price" class="form-label">Price</label>
-                            <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="price" class="form-label">Price (DH)</label>
+                                    <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="quantity" class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" id="quantity" name="quantity" min="0" required>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="quantity" class="form-label">Quantity</label>
-                            <input type="number" class="form-control" id="quantity" name="quantity" min="0" required>
+                            <label for="sizes" class="form-label">Sizes (comma-separated)</label>
+                            <input type="text" class="form-control" id="sizes" name="sizes" placeholder="e.g., S, M, L, XL or 40, 41, 42">
+                            <div class="form-text">Enter sizes separated by commas</div>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="colors" class="form-label">Colors (comma-separated)</label>
-                            <input type="text" class="form-control" id="colors" name="colors" placeholder="e.g., Red, Blue, Black">
-                            <div class="form-text">Enter colors separated by commas</div>
+                        <!-- Main Product Image -->
+                        <div class="main-image-section">
+                            <h5 class="section-title">
+                                <i class="fas fa-image"></i>
+                                Main Product Image
+                            </h5>
+                            <div class="mb-3">
+                                <label for="image" class="form-label">Primary Product Image</label>
+                                <input type="file" class="form-control" id="image" name="image" accept="image/*" required onchange="previewImage(this)">
+                                <div class="form-text">This will be the main image shown in product listings. Supported formats: JPG, JPEG, PNG, GIF, WEBP. Max size: 5MB.</div>
+                                <div id="imagePreview" class="mt-2 position-relative" style="display:none;">
+                                    <img id="preview" src="#" alt="Preview" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                                    <button type="button" class="clear-image-btn position-absolute top-0 end-0" onclick="clearImage()">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="category" class="form-label">Category</label>
-                            <select class="form-select" id="category" name="category" required>
-                                <option value="">Select a category</option>
-                                <% categories.forEach(category => { %>
-                                    <option value="<%= category.name %>"><%= category.name %></option>
-                                <% }) %>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="image" class="form-label">Product Image</label>
-                            <input type="file" class="form-control" id="image" name="image" accept="image/*" required onchange="previewImage(this)">
-                            <div class="form-text">Supported formats: JPG, JPEG, PNG, GIF, WEBP. Max size: 5MB.</div>
-                            <div id="imagePreview" class="mt-2 position-relative" style="display:none;">
-                                <img id="preview" src="#" alt="Preview" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">                                <button type="button" class="clear-image-btn position-absolute top-0 end-0" onclick="clearImage()">
-                                    <i class="fas fa-times"></i>
+                        <!-- Color-Specific Images -->
+                        <div class="color-images-section">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="section-title mb-0">
+                                    <i class="fas fa-palette"></i>
+                                    Color Variants & Images
+                                </h5>
+                                <button type="button" class="add-color-btn" onclick="addColorVariant(); return false;">
+                                    <i class="fas fa-plus"></i>
+                                    Add Color
                                 </button>
                             </div>
-                        </div>                        <div class="row mt-4">
+                            <div class="form-text mb-3">
+                                Add different colors for your product and upload specific images for each color. These images will be shown when users select different color variants.
+                            </div>
+                            <div id="colorVariants">
+                                <!-- Color variants will be added here dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Hidden input to store color data -->
+                        <input type="hidden" id="colorsData" name="colorsData">
+
+                        <div class="row mt-4">
                             <div class="col-md-6">
                                 <button type="submit" class="btn btn-primary w-100">
                                     <i class="fas fa-plus me-2"></i> Add Product
@@ -244,19 +457,204 @@
 </div>
 
 <script>
+// Simple working version of color variants
+let colorVariants = [];
+let colorCounter = 0;
+
+console.log('🚀 Color variants script loaded');
+
+// Simple add color function
+function addColorVariant() {
+    console.log('🎨 Add Color button clicked!');
+    
+    const colorName = prompt('Enter color name (e.g., Red, Blue, Black):');
+    if (!colorName || colorName.trim() === '') {
+        console.log('No color name entered');
+        return;
+    }
+    
+    const trimmedColorName = colorName.trim();
+    console.log('Adding color:', trimmedColorName);
+    
+    // Check if color already exists
+    if (colorVariants.some(variant => variant.name.toLowerCase() === trimmedColorName.toLowerCase())) {
+        alert('This color already exists!');
+        return;
+    }
+    
+    const colorId = `color_${colorCounter++}`;
+    const colorVariant = {
+        id: colorId,
+        name: trimmedColorName,
+        images: []
+    };
+    
+    colorVariants.push(colorVariant);
+    console.log('Color variants now:', colorVariants);
+    
+    renderColorVariants();
+    updateColorsData();
+    
+    alert(`Color "${trimmedColorName}" added successfully! You can now upload images for this color.`);
+}
+
+// Render color variants
+function renderColorVariants() {
+    console.log('Rendering color variants:', colorVariants.length);
+    const container = document.getElementById('colorVariants');
+    
+    if (!container) {
+        console.error('colorVariants container not found!');
+        return;
+    }
+    
+    if (colorVariants.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-4 text-muted">
+                <i class="fas fa-palette fa-3x mb-3"></i>
+                <p>No color variants added yet.</p>
+                <p class="small">Click "Add Color" to start adding color variants with specific images.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = colorVariants.map(variant => `
+        <div class="color-item" id="${variant.id}">
+            <div class="color-header d-flex justify-content-between align-items-center">
+                <div class="color-name">${variant.name}</div>
+                <button type="button" class="remove-color-btn" onclick="removeColorVariant('${variant.id}')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="image-upload-area" onclick="triggerFileInput('${variant.id}')" 
+                 ondrop="handleDrop(event, '${variant.id}')" 
+                 ondragover="handleDragOver(event)"
+                 ondragleave="handleDragLeave(event)">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <div class="upload-text">Click to upload or drag and drop</div>
+                <div class="upload-subtext">PNG, JPG, GIF up to 5MB</div>
+                <input type="file" id="fileInput_${variant.id}" multiple accept="image/*" 
+                       style="display: none;" onchange="handleFileSelect(event, '${variant.id}')">
+            </div>
+            
+            <div class="image-preview-grid" id="imageGrid_${variant.id}">
+                ${variant.images.map((image, index) => `
+                    <div class="image-preview-item">
+                        <img src="${image.url}" alt="${variant.name}">
+                        <button type="button" class="remove-image-btn" onclick="removeImage('${variant.id}', ${index})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `).join('');
+    
+    console.log('Color variants rendered successfully');
+}
+
+// Remove color variant
+function removeColorVariant(colorId) {
+    if (confirm('Are you sure you want to remove this color variant?')) {
+        colorVariants = colorVariants.filter(variant => variant.id !== colorId);
+        renderColorVariants();
+        updateColorsData();
+    }
+}
+
+// File handling functions
+function triggerFileInput(colorId) {
+    document.getElementById(`fileInput_${colorId}`).click();
+}
+
+function handleFileSelect(event, colorId) {
+    const files = Array.from(event.target.files);
+    processFiles(files, colorId);
+}
+
+function handleDrop(event, colorId) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.target.classList.remove('dragover');
+    
+    const files = Array.from(event.dataTransfer.files);
+    processFiles(files, colorId);
+}
+
+function handleDragOver(event) {
+    event.preventDefault();
+    event.target.classList.add('dragover');
+}
+
+function handleDragLeave(event) {
+    event.target.classList.remove('dragover');
+}
+
+function processFiles(files, colorId) {
+    const variant = colorVariants.find(v => v.id === colorId);
+    if (!variant) return;
+    
+    files.forEach(file => {
+        if (file.size > 5 * 1024 * 1024) {
+            alert(`File ${file.name} is too large. Maximum size is 5MB.`);
+            return;
+        }
+        
+        const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+        if (!validTypes.includes(file.type.toLowerCase())) {
+            alert(`File ${file.name} is not a valid image format.`);
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            variant.images.push({
+                file: file,
+                url: e.target.result,
+                name: file.name
+            });
+            renderColorVariants();
+            updateColorsData();
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function removeImage(colorId, imageIndex) {
+    const variant = colorVariants.find(v => v.id === colorId);
+    if (variant) {
+        variant.images.splice(imageIndex, 1);
+        renderColorVariants();
+        updateColorsData();
+    }
+}
+
+function updateColorsData() {
+    const colorsData = colorVariants.map(variant => ({
+        name: variant.name,
+        images: variant.images.map(img => img.name)
+    }));
+    
+    document.getElementById('colorsData').value = JSON.stringify(colorsData);
+    console.log('Colors data updated:', colorsData);
+}
+
+// Main image preview functions
 function previewImage(input) {
     const preview = document.getElementById('preview');
     const previewDiv = document.getElementById('imagePreview');
     
     if (input.files && input.files[0]) {
-        // Validate file size
         if (input.files[0].size > 5 * 1024 * 1024) {
             alert('File size must be less than 5MB');
             clearImage();
             return;
         }
 
-        // Validate file type
         const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
         if (!validTypes.includes(input.files[0].type.toLowerCase())) {
             alert('Please select a valid image file (JPG, JPEG, PNG, GIF, WEBP)');
@@ -268,10 +666,6 @@ function previewImage(input) {
         reader.onload = function(e) {
             preview.src = e.target.result;
             previewDiv.style.display = 'block';
-        }
-        reader.onerror = function() {
-            alert('Error reading file');
-            clearImage();
         }
         reader.readAsDataURL(input.files[0]);
     } else {
@@ -289,26 +683,110 @@ function clearImage() {
     previewDiv.style.display = 'none';
 }
 
-// Form validation
-document.querySelector('form').addEventListener('submit', function(e) {
-    const fileInput = document.getElementById('image');
-    const colorInput = document.getElementById('colors');
+// Form submission
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Page loaded, initializing...');
     
-    // Trim whitespace from color input
-    if (colorInput.value) {
-        colorInput.value = colorInput.value
-            .split(',')
-            .map(c => c.trim())
-            .filter(c => c)
-            .join(', ');
+    // Initialize empty color variants
+    renderColorVariants();
+    
+    // Test button functionality
+    const addColorBtn = document.querySelector('.add-color-btn');
+    console.log('Add Color Button found:', !!addColorBtn);
+    
+    if (addColorBtn) {
+        // Add click event listener as backup
+        addColorBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('🎨 Button clicked via event listener!');
+            addColorVariant();
+        });
     }
     
-    // Validate file
-    if (fileInput.files.length === 0) {
-        e.preventDefault();
-        alert('Please select a product image');
+    // Form submission handler
+    const form = document.getElementById('productForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const fileInput = document.getElementById('image');
+            
+            if (fileInput.files.length === 0) {
+                alert('Please select a main product image');
+                return;
+            }
+            
+            console.log('Submitting form with color variants:', colorVariants.length);
+            
+            const formData = new FormData();
+            
+            // Add all form fields
+            formData.append('name', document.getElementById('name').value);
+            formData.append('description', document.getElementById('description').value);
+            formData.append('price', document.getElementById('price').value);
+            formData.append('quantity', document.getElementById('quantity').value);
+            formData.append('sizes', document.getElementById('sizes').value);
+            formData.append('category', document.getElementById('category').value);
+            formData.append('colorsData', document.getElementById('colorsData').value);
+            
+            // Add CSRF token
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            formData.append('_csrf', csrfToken);
+            
+            // Add main image
+            if (fileInput.files[0]) {
+                formData.append('image', fileInput.files[0]);
+            }
+            
+            // Add color images
+            let totalColorImages = 0;
+            colorVariants.forEach((variant, variantIndex) => {
+                variant.images.forEach((image, imageIndex) => {
+                    if (image.file) {
+                        const fieldName = `colorImages_${variant.name}_${imageIndex}`;
+                        formData.append(fieldName, image.file);
+                        totalColorImages++;
+                    }
+                });
+            });
+            
+            console.log(`Uploading ${totalColorImages} color images`);
+            
+            // Show loading
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Uploading...';
+            submitBtn.disabled = true;
+            
+            // Submit
+            fetch('/admin/add-product', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/admin/dashboard';
+                } else {
+                    throw new Error('Upload failed');
+                }
+            })
+            .catch(error => {
+                console.error('Upload error:', error);
+                alert('Error uploading product: ' + error.message);
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            });
+        });
     }
 });
+
+// Global test function
+window.testAddColor = function() {
+    console.log('🧪 Testing Add Color...');
+    addColorVariant();
+};
+
+console.log('✅ All functions loaded. Try clicking "Add Color" or type testAddColor() in console.');
 </script>
 
 <%- include('../partials/admin-footer') %>

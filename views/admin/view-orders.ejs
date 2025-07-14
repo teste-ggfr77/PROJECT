@@ -161,6 +161,16 @@
         color: #10b981;
     }
 
+    .status-delivered {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+    }
+
+    .status-shipped {
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+    }
+
     .status-processing {
         background: rgba(234, 179, 8, 0.1);
         color: #ca8a04;
@@ -245,7 +255,7 @@
                                             </td>
                                             <td>
                                                 <div class="customer-info">
-                                                    <span class="customer-name"><%= order.user ? order.user.name : 'Unknown User' %></span>
+                                                    <span class="customer-name"><%= order.customerName || (order.user ? order.user.name : 'Unknown User') %></span>
                                                     <span class="customer-email"><%= order.user && order.user.email ? order.user.email : '' %></span>
                                                 </div>
                                             </td>
@@ -261,6 +271,11 @@
                                                         <i class="fas fa-box-open"></i>
                                                         <%= order.items.length %> items
                                                     </span>
+                                                    <div>
+                                                        <% order.items.forEach(item => { %>
+                                                            <span class="badge bg-light text-dark"><%= item.product.name %> - <%= item.size %></span>
+                                                        <% }) %>
+                                                    </div>
                                                 </div>
                                             </td>
                                             <td>
@@ -294,72 +309,63 @@
     </div>
 </div>
 
-<!-- Status Update Modal -->
-<div class="modal fade" id="statusModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header border-0">
-                <h5 class="modal-title">Update Order Status</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to mark this order as <span id="statusText"></span>?
-            </div>
-            <div class="modal-footer border-0">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="confirmStatus">Update</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-let orderToUpdate = null;
-let statusToSet = null;
-const statusModal = new bootstrap.Modal(document.getElementById('statusModal'));
-
-function updateStatus(orderId, status) {
-    orderToUpdate = orderId;
-    statusToSet = status;
-    document.getElementById('statusText').textContent = status;
-    document.getElementById('confirmStatus').className = `btn ${status === 'completed' ? 'btn-complete' : 'btn-cancel'}`;
-    statusModal.show();
-}
-
-document.getElementById('confirmStatus').addEventListener('click', function() {
-    if (orderToUpdate && statusToSet) {
-        fetch(`/admin/orders/${orderToUpdate}/status`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ status: statusToSet })
-        }).then(response => {
-            if (response.ok) {
-                window.location.reload();
-            } else {
-                alert('Error updating order status');
-            }
-        });
-    }
-    statusModal.hide();
-});
-</script>
 <script>
 function updateStatus(orderId, status) {
     if (confirm(`Are you sure you want to mark this order as ${status}?`)) {
+        // Show loading state
+        const button = event.target.closest('button');
+        const originalContent = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        button.disabled = true;
+        
+        // Get CSRF token from meta tag
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        
+        const headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        };
+        
+        // Add CSRF token if available
+        if (csrfToken) {
+            headers['X-CSRF-Token'] = csrfToken;
+        }
+        
         fetch(`/admin/orders/${orderId}/status`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ status })
-        }).then(response => {
+            headers: headers,
+            body: JSON.stringify({ status, _csrf: csrfToken })
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
+            
             if (response.ok) {
+                return response.json();
+            } else {
+                return response.text().then(text => {
+                    console.error('Error response body:', text);
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                });
+            }
+        })
+        .then(data => {
+            console.log('Response data:', data);
+            if (data.success) {
+                // Show success message
+                alert(`Order status updated to ${status} successfully!`);
                 window.location.reload();
             } else {
-                alert('Error updating order status');
+                throw new Error(data.error || 'Unknown error occurred');
             }
+        })
+        .catch(error => {
+            console.error('Error updating order status:', error);
+            alert(`Error updating order status: ${error.message}`);
+            // Restore button state
+            button.innerHTML = originalContent;
+            button.disabled = false;
         });
     }
 }

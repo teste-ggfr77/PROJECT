@@ -352,19 +352,19 @@
 
 <div class="checkout-page">
     <div class="checkout-header">
-        <h1 class="checkout-title">Checkout</h1>
+        <h1 class="checkout-title"><%= __('checkout.title') %></h1>
     </div>
 
     <% if (cart && cart.items && cart.items.length > 0) { %>
         <% if (typeof stockErrors !== 'undefined' && stockErrors.length > 0) { %>
             <div class="error-alert">
-                <div class="error-title">Cannot proceed with checkout:</div>
+                <div class="error-title"><%= __('checkout.cannot_proceed') %>:</div>
                 <ul class="error-list">
                     <% stockErrors.forEach(error => { %>
                         <li><%= error %></li>
                     <% }); %>
                 </ul>
-                <a href="/cart" class="return-btn">Return to Cart</a>
+                <a href="/cart" class="return-btn"><%= __('checkout.return_to_cart') %></a>
             </div>
         <% } %>
 
@@ -375,28 +375,33 @@
                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         
                         <div class="form-section">
-                            <h2 class="section-title">Shipping Information</h2>
+                            <h2 class="section-title"><%= __('checkout.shipping_info') %></h2>
                             
                             <div class="form-group">
-                                <label for="address" class="form-label">Shipping Address *</label>
-                                <textarea class="form-input form-textarea" id="address" name="address" required placeholder="Enter your complete shipping address..."></textarea>
+                                <label for="customerName" class="form-label"><%= __('checkout.full_name') %> *</label>
+                                <input type="text" class="form-input" id="customerName" name="customerName" required placeholder="<%- __('checkout.enter_full_name') %>">
                             </div>
                             
                             <div class="form-group">
-                                <label for="phone" class="form-label">Phone Number *</label>
-                                <input type="tel" class="form-input" id="phone" name="phone" required placeholder="Enter your phone number">
+                                <label for="phone" class="form-label"><%= __('checkout.phone_number') %> *</label>
+                                <input type="tel" class="form-input" id="phone" name="phone" required placeholder="<%- __('checkout.enter_phone') %>">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="address" class="form-label"><%= __('checkout.shipping_address') %> *</label>
+                                <textarea class="form-input form-textarea" id="address" name="address" required placeholder="<%- __('checkout.enter_address') %>"></textarea>
                             </div>
                         </div>
 
                         <button type="submit" class="place-order-btn" id="place-order">
-                            Place Order
+                            <%= __('checkout.place_order') %>
                         </button>
                     </form>
                 <% } %>
             </div>
 
             <div class="order-summary">
-                <h2 class="summary-title">Order Summary</h2>
+                <h2 class="summary-title"><%= __('checkout.order_summary') %></h2>
                 
                 <div class="order-items">
                     <% cart.items.forEach(item => { %>
@@ -404,43 +409,43 @@
                             <div class="item-info">
                                 <div class="item-name"><%= item.name %></div>
                                 <div class="item-details">
-                                    Qty: <%= item.qty %> 
-                                    <% if (item.color) { %>| Color: <%= item.color %><% } %>
-                                    <% if (item.size) { %>| Size: <%= item.size %><% } %>
+                                    <%= __('common.quantity') %>: <%= item.qty %> 
+                                    <% if (item.color) { %>| <%= __('products.color') %>: <%= item.color %><% } %>
+                                    <% if (item.size) { %>| <%= __('products.size') %>: <%= item.size %><% } %>
                                 </div>
                             </div>
-                            <div class="item-price">$<%= (item.price * item.qty).toLocaleString() %></div>
+                            <div class="item-price"><%= (item.price * item.qty).toLocaleString() %> <%= __('common.currency').toUpperCase() %></div>
                         </div>
                     <% }) %>
                 </div>
 
                 <div class="summary-row">
-                    <span>Subtotal</span>
-                    <span>$<%= subtotal.toLocaleString() %></span>
+                    <span><%= __('common.subtotal') %></span>
+                    <span><%= subtotal.toLocaleString() %> <%= __('common.currency').toUpperCase() %></span>
                 </div>
                 
                 <% if (cart.discount > 0) { %>
                     <div class="summary-row">
-                        <span>Discount</span>
-                        <span>-$<%= cart.discount.toLocaleString() %></span>
+                        <span><%= __('common.discount') %></span>
+                        <span>-<%= cart.discount.toLocaleString() %> <%= __('common.currency').toUpperCase() %></span>
                     </div>
                 <% } %>
                 
                 <div class="summary-row">
-                    <span>Shipping</span>
-                    <span>Free</span>
+                    <span><%= __('common.shipping') %></span>
+                    <span><%= __('common.free') %></span>
                 </div>
                 
                 <div class="summary-row total">
-                    <span>Total</span>
-                    <span>$<%= total.toLocaleString() %></span>
+                    <span><%= __('common.total') %></span>
+                    <span><%= total.toLocaleString() %> <%= __('common.currency').toUpperCase() %></span>
                 </div>
             </div>
         </div>
     <% } else { %>
         <div class="empty-cart">
-            <p class="empty-message">Your cart is empty</p>
-            <a href="/products" class="continue-btn">Continue Shopping</a>
+            <p class="empty-message"><%= __('cart.empty') %></p>
+            <a href="/products" class="continue-btn"><%= __('cart.continue_shopping') %></a>
         </div>
     <% } %>
 </div>
@@ -453,10 +458,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (form && placeOrderBtn) {
         form.addEventListener('submit', function(e) {
             // Validate form
-            const address = document.getElementById('address').value.trim();
+            const customerName = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
             
-            if (!address || !phone) {
+            if (!customerName || !phone || !address) {
                 e.preventDefault();
                 showNotification('Please fill in all required fields.', 'error');
                 return;

@@ -81,9 +81,25 @@ exports.login = async (req, res) => {
 };
 
 exports.logout = (req, res) => {
-    req.session.destroy(() => {
+    // Simple logout - just destroy the session
+    if (req.session) {
+        // Clear user data first
+        req.session.user = null;
+        
+        // Destroy the session
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Session destroy error:', err);
+            }
+            // Clear the session cookie
+            res.clearCookie('connect.sid', { path: '/' });
+            res.redirect('/');
+        });
+    } else {
+        // No session, just clear cookie and redirect
+        res.clearCookie('connect.sid', { path: '/' });
         res.redirect('/');
-    });
+    }
 };
 
 exports.forgotPasswordForm = (req, res) => {

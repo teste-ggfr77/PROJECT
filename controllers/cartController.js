@@ -17,7 +17,7 @@ exports.addToCart = async (req, res) => {
         
         // Set default values if not provided
         const itemColor = color || 'Black';
-        const itemSize = size || 'M';
+        const itemSize = size;
 
         // Get the product from database
         const product = await Product.findById(productId);
@@ -335,6 +335,7 @@ exports.processCheckout = async (req, res) => {
         const orderData = {
             items: orderItems,
             total: cart.total,
+            customerName: req.body.customerName,
             shippingAddress: req.body.address,
             phone: req.body.phone,
             status: 'processing'
@@ -346,6 +347,18 @@ exports.processCheckout = async (req, res) => {
         }
 
         const order = await Order.create(orderData);
+
+        // Create notification for new order
+        try {
+            console.log('Creating notification for order:', order._id, 'Customer:', order.customerName);
+            const notificationCtrl = require('./notificationController');
+            await notificationCtrl.createOrderNotification(order);
+            console.log('Notification created successfully for order:', order._id);
+        } catch (notificationError) {
+            console.error('Error creating order notification:', notificationError);
+            console.error('Notification error stack:', notificationError.stack);
+            // Don't fail the order if notification fails
+        }
 
         // Clear the cart
         req.session.cart = {

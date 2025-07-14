@@ -6,6 +6,7 @@ router.get('/register', authCtrl.registerForm);
 router.post('/register', authCtrl.register);
 router.get('/login', authCtrl.loginForm);
 router.post('/login', authCtrl.login);
+router.get('/logout', authCtrl.logout);
 router.post('/logout', authCtrl.logout);
 router.get('/forgot-password', authCtrl.forgotPasswordForm);
 router.post('/forgot-password', authCtrl.forgotPassword);

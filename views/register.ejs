@@ -1,7 +1,7 @@
 <%- include('partials/header') %>
 
 <div class="login-container">
-    <h1>Create account</h1>
+    <h1><%= t('auth.register_page.title') %></h1>
     
     <% if (messages && messages.error) { %>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -12,12 +12,12 @@
 
     <form method="POST" action="/auth/register">
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-        <input type="text" class="text-input" name="name" placeholder="Full Name" required>
-        <input type="email" class="text-input" name="email" placeholder="Email" required>
-        <input type="password" class="text-input" name="password" placeholder="Password" required>
-        <button type="submit" class="signin-btn">Create account</button>
+        <input type="text" class="text-input" name="name" placeholder="<%= t('auth.register_page.full_name_placeholder') %>" required>
+        <input type="email" class="text-input" name="email" placeholder="<%= t('auth.register_page.email_placeholder') %>" required>
+        <input type="password" class="text-input" name="password" placeholder="<%= t('auth.register_page.password_placeholder') %>" required>
+        <button type="submit" class="signin-btn"><%= t('auth.register_page.create_account_button') %></button>
     </form>
-    <a href="/auth/login" class="create-link">Already have an account? Sign in</a>
+    <a href="/auth/login" class="create-link"><%= t('auth.register_page.already_have_account') %></a>
 </div>
 
 <style>

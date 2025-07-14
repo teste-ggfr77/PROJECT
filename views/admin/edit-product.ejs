@@ -93,9 +93,14 @@
             <h2 class="m-0">Edit Product</h2>
             <p class="text-light mb-0 mt-2">Update product details and images</p>
         </div>
-        <a href="/admin" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Back to Dashboard
-        </a>
+        <div class="d-flex gap-2">
+            <a href="/admin/products" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Products
+            </a>
+            <a href="/admin/dashboard" class="btn btn-secondary">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+        </div>
     </div>
     <div class="row justify-content-center">
         <div class="col-lg-8">
@@ -126,6 +131,10 @@
                         <div class="mb-3">
                             <label for="colors" class="form-label">Colors (comma-separated)</label>
                             <input type="text" class="form-control" id="colors" name="colors" value="<%= product.colors.join(',') %>" placeholder="Red, Blue, Green">
+                        </div>
+                        <div class="mb-3">
+                            <label for="sizes" class="form-label">Sizes (comma-separated)</label>
+                            <input type="text" class="form-control" id="sizes" name="sizes" value="<%= product.sizes.join(',') %>" placeholder="S, M, L, XL or 40, 41, 42">
                         </div>
                         <div class="mb-3">
                             <label for="category" class="form-label">Category</label>

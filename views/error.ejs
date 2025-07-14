@@ -2,12 +2,12 @@
 
 <div class="error-container">
     <h1><%= message %></h1>
-    <% if (error.status === 404) { %>
+    <% if (typeof error !== 'undefined' && error.status === 404) { %>
         <p>The page you're looking for could not be found.</p>
     <% } else { %>
         <p>Something went wrong! Please try again later.</p>
     <% } %>
-    <% if (error && error.message) { %>
+    <% if (typeof error !== 'undefined' && error.message) { %>
         <pre style="color: #c00; background: #f9f9f9; padding: 10px; border-radius: 5px; margin: 20px auto; max-width: 90vw; overflow-x: auto;"><%= error.message %></pre>
     <% } %>
     <a href="/" class="btn btn-primary">Return to Home</a>

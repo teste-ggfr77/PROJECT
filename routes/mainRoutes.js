@@ -45,7 +45,7 @@ router.get('/', async (req, res) => {
 });
 
 // Static pages (must be before dynamic routes)
-router.get('/about', (req, res) => res.render('about', { title: 'About PROJECT' }));
+router.get('/about', (req, res) => res.render('about', { title: 'About SABILS' }));
 router.get('/size-guide', (req, res) => res.render('size-guide', { title: 'Size Guide' }));
 router.get('/shipping', (req, res) => res.render('shipping', { title: 'Shipping Info' }));
 router.get('/returns', (req, res) => res.render('returns', { title: 'Returns & Exchanges' }));
@@ -80,7 +80,7 @@ router.get('/api/track-order/:orderId', async (req, res) => {
         if (!order) {
             return res.status(404).json({ 
                 success: false, 
-                message: 'Order not found. Please check your order ID and try again.' 
+                message: req.__('track_order.order_not_found')
             });
         }
         
@@ -91,8 +91,8 @@ router.get('/api/track-order/:orderId', async (req, res) => {
         // Order Placed
         timeline.push({
             status: 'completed',
-            title: 'Order Placed',
-            description: 'Your order has been received and is being processed',
+            title: req.__('profile.order_placed'),
+            description: req.__('profile.order_received_desc'),
             date: orderDate.toLocaleDateString('en-US', { 
                 month: 'long', 
                 day: 'numeric', 
@@ -106,8 +106,8 @@ router.get('/api/track-order/:orderId', async (req, res) => {
         const paymentDate = new Date(orderDate.getTime() + 5 * 60000);
         timeline.push({
             status: 'completed',
-            title: 'Payment Confirmed',
-            description: 'Payment has been processed successfully',
+            title: req.__('profile.payment_confirmed'),
+            description: req.__('profile.payment_processed_desc'),
             date: paymentDate.toLocaleDateString('en-US', { 
                 month: 'long', 
                 day: 'numeric', 
@@ -121,28 +121,28 @@ router.get('/api/track-order/:orderId', async (req, res) => {
         if (order.status === 'processing') {
             timeline.push({
                 status: 'current',
-                title: 'Processing',
-                description: 'Your order is being prepared for shipment',
-                date: 'In Progress'
+                title: req.__('track_order.status_processing'),
+                description: req.__('profile.status_processing_desc'),
+                date: req.__('profile.in_progress')
             });
             timeline.push({
                 status: 'pending',
-                title: 'Shipped',
-                description: 'Your order will be shipped soon',
-                date: 'Estimated: ' + new Date(orderDate.getTime() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+                title: req.__('track_order.status_shipped'),
+                description: req.__('profile.will_ship_soon_desc'),
+                date: req.__('profile.estimated') + ': ' + new Date(orderDate.getTime() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
             });
             timeline.push({
                 status: 'pending',
-                title: 'Delivered',
-                description: 'Package delivered to your address',
-                date: 'Estimated: ' + new Date(orderDate.getTime() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+                title: req.__('track_order.status_delivered'),
+                description: req.__('profile.package_delivered_desc'),
+                date: req.__('profile.estimated') + ': ' + new Date(orderDate.getTime() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
             });
         } else if (order.status === 'shipped') {
             const processedDate = new Date(orderDate.getTime() + 24 * 60 * 60 * 1000);
             timeline.push({
                 status: 'completed',
-                title: 'Order Processed',
-                description: 'Your items have been picked and packed',
+                title: req.__('profile.order_processed'),
+                description: req.__('profile.items_picked_packed_desc'),
                 date: processedDate.toLocaleDateString('en-US', { 
                     month: 'long', 
                     day: 'numeric', 
@@ -155,8 +155,8 @@ router.get('/api/track-order/:orderId', async (req, res) => {
             const shippedDate = new Date(orderDate.getTime() + 2 * 24 * 60 * 60 * 1000);
             timeline.push({
                 status: 'current',
-                title: 'Shipped',
-                description: `Your order is on its way! Tracking: 1Z999AA${order._id.toString().slice(-10)}`,
+                title: req.__('track_order.status_shipped'),
+                description: req.__('profile.status_shipped_desc') + ` ${req.__('profile.tracking')}: 1Z999AA${order._id.toString().slice(-10)}`,
                 date: shippedDate.toLocaleDateString('en-US', { 
                     month: 'long', 
                     day: 'numeric', 
@@ -168,16 +168,16 @@ router.get('/api/track-order/:orderId', async (req, res) => {
             
             timeline.push({
                 status: 'pending',
-                title: 'Out for Delivery',
-                description: 'Your package is out for delivery',
-                date: 'Expected: ' + new Date(orderDate.getTime() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+                title: req.__('profile.out_for_delivery'),
+                description: req.__('profile.package_out_delivery_desc'),
+                date: req.__('profile.expected') + ': ' + new Date(orderDate.getTime() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
             });
             
             timeline.push({
                 status: 'pending',
-                title: 'Delivered',
-                description: 'Package delivered to your address',
-                date: 'Expected: ' + new Date(orderDate.getTime() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+                title: req.__('track_order.status_delivered'),
+                description: req.__('profile.package_delivered_desc'),
+                date: req.__('profile.expected') + ': ' + new Date(orderDate.getTime() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
             });
         } else if (order.status === 'delivered') {
             const processedDate = new Date(orderDate.getTime() + 24 * 60 * 60 * 1000);
@@ -187,8 +187,8 @@ router.get('/api/track-order/:orderId', async (req, res) => {
             
             timeline.push({
                 status: 'completed',
-                title: 'Order Processed',
-                description: 'Your items have been picked and packed',
+                title: req.__('profile.order_processed'),
+                description: req.__('profile.items_picked_packed_desc'),
                 date: processedDate.toLocaleDateString('en-US', { 
                     month: 'long', 
                     day: 'numeric', 
@@ -200,8 +200,8 @@ router.get('/api/track-order/:orderId', async (req, res) => {
             
             timeline.push({
                 status: 'completed',
-                title: 'Shipped',
-                description: `Your order was shipped! Tracking: 1Z999AA${order._id.toString().slice(-10)}`,
+                title: req.__('track_order.status_shipped'),
+                description: req.__('profile.order_shipped_desc') + ` ${req.__('profile.tracking')}: 1Z999AA${order._id.toString().slice(-10)}`,
                 date: shippedDate.toLocaleDateString('en-US', { 
                     month: 'long', 
                     day: 'numeric', 
@@ -213,8 +213,8 @@ router.get('/api/track-order/:orderId', async (req, res) => {
             
             timeline.push({
                 status: 'completed',
-                title: 'Out for Delivery',
-                description: 'Your package was out for delivery',
+                title: req.__('profile.out_for_delivery'),
+                description: req.__('profile.package_was_out_delivery_desc'),
                 date: outForDeliveryDate.toLocaleDateString('en-US', { 
                     month: 'long', 
                     day: 'numeric', 
@@ -226,8 +226,8 @@ router.get('/api/track-order/:orderId', async (req, res) => {
             
             timeline.push({
                 status: 'completed',
-                title: 'Delivered',
-                description: 'Package delivered to your address',
+                title: req.__('track_order.status_delivered'),
+                description: req.__('profile.status_delivered_desc'),
                 date: deliveredDate.toLocaleDateString('en-US', { 
                     month: 'long', 
                     day: 'numeric', 
@@ -239,8 +239,8 @@ router.get('/api/track-order/:orderId', async (req, res) => {
         } else if (order.status === 'cancelled') {
             timeline.push({
                 status: 'completed',
-                title: 'Order Cancelled',
-                description: 'This order has been cancelled',
+                title: req.__('track_order.status_cancelled'),
+                description: req.__('profile.status_cancelled_desc'),
                 date: new Date().toLocaleDateString('en-US', { 
                     month: 'long', 
                     day: 'numeric', 
@@ -261,7 +261,7 @@ router.get('/api/track-order/:orderId', async (req, res) => {
             }),
             total: `${order.total.toFixed(2)}`,
             status: order.status,
-            estimatedDelivery: order.status === 'delivered' ? 'Delivered' : 
+            estimatedDelivery: order.status === 'delivered' ? req.__('track_order.status_delivered') : 
                               new Date(orderDate.getTime() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { 
                                   month: 'long', 
                                   day: 'numeric', 
@@ -269,7 +269,7 @@ router.get('/api/track-order/:orderId', async (req, res) => {
                               }),
             timeline: timeline,
             items: order.items.map(item => ({
-                name: item.product ? item.product.name : 'Unknown Product',
+                name: item.product ? item.product.name : req.__('profile.unknown_product'),
                 size: item.size || 'N/A',
                 color: item.color || 'N/A',
                 quantity: item.quantity,
@@ -283,7 +283,7 @@ router.get('/api/track-order/:orderId', async (req, res) => {
         console.error('Error tracking order:', error);
         res.status(500).json({ 
             success: false, 
-            message: 'An error occurred while tracking your order. Please try again.' 
+            message: req.__('track_order.tracking_error')
         });
     }
 });

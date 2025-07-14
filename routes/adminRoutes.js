@@ -5,9 +5,11 @@ const adminCtrl = require('../controllers/adminController');
 const analyticsCtrl = require('../controllers/analyticsController');
 const promoCtrl = require('../controllers/promoController');
 const pageContentCtrl = require('../controllers/pageContentController');
+const notificationCtrl = require('../controllers/notificationController');
 const contactRoutes = require('./contactRoutes');
 const adminAuth = require('../middleware/adminAuth');
 const upload = require('../middleware/upload');
+const { uploadProductImages } = require('../middleware/multipleUpload');
 const { handleAdminError } = require('../middleware/adminErrorHandler');
 
 // Debug middleware
@@ -40,6 +42,17 @@ router.get('/test', (req, res) => {
     });
 });
 
+// Test route for parameter debugging
+router.get('/test-param/:id', (req, res) => {
+    res.json({
+        message: 'Parameter test route',
+        params: req.params,
+        id: req.params.id,
+        url: req.url,
+        originalUrl: req.originalUrl
+    });
+});
+
 // Protected admin routes
 router.get('/', adminAuth, (req, res) => res.redirect('/admin/dashboard'));
 router.get('/dashboard', adminAuth, adminCtrl.dashboard);
@@ -50,8 +63,9 @@ router.post('/dashboard/update-section/:type', adminAuth, upload.any(), pageCont
 router.get('/edit-homepage', adminAuth, (req, res) => res.redirect('/admin/dashboard/edit-homepage'));
 
 // Product Management Routes
+router.get('/products', adminAuth, adminCtrl.viewProducts);
 router.get('/add-product', adminAuth, adminCtrl.addProductForm);
-router.post('/add-product', adminAuth, upload.single('image'), adminCtrl.addProduct);
+router.post('/add-product', adminAuth, uploadProductImages, adminCtrl.addProduct);
 router.delete('/product/:id', adminAuth, adminCtrl.deleteProduct);
 router.get('/edit-product/:id', adminAuth, adminCtrl.editProductForm);
 router.post('/edit-product/:id', 
@@ -74,7 +88,15 @@ router.post('/edit-product/:id',
     },
     adminCtrl.editProduct);
 router.get('/view-orders', adminAuth, adminCtrl.viewOrders);
-router.get('/view-orders/:id', adminAuth, adminCtrl.viewOrderDetail);
+router.get('/view-orders/:id', adminAuth, (req, res, next) => {
+    console.log('Route matched - view-orders/:id', {
+        params: req.params,
+        url: req.url,
+        originalUrl: req.originalUrl,
+        baseUrl: req.baseUrl
+    });
+    next();
+}, adminCtrl.viewOrderDetail);
 router.get('/categories', adminAuth, adminCtrl.viewCategories);
 router.get('/add-category', adminAuth, adminCtrl.addCategoryForm);
 router.post('/add-category', adminAuth, adminCtrl.addCategory);
@@ -129,6 +151,22 @@ router.delete('/api/content/:id', adminAuth, pageContentCtrl.deleteContent);
 router.post('/api/content/reorder', adminAuth, pageContentCtrl.reorderContent);
 
 // Homepage content management routes (duplicate removed - using dashboard routes above)
+
+// Notification Management Routes
+router.get('/notifications', adminAuth, (req, res) => {
+    res.render('admin/notifications', {
+        title: 'Notification Management',
+        csrfToken: req.csrfToken()
+    });
+});
+
+// Notification API Routes
+router.get('/api/notifications', adminAuth, notificationCtrl.getNotifications);
+router.post('/api/notifications/:id/read', adminAuth, notificationCtrl.markAsRead);
+router.post('/api/notifications/mark-all-read', adminAuth, notificationCtrl.markAllAsRead);
+router.post('/api/notifications', adminAuth, notificationCtrl.createNotification);
+router.delete('/api/notifications/:id', adminAuth, notificationCtrl.deleteNotification);
+router.get('/api/notifications/stats', adminAuth, notificationCtrl.getStats);
 
 // User Management Routes
 router.get('/users', adminAuth, adminCtrl.getUsers);

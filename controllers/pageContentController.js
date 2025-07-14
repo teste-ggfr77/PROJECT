@@ -425,8 +425,8 @@ exports.updateSection = async (req, res) => {
                 updateData = {
                     ...updateData,
                     title: communityTitle || 'JOIN THE COMMUNITY',
-                    subtitle: communitySubtitle || 'Tag us @NOBULLPROJECT',
-                    instagram: instagram || '@NOBULLPROJECT',
+                    subtitle: communitySubtitle || 'Tag us @SABILS',
+                    instagram: instagram || '@SABILS',
                     posts: postsString
                 };
                 break;

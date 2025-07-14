@@ -1,7 +1,7 @@
 <%- include('partials/header') %>
 
 <div class="login-container">
-    <h1>Login</h1>
+    <h1><%= t('auth.login_page.title') %></h1>
     
     <% if (messages && messages.error) { %>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -11,22 +11,22 @@
     <% } %>
 
     <form action="/auth/login" method="POST">
-        <button type="submit" class="shop-signin-btn" name="shopSignIn" value="true">Sign in with shop</button>
+        <button type="submit" class="shop-signin-btn" name="shopSignIn" value="true"><%= t('auth.login_page.sign_in_with_shop') %></button>
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
     </form>
     
     <div class="divider">
-        <span>or</span>
+        <span><%= t('auth.login_page.or') %></span>
     </div>
 
     <form method="POST" action="/auth/login">
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-        <input type="email" class="text-input" id="email" name="email" placeholder="Email" required>
-        <input type="password" class="text-input" id="password" name="password" placeholder="Password" required>
-        <a href="/auth/forgot-password" class="forgot-link">Forgot your password?</a>
-        <button type="submit" class="signin-btn">Sign in</button>
+        <input type="email" class="text-input" id="email" name="email" placeholder="<%= t('auth.login_page.email_placeholder') %>" required>
+        <input type="password" class="text-input" id="password" name="password" placeholder="<%= t('auth.login_page.password_placeholder') %>" required>
+        <a href="/auth/forgot-password" class="forgot-link"><%= t('auth.login_page.forgot_your_password') %></a>
+        <button type="submit" class="signin-btn"><%= t('auth.login_page.sign_in_button') %></button>
     </form>
-    <a href="/auth/register" class="create-link">Create account</a>
+    <a href="/auth/register" class="create-link"><%= t('auth.login_page.create_account_link') %></a>
 </div>
 
 <style>

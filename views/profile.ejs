@@ -1050,13 +1050,13 @@ body {
             <div class="quick-stats animate-slide-in">
                 <div class="quick-stat">
                     <span class="quick-stat-value"><%= orders ? orders.length : 0 %></span>
-                    <span class="quick-stat-label">Orders</span>
+                    <span class="quick-stat-label"><%= __('profile.orders') %></span>
                 </div>
                 <div class="quick-stat">
                     <span class="quick-stat-value">dh<%= orders ? orders.reduce((sum, order) => sum + order.total, 0).toFixed(0) : '0' %></span>
-                    <span class="quick-stat-label">Spent</span>
+                    <span class="quick-stat-label"><%= __('profile.spent') %></span>
                 </div>
-                <span class="member-since">Member since <%= new Date(user.createdAt).toLocaleDateString() %></span>
+                <span class="member-since"><%= __('profile.member_since') %> <%= new Date(user.createdAt).toLocaleDateString() %></span>
             </div>
         </div>
     </div>
@@ -1065,16 +1065,16 @@ body {
     <div class="profile-section settings-section">
         <div class="settings-grid">
             <div class="settings-card">
-                <h4><i class="fas fa-user-circle"></i> Account</h4>
+                <h4><i class="fas fa-user-circle"></i> <%= __('profile.account_info') %></h4>
                 <div class="settings-actions">
-                    <a href="/profile/edit" class="btn-profile">Edit Profile</a>
-                    <a href="/profile/change-password" class="btn-profile">Change Password</a>
+                    <a href="/profile/edit" class="btn-profile"><%= __('profile.edit_profile') %></a>
+                    <a href="/profile/change-password" class="btn-profile"><%= __('profile.change_password') %></a>
                 </div>
             </div>
                         <div class="settings-card">
-                <h4><i class="fas fa-shield-alt"></i> Account Security</h4>
+                <h4><i class="fas fa-shield-alt"></i> <%= __('profile.security') %></h4>
                 <div class="settings-actions">
-                    <a href="/auth/logout" class="btn-profile btn-logout">Logout</a>
+                    <a href="/auth/logout" class="btn-profile btn-logout"><%= __('auth.logout') %></a>
                 </div>
             </div>
         </div>
@@ -1082,38 +1082,38 @@ body {
 
     <!-- Stats Cards -->
     <div class="profile-section stats-section">
-        <h3>Statistics</h3>
+        <h3><%= __('profile.statistics') %></h3>
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-value"><%= orders ? orders.length : 0 %></div>
-                <div class="stat-label">Orders</div>
+                <div class="stat-label"><%= __('profile.orders') %></div>
             </div>
             <div class="stat-card">
                 <div class="stat-value">dh<%= orders ? orders.reduce((sum, order) => sum + order.total, 0).toFixed(2) : '0.00' %></div>
-                <div class="stat-label">Spent</div>
+                <div class="stat-label"><%= __('profile.spent') %></div>
             </div>
             <div class="stat-card">
                 <div class="stat-value"><%= user.challenges ? user.challenges.length : 0 %></div>
-                <div class="stat-label">Achievements</div>
+                <div class="stat-label"><%= __('profile.achievements') %></div>
             </div>
         </div>
     </div>
 
     <!-- Account Info -->
     <div class="profile-section account-section">
-        <h3>Account Information</h3>
+        <h3><%= __('profile.account_info') %></h3>
         <div class="info-grid">
             <div class="info-item">
-                <div class="info-label">Contact</div>
-                <div class="info-value"><%= user.contactNumber || 'Not set' %></div>
+                <div class="info-label"><%= __('auth.phone_number') %></div>
+                <div class="info-value"><%= user.contactNumber || __('common.not_set') %></div>
             </div>
             <div class="info-item">
-                <div class="info-label">Address</div>
-                <div class="info-value"><%= user.shippingAddress || 'Not set' %></div>
+                <div class="info-label"><%= __('common.address') %></div>
+                <div class="info-value"><%= user.shippingAddress || __('common.not_set') %></div>
             </div>
             <div class="info-item">
-                <div class="info-label">Payment Method</div>
-                <div class="info-value"><%= user.preferredPaymentMethod ? user.preferredPaymentMethod.replace('_', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : 'Not set' %></div>
+                <div class="info-label"><%= __('checkout.payment_method') %></div>
+                <div class="info-value"><%= user.preferredPaymentMethod ? user.preferredPaymentMethod.replace('_', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : __('common.not_set') %></div>
             </div>
         </div>
     </div>
@@ -1121,13 +1121,13 @@ body {
     <!-- Orders Section -->
     <div class="profile-section orders-section">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-            <h3 style="margin: 0;">Recent Orders</h3>
+            <h3 style="margin: 0;"><%= __('profile.recent_orders') %></h3>
             <div class="order-actions">
                 <a href="/track-order" class="btn-profile" style="background: #3b82f6; color: white; border-color: #3b82f6;">
-                    <i class="fas fa-search"></i> Track Order
+                    <i class="fas fa-search"></i> <%= __('profile.track_order') %>
                 </a>
                 <button class="btn-profile" onclick="toggleQuickTrack()" style="background: #10b981; color: white; border-color: #10b981;">
-                    <i class="fas fa-shipping-fast"></i> Quick Track
+                    <i class="fas fa-shipping-fast"></i> <%= __('profile.quick_track') %>
                 </button>
             </div>
         </div>
@@ -1135,19 +1135,19 @@ body {
         <!-- Quick Track Section -->
         <div id="quickTrackSection" class="quick-track-section" style="display: none; margin-bottom: 2rem;">
             <div class="quick-track-card">
-                <h4><i class="fas fa-shipping-fast"></i> Quick Order Tracking</h4>
-                <p>Enter your order ID to quickly check your order status</p>
+                <h4><i class="fas fa-shipping-fast"></i> <%= __('profile.quick_order_tracking') %></h4>
+                <p><%= __('profile.quick_order_tracking_desc') %></p>
                 <form class="quick-track-form" onsubmit="quickTrackOrder(event)">
                     <div class="track-input-group">
                         <input 
                             type="text" 
                             id="quickTrackInput"
-                            placeholder="Enter Order ID (e.g., ORD-2024-ABC123)"
+                            placeholder="<%= __('profile.order_id_placeholder') %>"
                             class="track-input"
                             required
                         >
                         <button type="submit" class="track-btn" id="quickTrackBtn">
-                            <i class="fas fa-search"></i> Track
+                            <i class="fas fa-search"></i> <%= __('profile.track') %>
                         </button>
                     </div>
                 </form>
@@ -1188,11 +1188,11 @@ body {
                             <div class="order-grid-footer">
                                 <div class="order-total">dh<%= order.total.toFixed(2) %></div>
                                 <div class="order-actions-grid">
-                                    <a href="/orders/<%= order._id %>" class="btn-profile">View Details</a>
+                                    <a href="/orders/<%= order._id %>" class="btn-profile"><%= __('profile.view_details') %></a>
                                     <button class="btn-profile track-this-order" 
                                             onclick="trackSpecificOrder('ORD-<%= new Date(order.createdAt).getFullYear() %>-<%= order._id.toString().slice(-6).toUpperCase() %>')"
                                             style="background: #f59e0b; color: white; border-color: #f59e0b;">
-                                        <i class="fas fa-truck"></i> Track
+                                        <i class="fas fa-truck"></i> <%= __('profile.track') %>
                                     </button>
                                 </div>
                             </div>
@@ -1203,8 +1203,8 @@ body {
             <% } else { %>
                 <div class="no-orders">
                     <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
-                    <p class="text-muted">No orders yet</p>
-                    <a href="/products" class="btn-profile">Start Shopping</a>
+                    <p class="text-muted"><%= __('profile.no_orders') %></p>
+                    <a href="/products" class="btn-profile"><%= __('cart.start_shopping') %></a>
                 </div>
             <% } %>
         </div>
@@ -1236,6 +1236,21 @@ body {
 </div>
 
 <script>
+// Translation variables for JavaScript
+const translations = {
+    orderStatusLabel: '<%= __("profile.order_status_label") %>',
+    orderDateLabel: '<%= __("profile.order_date_label") %>',
+    totalLabel: '<%= __("profile.total_label") %>',
+    estimatedDeliveryLabel: '<%= __("profile.estimated_delivery_label") %>',
+    viewFullTracking: '<%= __("profile.view_full_tracking") %>',
+    orderBeingPrepared: '<%= __("profile.order_being_prepared") %>',
+    track: '<%= __("profile.track") %>',
+    statusProcessingDesc: '<%= __("profile.status_processing_desc") %>',
+    statusShippedDesc: '<%= __("profile.status_shipped_desc") %>',
+    statusDeliveredDesc: '<%= __("profile.status_delivered_desc") %>',
+    statusCancelledDesc: '<%= __("profile.status_cancelled_desc") %>'
+};
+
 // Enhanced profile functionality
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize animations
@@ -1339,10 +1354,21 @@ function quickTrackOrder(event) {
         });
 }
 
+function getStatusDescription(status) {
+    switch(status) {
+        case 'processing': return translations.statusProcessingDesc;
+        case 'shipped': return translations.statusShippedDesc;
+        case 'delivered': return translations.statusDeliveredDesc;
+        case 'cancelled': return translations.statusCancelledDesc;
+        default: return translations.orderBeingPrepared;
+    }
+}
+
 function showQuickTrackResult(order) {
     const result = document.getElementById('quickTrackResult');
     const currentStatus = order.timeline.find(item => item.status === 'current');
     const statusIcon = getStatusIcon(order.status);
+    const statusDescription = currentStatus ? currentStatus.description : getStatusDescription(order.status);
     
     result.innerHTML = `
         <div class="quick-track-status">
@@ -1351,14 +1377,14 @@ function showQuickTrackResult(order) {
             <span class="order-status ${order.status}">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span>
         </div>
         <div class="quick-track-details">
-            <p><strong>Status:</strong> ${currentStatus ? currentStatus.description : 'Processing your order'}</p>
-            <p><strong>Order Date:</strong> ${order.date}</p>
-            <p><strong>Total:</strong> ${order.total}</p>
-            <p><strong>Estimated Delivery:</strong> ${order.estimatedDelivery}</p>
+            <p><strong>${translations.orderStatusLabel}</strong> ${statusDescription}</p>
+            <p><strong>${translations.orderDateLabel}</strong> ${order.date}</p>
+            <p><strong>${translations.totalLabel}</strong> ${order.total}</p>
+            <p><strong>${translations.estimatedDeliveryLabel}</strong> ${order.estimatedDelivery}</p>
         </div>
         <div style="margin-top: 1rem;">
             <a href="/track-order" class="btn-profile" style="background: #3b82f6; color: white; border-color: #3b82f6;">
-                <i class="fas fa-external-link-alt"></i> View Full Tracking
+                <i class="fas fa-external-link-alt"></i> ${translations.viewFullTracking}
             </a>
         </div>
     `;

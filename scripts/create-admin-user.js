@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const connectDB = require('../config/db');
 const User = require('../models/User');
 
-const email = 'project@admin.pt';
+const email = 'sabils@admin.pt';
 const password = 'e0KWp$Rtm.047+=eXdrsYN@';
 const name = 'Admin';
 
