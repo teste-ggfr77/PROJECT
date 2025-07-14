@@ -1,13 +1,30 @@
 <%- include('partials/header') %>
 
+<!-- Brand Animation Overlay -->
+<div id="brandAnimation" class="brand-animation-overlay">
+  <div class="brand-animation-content">
+    <h1 class="brand-name">SABILS</h1>
+    <div class="brand-tagline">BUILT FOR PERFORMANCE</div>
+  </div>
+</div>
+
 <!-- Hero Section -->
 <section class="relative w-full h-screen overflow-hidden">
-  <!-- Video Background -->
-  <video autoplay muted loop playsinline class="absolute w-full h-full object-cover z-0">
-    <source src="<%= heroSection?.videoUrl || 'https://www.w3schools.com/howto/rain.mp4' %>" type="video/mp4" />
-    <img src="<%= heroSection?.image || 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80' %>" 
-         alt="Fallback image" class="w-full h-full object-cover" />
-  </video>
+  <% if (heroSection?.videoUrl) { %>
+    <!-- Video Background -->
+    <video autoplay muted loop playsinline class="absolute w-full h-full object-cover z-0">
+      <source src="<%= heroSection.videoUrl %>" type="video/mp4" />
+      <!-- Fallback image if video fails to load -->
+      <img src="<%= heroSection?.image || 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80' %>" 
+           alt="Hero background" class="w-full h-full object-cover" />
+    </video>
+  <% } else { %>
+    <!-- Image Background -->
+    <div class="absolute w-full h-full z-0">
+      <img src="<%= heroSection?.image || 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80' %>" 
+           alt="Hero background" class="w-full h-full object-cover" />
+    </div>
+  <% } %>
 
   <!-- Dark Overlay -->
   <div class="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
@@ -104,7 +121,7 @@
       
       <!-- Apparel -->
       <a href="/apparel" class="group block relative overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Apparel" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
+        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Apparel" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500" />
         <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition duration-300"></div>
         <div class="absolute bottom-8 left-8">
           <h3 class="text-white text-2xl font-bold uppercase tracking-wider"><%= __('homepage.apparel') %></h3>
@@ -125,47 +142,6 @@
   </div>
 </section>
 
-<!-- No Bullshit Reviews Section -->
-<section class="w-full py-20 px-4 bg-gray-50">
-  <div class="max-w-4xl mx-auto text-center">
-    <h2 class="text-4xl md:text-5xl font-bold uppercase mb-8 tracking-wide"><%= __('homepage.no_bullshit_reviews') %></h2>
-    <div class="flex items-center justify-center mb-8">
-      <!-- Star Rating -->
-      <div class="flex items-center gap-1">
-        <% for(let i=1; i<=5; i++) { %>
-          <svg class="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-            <polygon points="10,1 12.59,7.36 19.51,7.36 13.97,11.64 16.56,18 10,13.72 3.44,18 6.03,11.64 0.49,7.36 7.41,7.36"/>
-          </svg>
-        <% } %>
-      </div>
-      <span class="ml-3 text-xl font-semibold text-gray-700"><%= __('homepage.reviews_rating') %></span>
-    </div>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <% 
-      // Access reviews from translations object directly
-      const reviewsData = translations?.homepage?.reviews || {};
-      const reviews = [
-        {snippet: reviewsData.review_1 || 'These trainers are built like tanks. I\'ve been wearing them daily for 6 months and they still look new.', name: reviewsData.reviewer_1 || 'Marcus T.', verified: true},
-        {snippet: reviewsData.review_2 || 'Finally found shoes that can handle my CrossFit workouts. The grip and stability are unmatched.', name: reviewsData.reviewer_2 || 'Sarah K.', verified: true},
-        {snippet: reviewsData.review_3 || 'No-nonsense design, incredible quality. Worth every penny for serious athletes.', name: reviewsData.reviewer_3 || 'David R.', verified: true},
-        {snippet: reviewsData.review_4 || 'Comfortable from day one, no break-in period needed. Perfect for lifting and cardio.', name: reviewsData.reviewer_4 || 'Jessica M.', verified: true},
-      ]; 
-      %>
-      <% reviews.forEach(review => { %>
-      <div class="bg-white p-6 rounded-lg shadow-sm">
-        <p class="text-gray-800 text-lg mb-4">"<%= review.snippet %>"</p>
-        <div class="flex items-center justify-between">
-          <span class="font-semibold text-gray-900"><%= review.name %></span>
-          <% if(review.verified) { %>
-          <span class="text-sm text-green-600 font-medium"><%= __('homepage.verified_purchase') %></span>
-          <% } %>
-        </div>
-      </div>
-      <% }); %>
-    </div>
-  </div>
-</section>
 
 <!-- Featured Products -->
 <section class="w-full py-20 px-4 bg-white">
@@ -288,7 +264,7 @@
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
       <div class="relative">
-        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Professional Athlete" class="w-full h-[600px] object-cover" />
+        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Professional Athlete" class="w-full h-[600px] object-cover" />
         <div class="absolute bottom-8 left-8 bg-black/80 p-6 text-white max-w-sm">
           <h4 class="text-xl font-bold uppercase mb-2">SARAH MARTINEZ</h4>
           <p class="text-sm uppercase tracking-wider text-gray-300">CROSSFIT GAMES ATHLETE</p>
@@ -334,7 +310,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       <% const programs = [
         {title: __('homepage.strength_foundation'), duration: '4 ' + __('homepage.weeks'), level: __('homepage.beginner'), img: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'},
-        {title: __('homepage.crossfit_prep'), duration: '8 ' + __('homepage.weeks'), level: __('homepage.intermediate'), img: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'},
+        {title: __('homepage.crossfit_prep'), duration: '8 ' + __('homepage.weeks'), level: __('homepage.intermediate'), img: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'},
         {title: __('homepage.elite_performance'), duration: '12 ' + __('homepage.weeks'), level: __('homepage.advanced'), img: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'}
       ]; %>
       <% programs.forEach(program => { %>
@@ -548,6 +524,111 @@ h1, h2, h3 {
 .feature-icon i {
   color: white;
 }
+
+/* Brand Animation Styles */
+.brand-animation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: #000;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 1s ease-out, visibility 1s ease-out;
+}
+
+.brand-animation-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.brand-animation-content {
+  text-align: center;
+  color: white;
+}
+
+.brand-name {
+  font-size: 8rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1;
+  animation: brandZoom 6s ease-out forwards;
+  will-change: transform, opacity;
+}
+
+.brand-tagline {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-top: 2rem;
+  opacity: 0;
+  animation: fadeIn 2s ease-out 4.5s forwards;
+  will-change: opacity;
+}
+
+@keyframes brandZoom {
+  0% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  45% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Responsive brand animation */
+@media (max-width: 768px) {
+  .brand-name {
+    font-size: 4rem;
+  }
+  
+  .brand-tagline {
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-name {
+    font-size: 3rem;
+  }
+  
+  .brand-tagline {
+    font-size: 0.9rem;
+    letter-spacing: 0.15em;
+  }
+}
 </style>
 
 <!-- Tailwind CDN -->
@@ -556,8 +637,8 @@ h1, h2, h3 {
 <!-- FAQ Toggle Script -->
 <script>
 function toggleFAQ(index) {
-  const answer = document.getElementById(`faq-answer-${index}`);
-  const icon = document.getElementById(`faq-icon-${index}`);
+  const answer = document.getElementById(`faq-answer-`+index);
+  const icon = document.getElementById(`faq-icon-`+index);
   
   if (answer.classList.contains('hidden')) {
     answer.classList.remove('hidden');
@@ -633,6 +714,52 @@ function showNotification(message, type = 'info') {
       document.body.removeChild(notification);
     }, 300);
   }, 3000);
+}
+
+// Brand Animation Control
+document.addEventListener('DOMContentLoaded', function() {
+  const brandAnimation = document.getElementById('brandAnimation');
+  const hasVisited = localStorage.getItem('hasVisited');
+  const selectedLanguage = localStorage.getItem('selectedLanguage');
+  
+  // Only show brand animation for first-time visitors
+  if (!hasVisited || !selectedLanguage) {
+    // Prevent scrolling during animation
+    document.body.style.overflow = 'hidden';
+    
+    // Hide the animation after 8 seconds (6s main animation + 2s tagline + 0.5s buffer)
+    setTimeout(() => {
+      brandAnimation.classList.add('hidden');
+      document.body.style.overflow = '';
+      
+      // Show language modal after brand animation with longer delay to ensure header JS is loaded
+      setTimeout(() => {
+        if (!hasVisited || !selectedLanguage) {
+          // Check if showLanguageModal function exists, if not wait a bit more
+          if (typeof showLanguageModal === 'function') {
+            showLanguageModal();
+          } else {
+            // Wait for header script to load
+            setTimeout(() => {
+              if (typeof showLanguageModal === 'function') {
+                showLanguageModal();
+              }
+            }, 500);
+          }
+        }
+      }, 1000); // Wait for brand animation to fully fade out
+    }, 8500);
+  } else {
+    // Hide brand animation immediately for returning visitors
+    brandAnimation.classList.add('hidden');
+    brandAnimation.style.display = 'none';
+  }
+});
+
+// Override the original checkFirstVisit function to work with brand animation
+function checkFirstVisit() {
+  // This function is now handled in the DOMContentLoaded event above
+  // to coordinate with the brand animation
 }
 </script>
 

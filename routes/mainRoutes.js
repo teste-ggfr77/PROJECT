@@ -6,21 +6,31 @@ const PageContent = require('../models/PageContent');
 // Homepage route with dynamic content
 router.get('/', async (req, res) => {
     try {
-        // Fetch all homepage sections
+        // Fetch all homepage sections with fresh data (no cache)
         const [heroSection, featuredSection, promoSection, featuredProductsSection, communitySection] = await Promise.all([
-            PageContent.findOne({ type: 'hero' }),
-            PageContent.findOne({ type: 'featured' }),
-            PageContent.findOne({ type: 'promotion' }),
-            PageContent.findOne({ type: 'product-showcase' }),
-            PageContent.findOne({ type: 'community' })
+            PageContent.findOne({ type: 'hero' }).lean(),
+            PageContent.findOne({ type: 'featured' }).lean(),
+            PageContent.findOne({ type: 'promotion' }).lean(),
+            PageContent.findOne({ type: 'product-showcase' }).lean(),
+            PageContent.findOne({ type: 'community' }).lean()
         ]);
 
         console.log('Homepage sections loaded:', {
             hero: !!heroSection,
+            heroImage: heroSection?.image,
+            heroTitle: heroSection?.title,
+            heroUpdated: heroSection?.updatedAt,
             featured: !!featuredSection,
             promo: !!promoSection,
             featuredProducts: !!featuredProductsSection,
             community: !!communitySection
+        });
+
+        // Set cache control headers to prevent caching
+        res.set({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
         });
 
         res.render('index', {
