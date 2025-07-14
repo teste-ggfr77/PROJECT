@@ -25,6 +25,8 @@ exports.loginForm = (req, res) => {
 
 exports.login = async (req, res) => {
     try {
+        console.log('Login attempt:', { email: req.body.email, sessionId: req.sessionID });
+        
         const { email, password } = req.body;
 
         if (!email || !password) {
@@ -44,34 +46,54 @@ exports.login = async (req, res) => {
             return res.redirect('/auth/login');
         }
         
+        console.log('User authenticated successfully:', { userId: user._id, email: user.email });
+        
         // Start a new session for security
         await new Promise((resolve, reject) => {
             req.session.regenerate((err) => {
                 if (err) {
+                    console.error('Session regenerate error:', err);
                     reject(err);
                     return;
                 }
+                console.log('Session regenerated successfully');
                 resolve();
             });
         });
 
         // Update last login time
-        await user.updateLastLogin();
+        try {
+            await user.updateLastLogin();
+            console.log('Last login time updated');
+        } catch (updateError) {
+            console.error('Error updating last login:', updateError);
+            // Don't fail login if this fails
+        }
         
-        // Set up session
-        req.session.user = user;
+        // Set up session with user data
+        req.session.user = {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role || 'user'
+        };
+        
+        console.log('Session user set:', req.session.user);
         
         // Save session before redirecting
         await new Promise((resolve, reject) => {
             req.session.save((err) => {
                 if (err) {
+                    console.error('Session save error:', err);
                     reject(err);
                     return;
                 }
+                console.log('Session saved successfully');
                 resolve();
             });
         });
 
+        console.log('Login successful, redirecting to home page');
         res.redirect('/');
     } catch (error) {
         console.error('Login error:', error);

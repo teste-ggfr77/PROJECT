@@ -34,15 +34,20 @@ app.set('views', path.join(__dirname, 'views'));
 const cookieParser = require('cookie-parser');
 app.use(cookieParser(process.env.SESSION_SECRET || 'your-secret-key'));
 
-// Session setup
+// Session setup with Vercel-compatible configuration
 app.use(session({
     secret: process.env.SESSION_SECRET || 'your-secret-key',
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+    store: MongoStore.create({ 
+        mongoUrl: process.env.MONGO_URI,
+        touchAfter: 24 * 3600 // lazy session update
+    }),
     cookie: {
         maxAge: 1000 * 60 * 60 * 24, // 24 hours
-        secure: process.env.NODE_ENV === 'production'
+        secure: false, // Set to false for Vercel compatibility
+        httpOnly: true,
+        sameSite: 'lax'
     }
 }));
 

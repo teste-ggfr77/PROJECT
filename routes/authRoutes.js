@@ -13,4 +13,15 @@ router.post('/forgot-password', authCtrl.forgotPassword);
 router.get('/reset-password/:token', authCtrl.resetPasswordForm);
 router.post('/reset-password/:token', authCtrl.resetPassword);
 
+// Debug route to check session status
+router.get('/debug-session', (req, res) => {
+    res.json({
+        sessionId: req.sessionID,
+        hasSession: !!req.session,
+        sessionUser: req.session ? req.session.user : null,
+        reqUser: req.user,
+        cookies: req.headers.cookie
+    });
+});
+
 module.exports = router;
