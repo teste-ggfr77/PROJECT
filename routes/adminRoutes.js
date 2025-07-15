@@ -9,7 +9,7 @@ const notificationCtrl = require('../controllers/notificationController');
 const contactRoutes = require('./contactRoutes');
 const adminAuth = require('../middleware/adminAuth');
 const upload = require('../middleware/upload');
-const { uploadProductImages } = require('../middleware/multipleUpload');
+const { uploadProductImages } = require('../middleware/cloudinaryUpload');
 const { handleAdminError } = require('../middleware/adminErrorHandler');
 
 // Debug middleware

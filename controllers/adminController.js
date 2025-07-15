@@ -378,13 +378,13 @@ exports.addProductForm = async (req, res) => {
     });
 };
 
-// Updated addProduct function for handling multiple color images
+// Updated addProduct function for handling multiple color images with Cloudinary
 exports.addProduct = async (req, res) => {
     try {
         console.log('Add product request:', {
             body: req.body,
             files: req.files ? req.files.length : 0,
-            file: req.file ? req.file.filename : 'none'
+            file: req.file ? req.file.path : 'none'
         });
 
         if (req.fileValidationError) {
@@ -397,7 +397,7 @@ exports.addProduct = async (req, res) => {
             return res.redirect('/admin/add-product');
         }
 
-        const { name, description, price, sizes, category, quantity, colorsData } = req.body;
+        const { name, description, price, sizes, category, quantity, colors } = req.body;
 
         // Client-side validation backup
         if (!name || !description || !price || !category || !quantity) {
@@ -405,96 +405,23 @@ exports.addProduct = async (req, res) => {
             return res.redirect('/admin/add-product');
         }
 
-        const fs = require('fs').promises;
-        
-        // Process main product image
-        const oldPath = req.file.path;
-        const newPath = path.join(__dirname, '../public/uploads/', req.file.filename);
-        
-        try {
-            await fs.mkdir(path.dirname(newPath), { recursive: true });
-            await fs.rename(oldPath, newPath);
-            console.log('Main image processed:', req.file.filename);
-        } catch (err) {
-            console.error('Error processing main image:', err);
-            req.flash('error', 'Error uploading main image');
-            return res.redirect('/admin/add-product');
-        }
+        // Main image is already uploaded to Cloudinary via middleware
+        const mainImageUrl = req.file.path; // Cloudinary URL
+        console.log('Main image uploaded to Cloudinary:', mainImageUrl);
 
-        // Process color data and images
-        let colorVariants = [];
-        let colorNames = [];
-        
-        if (colorsData) {
-            try {
-                const parsedColorsData = JSON.parse(colorsData);
-                console.log('Parsed colors data:', parsedColorsData);
-                
-                colorNames = parsedColorsData.map(color => color.name);
-                
-                // Process color-specific images from req.files
-                if (req.files && Array.isArray(req.files) && req.files.length > 0) {
-                    console.log('Processing color images:', req.files.length);
-                    
-                    for (const colorData of parsedColorsData) {
-                        const colorImages = [];
-                        
-                        // Look for uploaded files for this color
-                        for (const file of req.files) {
-                            if (file.fieldname.startsWith(`colorImages_${colorData.name}_`)) {
-                                const colorImagePath = path.join(__dirname, '../public/uploads/', file.filename);
-                                try {
-                                    await fs.mkdir(path.dirname(colorImagePath), { recursive: true });
-                                    await fs.rename(file.path, colorImagePath);
-                                    colorImages.push('/uploads/' + file.filename);
-                                    console.log(`Processed color image for ${colorData.name}:`, file.filename);
-                                } catch (err) {
-                                    console.error('Error processing color image:', err);
-                                }
-                            }
-                        }
-                        
-                        colorVariants.push({
-                            name: colorData.name,
-                            images: colorImages
-                        });
-                    }
-                } else {
-                    console.log('No color images to process');
-                    // Create color variants without images
-                    for (const colorData of parsedColorsData) {
-                        colorVariants.push({
-                            name: colorData.name,
-                            images: []
-                        });
-                    }
-                }
-            } catch (err) {
-                console.error('Error parsing colors data:', err);
-            }
-        }
-
-        // Process additional photos
+        // Process additional photos (already uploaded to Cloudinary)
         let additionalPhotos = [];
         if (req.files && Array.isArray(req.files) && req.files.length > 0) {
             console.log('Processing additional photos...');
             
             for (const file of req.files) {
                 if (file.fieldname.startsWith('additionalPhotos_')) {
-                    const additionalPhotoPath = path.join(__dirname, '../public/uploads/', file.filename);
-                    try {
-                        await fs.mkdir(path.dirname(additionalPhotoPath), { recursive: true });
-                        await fs.rename(file.path, additionalPhotoPath);
-                        additionalPhotos.push('/uploads/' + file.filename);
-                        console.log('Processed additional photo:', file.filename);
-                    } catch (err) {
-                        console.error('Error processing additional photo:', err);
-                    }
+                    additionalPhotos.push(file.path); // Cloudinary URL
+                    console.log('Processed additional photo:', file.path);
                 }
             }
         }
 
-        console.log('Final color variants:', colorVariants);
         console.log('Final additional photos:', additionalPhotos);
         
         const Product = require('../models/Product');
@@ -502,13 +429,12 @@ exports.addProduct = async (req, res) => {
             name: name.trim(),
             description: description.trim(),
             price: parseFloat(price),
-            colors: colorNames,
-            colorVariants: colorVariants,
+            colors: colors ? colors.split(',').map(c => c.trim()).filter(Boolean) : [],
             sizes: sizes ? sizes.split(',').map(s => s.trim()).filter(s => s) : [],
             category,
             quantity: parseInt(quantity),
-            image: '/uploads/' + req.file.filename,
-            additionalPhotos: additionalPhotos
+            image: mainImageUrl, // Cloudinary URL
+            additionalPhotos: additionalPhotos // Array of Cloudinary URLs
         });
 
         await product.save();
@@ -523,28 +449,12 @@ exports.addProduct = async (req, res) => {
             // Don't fail the product creation if notification fails
         }
 
-        req.flash('success', `Product "${product.name}" added successfully with ${colorVariants.length} color variants and ${additionalPhotos.length} additional photos`);
+        req.flash('success', `Product "${product.name}" added successfully with ${additionalPhotos.length} additional photos`);
         res.redirect('/admin/dashboard');
     } catch (error) {
         console.error('Error adding product:', error);
         
-        // Clean up uploaded files if they exist
-        if (req.file) {
-            try {
-                await require('fs').promises.unlink(req.file.path).catch(() => {});
-            } catch (err) {
-                console.error('Error deleting failed main upload:', err);
-            }
-        }
-        if (req.files && Array.isArray(req.files)) {
-            for (const file of req.files) {
-                try {
-                    await require('fs').promises.unlink(file.path).catch(() => {});
-                } catch (err) {
-                    console.error('Error deleting failed color upload:', err);
-                }
-            }
-        }
+        // Note: Cloudinary files don't need manual cleanup as they're managed by Cloudinary
         
         req.flash('error', error.message || 'Error adding product');
         res.redirect('/admin/add-product');
