@@ -1,9 +1,26 @@
 const multer = require('multer');
 const path = require('path');
 
+const fs = require('fs');
+
+// Ensure upload directories exist
+const ensureUploadDirs = () => {
+    const dirs = ['uploads/temp', 'public/uploads'];
+    dirs.forEach(dir => {
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+            console.log(`Created directory: ${dir}`);
+        }
+    });
+};
+
+// Initialize directories
+ensureUploadDirs();
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/temp'); // Temporary directory
+        // Use public/uploads directly to avoid file moving issues
+        cb(null, 'public/uploads');
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);

@@ -527,81 +527,53 @@ function clearImage() {
     previewDiv.style.display = 'none';
 }
 
-// Form submission
+// Form submission - Use regular form submission to avoid CSRF issues
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Page loaded, initializing...');
-    
+
     // Form submission handler
     const form = document.getElementById('productForm');
     if (form) {
         form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
             const fileInput = document.getElementById('image');
-            
+
             if (fileInput.files.length === 0) {
                 alert('Please select a main product image');
-                return;
+                e.preventDefault();
+                return false;
             }
-            
+
             console.log('Submitting form...');
-            
-            const formData = new FormData();
-            
-            // Add all form fields
-            formData.append('name', document.getElementById('name').value);
-            formData.append('description', document.getElementById('description').value);
-            formData.append('price', document.getElementById('price').value);
-            formData.append('quantity', document.getElementById('quantity').value);
-            formData.append('sizes', document.getElementById('sizes').value);
-            formData.append('colors', document.getElementById('colors').value);
-            formData.append('category', document.getElementById('category').value);
-            
-            // Add CSRF token
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            formData.append('_csrf', csrfToken);
-            
-            // Add main image
-            if (fileInput.files[0]) {
-                formData.append('image', fileInput.files[0]);
-            }
-            
-            // Add additional photos
+
+            // Add additional photos to form before submission
             let totalAdditionalPhotos = 0;
             additionalPhotos.forEach((photo, index) => {
                 if (photo.file) {
-                    const fieldName = `additionalPhotos_${index}`;
-                    formData.append(fieldName, photo.file);
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'file';
+                    hiddenInput.name = `additionalPhotos_${index}`;
+                    hiddenInput.style.display = 'none';
+                    
+                    // Create a new FileList with the file
+                    const dt = new DataTransfer();
+                    dt.items.add(photo.file);
+                    hiddenInput.files = dt.files;
+                    
+                    form.appendChild(hiddenInput);
                     totalAdditionalPhotos++;
                 }
             });
-            
+
             console.log(`Uploading ${totalAdditionalPhotos} additional photos`);
-            
+
             // Show loading
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Uploading...';
             submitBtn.disabled = true;
-            
-            // Submit
-            fetch('/admin/add-product', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                if (response.ok) {
-                    window.location.href = '/admin/dashboard';
-                } else {
-                    throw new Error('Upload failed');
-                }
-            })
-            .catch(error => {
-                console.error('Upload error:', error);
-                alert('Error uploading product: ' + error.message);
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            });
+
+            // Allow form to submit normally
+            return true;
         });
     }
 });
