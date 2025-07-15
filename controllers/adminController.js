@@ -405,8 +405,21 @@ exports.addProduct = async (req, res) => {
             return res.redirect('/admin/add-product');
         }
 
-        // Main image is already in the correct location (public/uploads)
-        console.log('Main image processed:', req.file.filename);
+        const fs = require('fs').promises;
+        
+        // Process main product image
+        const oldPath = req.file.path;
+        const newPath = path.join(__dirname, '../public/uploads/', req.file.filename);
+        
+        try {
+            await fs.mkdir(path.dirname(newPath), { recursive: true });
+            await fs.rename(oldPath, newPath);
+            console.log('Main image processed:', req.file.filename);
+        } catch (err) {
+            console.error('Error processing main image:', err);
+            req.flash('error', 'Error uploading main image');
+            return res.redirect('/admin/add-product');
+        }
 
         // Process color data and images
         let colorVariants = [];
