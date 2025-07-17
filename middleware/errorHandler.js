@@ -1,3 +1,20 @@
+const cloudinaryErrorCodes = {
+    'cdg1::4qsdh': { retryable: true, wait: 5000 },
+    'cdg1::twg4r': { retryable: true, wait: 5000 },
+    'cdg1::q9rmp': { retryable: true, wait: 3000 }
+};
+
+function isCloudinaryError(error) {
+    return error?.message?.includes('cdg1::') || 
+           error?.error?.includes('cdg1::') || 
+           error?.cloudinaryError;
+}
+
+function getCloudinaryErrorCode(error) {
+    const errorMatch = (error.message || error.error || '').match(/cdg1::\S+/);
+    return errorMatch ? errorMatch[0] : null;
+}
+
 exports.csrfErrorHandler = (err, req, res, next) => {
     if (err.code === 'EBADCSRFTOKEN') {
         req.flash('error', 'Invalid form submission, please try again');
@@ -7,22 +24,16 @@ exports.csrfErrorHandler = (err, req, res, next) => {
 };
 
 exports.globalErrorHandler = (err, req, res, next) => {
-    // Extract Cloudinary specific error details if present
-    const cloudinaryError = err.error?.match?.(/cdg1::\S+/) || err.message?.match?.(/cdg1::\S+/);
+    // Basic error info
     const errorDetails = {
         message: err.message,
-        stack: err.stack,
-        path: req.path,
-        method: req.method,
-        query: req.query,
-        body: req.body,
-        files: req.files ? Object.keys(req.files).join(', ') : undefined,
         type: err.type || err.name,
         code: err.code,
-        cloudinaryError: cloudinaryError ? cloudinaryError[0] : undefined,
-        originalError: err.originalError || err,
-        requestId: err.http?.headers?.['x-request-id'] || req.id,
-        timestamp: new Date().toISOString()
+        path: req.path,
+        method: req.method,
+        timestamp: new Date().toISOString(),
+        requestId: req.id || Date.now().toString(),
+        files: req.files ? Object.keys(req.files).join(', ') : undefined
     };
 
     // Log detailed error information
@@ -36,25 +47,22 @@ exports.globalErrorHandler = (err, req, res, next) => {
     let errorType = 'GENERAL_ERROR';
 
     // Handle specific error types
-    if (err.name === 'MulterError' || err.message.includes('Failed to upload file')) {
+    if (err.name === 'MulterError' || err.message?.includes('Failed to upload file')) {
         statusCode = 400;
         errorType = 'UPLOAD_ERROR';
         errorMessage = 'File upload failed. Please ensure your file is not too large and is in a supported format.';
-    } else if (cloudinaryError) {
-        statusCode = 503; // Service Unavailable
+    } else if (isCloudinaryError(err)) {
+        const errorCode = getCloudinaryErrorCode(err);
+        const errorInfo = cloudinaryErrorCodes[errorCode] || { retryable: true, wait: 5000 };
+        
+        statusCode = errorInfo.retryable ? 503 : 500;
         errorType = 'CLOUDINARY_ERROR';
+        errorMessage = 'Image upload service is temporarily unavailable. Please try again in a few moments.';
         
-        // Extract specific Cloudinary error code
-        const errorCode = cloudinaryError[0].split('::')[1];
-        
-        // Map specific Cloudinary error codes to user-friendly messages
-        const cloudinaryErrorMessages = {
-            'rate_limit_reached': 'Upload service is temporarily busy. Please try again in a few moments.',
-            'upload_failed': 'Image upload failed. Please try again.',
-            'invalid_image': 'The image file appears to be corrupted or in an unsupported format.',
-            'file_size_too_large': 'The image file is too large. Please choose a smaller file.',
-            'default': 'There was a problem processing your image. Please try again.'
-        };
+        // Set retry headers
+        if (errorInfo.retryable && !res.headersSent) {
+            res.set('Retry-After', Math.ceil(errorInfo.wait / 1000).toString());
+        }
 
         // Check if it's a known error pattern
         if (errorCode.includes('4qsdh') || errorCode.includes('twg4r')) {
@@ -86,14 +94,13 @@ exports.globalErrorHandler = (err, req, res, next) => {
             success: false,
             message: errorMessage,
             type: errorType,
-            code: err.code || 'UNKNOWN',
+            code: errorDetails.code || 'UNKNOWN',
             requestId: errorDetails.requestId,
-            retryable: statusCode === 503, // Indicate if the error is temporary
-            retryAfter: res.get('Retry-After'), // Include retry timing if set
-            error: process.env.NODE_ENV !== 'production' ? {
+            retryable: statusCode === 503,
+            retryAfter: res.get('Retry-After'),
+            error: process.env.NODE_ENV === 'development' ? {
                 stack: err.stack,
-                cloudinaryError: errorDetails.cloudinaryError,
-                originalError: err.originalError?.message
+                details: errorDetails
             } : undefined
         };
 
