@@ -8,7 +8,7 @@ const pageContentCtrl = require('../controllers/pageContentController');
 const notificationCtrl = require('../controllers/notificationController');
 const contactRoutes = require('./contactRoutes');
 const adminAuth = require('../middleware/adminAuth');
-const { upload, handleFileUploads } = require('../middleware/fileUploadHandler');
+const upload = require('../middleware/upload');
 const { uploadProductImages } = require('../middleware/cloudinaryUpload');
 const { handleAdminError } = require('../middleware/adminErrorHandler');
 
@@ -57,51 +57,7 @@ router.get('/test-param/:id', (req, res) => {
 router.get('/', adminAuth, (req, res) => res.redirect('/admin/dashboard'));
 router.get('/dashboard', adminAuth, adminCtrl.dashboard);
 router.get('/dashboard/edit-homepage', adminAuth, pageContentCtrl.getHomepageEditor);
-router.post('/dashboard/update-section/:type', 
-    adminAuth, 
-    upload.any(),
-    handleFileUploads,
-    async (req, res, next) => {
-        try {
-            console.log('Content update request:', {
-                type: req.params.type,
-                body: req.body,
-                uploadedFiles: req.uploadedFiles
-            });
-
-            if (req.uploadedFiles) {
-                // Attach uploaded files to the request body
-                Object.keys(req.uploadedFiles).forEach(fieldname => {
-                    req.body[fieldname] = req.uploadedFiles[fieldname];
-                });
-            }
-
-            await pageContentCtrl.updateSection(req, res, next);
-        } catch (error) {
-            console.error('Error in content update route:', error);
-            
-            // Clean up any remaining temporary files
-            if (req.files) {
-                for (const file of req.files) {
-                    try {
-                        await fs.promises.unlink(file.path).catch(() => {});
-                    } catch (cleanupError) {
-                        console.error('Error cleaning up file:', cleanupError);
-                    }
-                }
-            }
-
-            if (!res.headersSent) {
-                res.status(500).json({
-                    success: false,
-                    message: 'Error updating content',
-                    error: process.env.NODE_ENV === 'production' 
-                        ? 'An error occurred while updating content' 
-                        : error.message
-                });
-            }
-        }
-    });
+router.post('/dashboard/update-section/:type', adminAuth, upload.any(), pageContentCtrl.updateSection);
 
 // Add a redirect for common URL patterns
 router.get('/edit-homepage', adminAuth, (req, res) => res.redirect('/admin/dashboard/edit-homepage'));
