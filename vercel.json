@@ -5,22 +5,41 @@
       "src": "app.js",
       "use": "@vercel/node",
       "config": {
-        "maxDuration": 10,
-        "memory": 1024
+        "maxDuration": 60,
+        "memory": 3008,
+        "build": {
+          "env": {
+            "NODE_OPTIONS": "--max-old-space-size=3008"
+          }
+        }
       }
     }
   ],
   "routes": [
     {
+      "src": "/uploads/(.*)",
+      "dest": "/uploads/$1",
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "src": "/(css|js|images)/.*",
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
       "src": "/(.*)",
       "dest": "app.js",
       "headers": {
-        "cache-control": "s-maxage=0"
+        "x-vercel-protection": "true",
+        "cache-control": "no-cache, no-store, must-revalidate"
       }
     }
   ],
   "env": {
     "NODE_ENV": "production",
-    "MAX_FILE_SIZE": "5242880"
+    "MAX_FILE_SIZE": "10485760"
   }
 }

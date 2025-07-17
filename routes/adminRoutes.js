@@ -8,7 +8,7 @@ const pageContentCtrl = require('../controllers/pageContentController');
 const notificationCtrl = require('../controllers/notificationController');
 const contactRoutes = require('./contactRoutes');
 const adminAuth = require('../middleware/adminAuth');
-const upload = require('../middleware/upload');
+const { upload, handleContentEdit } = require('../middleware/contentEditHandler');
 const { uploadProductImages } = require('../middleware/cloudinaryUpload');
 const { handleAdminError } = require('../middleware/adminErrorHandler');
 
@@ -57,7 +57,25 @@ router.get('/test-param/:id', (req, res) => {
 router.get('/', adminAuth, (req, res) => res.redirect('/admin/dashboard'));
 router.get('/dashboard', adminAuth, adminCtrl.dashboard);
 router.get('/dashboard/edit-homepage', adminAuth, pageContentCtrl.getHomepageEditor);
-router.post('/dashboard/update-section/:type', adminAuth, upload.any(), pageContentCtrl.updateSection);
+router.post('/dashboard/update-section/:type', 
+    adminAuth, 
+    upload.any(), 
+    handleContentEdit,
+    async (req, res, next) => {
+        try {
+            // Add request logging
+            console.log('Processing content update:', {
+                type: req.params.type,
+                body: req.body,
+                uploadedFiles: req.uploadedFiles
+            });
+            
+            await pageContentCtrl.updateSection(req, res, next);
+        } catch (error) {
+            console.error('Error in content update route:', error);
+            next(error);
+        }
+    });
 
 // Add a redirect for common URL patterns
 router.get('/edit-homepage', adminAuth, (req, res) => res.redirect('/admin/dashboard/edit-homepage'));
