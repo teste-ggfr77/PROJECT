@@ -498,23 +498,3 @@ exports.updateSection = async (req, res) => {
         });
     }
 };
-
-            section = new PageContent(updateData);
-            await section.save();
-            console.log('Section created:', section);
-        }
-
-        res.json({
-            success: true,
-            section,
-            message: `${type} section updated successfully`
-        });
-
-    } catch (error) {
-        console.error('Error updating section:', error);
-        res.status(500).json({
-            success: false,
-            error: error.message || 'Failed to update section'
-        });
-    }
-};

@@ -11,5 +11,15 @@
       "src": "/(.*)",
       "dest": "app.js"
     }
-  ]
+  ],
+  "env": {
+    "NODE_ENV": "production",
+    "MAX_FILE_SIZE": "5242880"
+  },
+  "functions": {
+    "api/**/*.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  }
 }

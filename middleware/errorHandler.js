@@ -7,11 +7,29 @@ exports.csrfErrorHandler = (err, req, res, next) => {
 };
 
 exports.globalErrorHandler = (err, req, res, next) => {
-    console.error(err.stack);
+    console.error('Error details:', {
+        message: err.message,
+        stack: err.stack,
+        path: req.path,
+        method: req.method,
+        query: req.query,
+        body: req.body,
+        files: req.files
+    });
+
     const statusCode = err.statusCode || 500;
     const errorMessage = process.env.NODE_ENV === 'production' 
-        ? 'Something went wrong!' 
+        ? 'Something went wrong! Our team has been notified.' 
         : err.message;
+    
+    // Check if request expects JSON
+    if (req.accepts('json') && !req.accepts('html')) {
+        return res.status(statusCode).json({
+            success: false,
+            message: errorMessage,
+            error: process.env.NODE_ENV !== 'production' ? err.stack : undefined
+        });
+    }
     
     res.status(statusCode).render('error', {
         error: errorMessage,
