@@ -17,8 +17,13 @@ exports.globalErrorHandler = (err, req, res, next) => {
         body: req.body,
         files: req.files,
         type: err.type || err.name,
-        code: err.code
+        code: err.code,
+        originalError: err.originalError || err,
+        cloudinaryError: err.cloudinaryError
     });
+
+    // Log the full error object for debugging
+    console.error('Full error object:', JSON.stringify(err, Object.getOwnPropertyNames(err)));
 
     const statusCode = err.statusCode || 500;
     let errorMessage = err.message;

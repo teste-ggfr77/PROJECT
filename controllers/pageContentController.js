@@ -44,53 +44,122 @@ exports.addContent = async (req, res) => {
             layout, customClass
         } = req.body;
 
-        // Get the maximum order number
-        const maxOrderContent = await PageContent.findOne().sort('-order');
-        const order = maxOrderContent ? maxOrderContent.order + 1 : 1;
+        // Validate required fields
+        if (!type || !title) {
+            return res.status(400).json({
+                success: false,
+                error: 'Type and title are required fields'
+            });
+        }
 
         let imageUrl = '';
         let additionalImageUrls = [];
+        let tempFiles = [];
 
-        if (req.files) {
-            if (req.files.image) {
-                const result = await cloudinary.uploader.upload(req.files.image[0].path);
-                imageUrl = result.secure_url;
-                await unlinkFile(req.files.image[0].path);
+        try {
+            // Get the maximum order number
+            const maxOrderContent = await PageContent.findOne().sort('-order');
+            const order = maxOrderContent ? maxOrderContent.order + 1 : 1;
+
+            if (req.files) {
+                if (req.files.image) {
+                    tempFiles.push(req.files.image[0].path);
+                    try {
+                        const result = await cloudinary.uploader.upload(req.files.image[0].path);
+                        imageUrl = result.secure_url;
+                        await unlinkFile(req.files.image[0].path);
+                        tempFiles = tempFiles.filter(path => path !== req.files.image[0].path);
+                    } catch (uploadError) {
+                        console.error('Error uploading main image:', uploadError);
+                        throw new Error('Failed to upload main image');
+                    }
+                }
+
+                if (req.files.additionalImages) {
+                    tempFiles.push(...req.files.additionalImages.map(f => f.path));
+                    try {
+                        additionalImageUrls = await uploadMultipleImages(req.files.additionalImages);
+                        // Remove successfully uploaded files from tempFiles
+                        tempFiles = tempFiles.filter(path => 
+                            !req.files.additionalImages.some(f => f.path === path)
+                        );
+                    } catch (uploadError) {
+                        console.error('Error uploading additional images:', uploadError);
+                        throw new Error('Failed to upload additional images');
+                    }
+                }
             }
 
-            if (req.files.additionalImages) {
-                additionalImageUrls = await uploadMultipleImages(req.files.additionalImages);
+            const content = new PageContent({
+                type,
+                title,
+                subtitle,
+                description,
+                imageUrl,
+                additionalImages: additionalImageUrls,
+                buttonText,
+                buttonLink,
+                backgroundColor,
+                textColor,
+                layout,
+                customClass,
+                order,
+                status: 'active'
+            });
+
+            try {
+                await content.save();
+                res.json({ success: true, content });
+            } catch (saveError) {
+                console.error('Error saving content to database:', saveError);
+                // If save fails, try to clean up uploaded images
+                if (imageUrl) {
+                    try {
+                        const publicId = imageUrl.split('/').pop().split('.')[0];
+                        await cloudinary.uploader.destroy(publicId);
+                    } catch (cleanupError) {
+                        console.error('Error cleaning up main image after save failure:', cleanupError);
+                    }
+                }
+                for (const url of additionalImageUrls) {
+                    try {
+                        const publicId = url.split('/').pop().split('.')[0];
+                        await cloudinary.uploader.destroy(publicId);
+                    } catch (cleanupError) {
+                        console.error('Error cleaning up additional image after save failure:', cleanupError);
+                    }
+                }
+                throw new Error('Failed to save content');
             }
+        } catch (error) {
+            // Clean up any remaining temporary files
+            for (const filePath of tempFiles) {
+                try {
+                    await unlinkFile(filePath);
+                } catch (cleanupError) {
+                    console.error('Error cleaning up temporary file:', cleanupError, filePath);
+                }
+            }
+            throw error;
         }
-
-        const content = new PageContent({
-            type,
-            title,
-            subtitle,
-            description,
-            imageUrl,
-            additionalImages: additionalImageUrls,
-            buttonText,
-            buttonLink,
-            backgroundColor,
-            textColor,
-            layout,
-            customClass,
-            order,
-            status: 'active'
-        });
-
-        await content.save();
-        res.json({ success: true, content });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, error: 'Error adding content' });
+        console.error('Content creation error:', error);
+        const errorMessage = error.message || 'Error adding content';
+        res.status(500).json({ 
+            success: false, 
+            error: errorMessage,
+            details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
     }
 };
 
 exports.updateContent = async (req, res) => {
     try {
         const contentId = req.params.id;
+        if (!contentId) {
+            return res.status(400).json({ success: false, error: 'Content ID is required' });
+        }
+
         const {
             type, title, subtitle, description,
             buttonText, buttonLink,
@@ -108,45 +177,93 @@ exports.updateContent = async (req, res) => {
         let additionalImageUrls = content.additionalImages;
 
         if (req.files) {
-            if (req.files.image) {
-                if (content.imageUrl) {
-                    const publicId = content.imageUrl.split('/').pop().split('.')[0];
-                    await cloudinary.uploader.destroy(publicId);
+            try {
+                if (req.files.image) {
+                    if (content.imageUrl) {
+                        try {
+                            const publicId = content.imageUrl.split('/').pop().split('.')[0];
+                            await cloudinary.uploader.destroy(publicId);
+                        } catch (cloudinaryError) {
+                            console.error('Error deleting old image from Cloudinary:', cloudinaryError);
+                            // Continue with upload even if delete fails
+                        }
+                    }
+                    
+                    try {
+                        const result = await cloudinary.uploader.upload(req.files.image[0].path);
+                        imageUrl = result.secure_url;
+                        await unlinkFile(req.files.image[0].path);
+                    } catch (uploadError) {
+                        console.error('Error uploading new image to Cloudinary:', uploadError);
+                        throw new Error('Failed to upload new image');
+                    }
                 }
-                const result = await cloudinary.uploader.upload(req.files.image[0].path);
-                imageUrl = result.secure_url;
-                await unlinkFile(req.files.image[0].path);
-            }
 
-            if (req.files.additionalImages) {
-                // Delete existing additional images
-                for (const url of content.additionalImages) {
-                    const publicId = url.split('/').pop().split('.')[0];
-                    await cloudinary.uploader.destroy(publicId);
+                if (req.files.additionalImages) {
+                    try {
+                        // Delete existing additional images
+                        for (const url of content.additionalImages) {
+                            try {
+                                const publicId = url.split('/').pop().split('.')[0];
+                                await cloudinary.uploader.destroy(publicId);
+                            } catch (deleteError) {
+                                console.error('Error deleting additional image from Cloudinary:', deleteError);
+                                // Continue with next deletion even if one fails
+                            }
+                        }
+                        additionalImageUrls = await uploadMultipleImages(req.files.additionalImages);
+                    } catch (additionalImagesError) {
+                        console.error('Error handling additional images:', additionalImagesError);
+                        throw new Error('Failed to process additional images');
+                    }
                 }
-                additionalImageUrls = await uploadMultipleImages(req.files.additionalImages);
+            } catch (fileProcessingError) {
+                // Clean up any uploaded files before throwing error
+                if (req.files.image) {
+                    try {
+                        await unlinkFile(req.files.image[0].path);
+                    } catch (cleanupError) {
+                        console.error('Error cleaning up temporary file:', cleanupError);
+                    }
+                }
+                if (req.files.additionalImages) {
+                    for (const file of req.files.additionalImages) {
+                        try {
+                            await unlinkFile(file.path);
+                        } catch (cleanupError) {
+                            console.error('Error cleaning up temporary file:', cleanupError);
+                        }
+                    }
+                }
+                throw fileProcessingError;
             }
         }
 
-        content.type = type;
-        content.title = title;
-        content.subtitle = subtitle;
-        content.description = description;
-        content.imageUrl = imageUrl;
-        content.additionalImages = additionalImageUrls;
-        content.buttonText = buttonText;
-        content.buttonLink = buttonLink;
-        content.backgroundColor = backgroundColor;
-        content.textColor = textColor;
-        content.layout = layout;
-        content.customClass = customClass;
-        content.status = status;
+        // Update content fields
+        const updateFields = {
+            type, title, subtitle, description,
+            imageUrl, additionalImages: additionalImageUrls,
+            buttonText, buttonLink,
+            backgroundColor, textColor,
+            layout, customClass, status
+        };
 
-        await content.save();
-        res.json({ success: true, content });
+        try {
+            Object.assign(content, updateFields);
+            await content.save();
+            res.json({ success: true, content });
+        } catch (saveError) {
+            console.error('Error saving content to database:', saveError);
+            throw new Error('Failed to save content updates');
+        }
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, error: 'Error updating content' });
+        console.error('Content update error:', error);
+        const errorMessage = error.message || 'Error updating content';
+        res.status(500).json({ 
+            success: false, 
+            error: errorMessage,
+            details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
     }
 };
 
