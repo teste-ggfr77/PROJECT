@@ -9,7 +9,7 @@ const notificationCtrl = require('../controllers/notificationController');
 const contactRoutes = require('./contactRoutes');
 const adminAuth = require('../middleware/adminAuth');
 const upload = require('../middleware/upload');
-const { uploadProductImages } = require('../middleware/cloudinaryUpload');
+const { upload: cloudinaryUpload, uploadProductImages } = require('../middleware/cloudinaryUpload');
 const { handleAdminError } = require('../middleware/adminErrorHandler');
 
 // Debug middleware
@@ -57,7 +57,7 @@ router.get('/test-param/:id', (req, res) => {
 router.get('/', adminAuth, (req, res) => res.redirect('/admin/dashboard'));
 router.get('/dashboard', adminAuth, adminCtrl.dashboard);
 router.get('/dashboard/edit-homepage', adminAuth, pageContentCtrl.getHomepageEditor);
-router.post('/dashboard/update-section/:type', adminAuth, upload.any(), pageContentCtrl.updateSection);
+router.post('/dashboard/update-section/:type', adminAuth, cloudinaryUpload.any(), pageContentCtrl.updateSection);
 
 // Add a redirect for common URL patterns
 router.get('/edit-homepage', adminAuth, (req, res) => res.redirect('/admin/dashboard/edit-homepage'));
@@ -145,11 +145,11 @@ router.delete('/newsletter/:id', adminAuth, async (req, res) => {
 
 // Page Content Management Routes
 router.get('/page-contents', adminAuth, pageContentCtrl.getPageContents);
-router.post('/api/content', adminAuth, upload.fields([
+router.post('/api/content', adminAuth, cloudinaryUpload.fields([
     { name: 'image', maxCount: 1 },
     { name: 'additionalImages', maxCount: 10 }
 ]), pageContentCtrl.addContent);
-router.put('/api/content/:id', adminAuth, upload.fields([
+router.put('/api/content/:id', adminAuth, cloudinaryUpload.fields([
     { name: 'image', maxCount: 1 },
     { name: 'additionalImages', maxCount: 10 }
 ]), pageContentCtrl.updateContent);

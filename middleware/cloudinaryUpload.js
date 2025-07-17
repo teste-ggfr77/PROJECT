@@ -12,12 +12,28 @@ cloudinary.config({
 // Cloudinary storage configuration
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
-    params: {
-        folder: 'products',
-        allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
-        transformation: [
-            { width: 1000, height: 1000, crop: 'limit', quality: 'auto' }
-        ]
+    params: (req, file) => {
+        // Determine folder based on the route or field name
+        let folder = 'uploads';
+        if (req.route && req.route.path.includes('product')) {
+            folder = 'products';
+        } else if (req.route && req.route.path.includes('section')) {
+            folder = 'page-content';
+        } else if (file.fieldname && file.fieldname.includes('product')) {
+            folder = 'page-content/products';
+        } else if (file.fieldname && file.fieldname.includes('post')) {
+            folder = 'page-content/community';
+        } else if (req.url && req.url.includes('admin')) {
+            folder = 'page-content';
+        }
+        
+        return {
+            folder: folder,
+            allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+            transformation: [
+                { width: 1000, height: 1000, crop: 'limit', quality: 'auto' }
+            ]
+        };
     }
 });
 

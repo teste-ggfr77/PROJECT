@@ -237,6 +237,7 @@ exports.updateSection = async (req, res) => {
         }
 
         let uploadedFiles = {};
+        let imageUrl = null;
         
         // Handle file uploads if present
         if (req.files && req.files.length > 0) {
@@ -244,40 +245,20 @@ exports.updateSection = async (req, res) => {
             
             for (const file of req.files) {
                 try {
-                    // Upload to Cloudinary with retry logic
-                    let retryCount = 0;
-                    let result;
-                    while (retryCount < 3) {
-                        try {
-                            result = await cloudinary.uploader.upload(file.path, {
-                                folder: 'page-content',
-                                resource_type: 'auto',
-                                timeout: 60000 // 60 second timeout
-                            });
-                            break;
-                        } catch (uploadError) {
-                            retryCount++;
-                            if (retryCount === 3) throw uploadError;
-                            await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
-                        }
-                    }
-                    
-                    uploadedFiles[file.fieldname] = result.secure_url;
-                    // Clean up the temporary file
-                    await unlinkFile(file.path).catch(err => 
-                        console.error('Error deleting temp file:', err)
-                    );
-                    console.log(`File uploaded successfully: ${file.fieldname} -> ${result.secure_url}`);
+                    // Files are already uploaded to Cloudinary via middleware
+                    // The file.path contains the Cloudinary URL
+                    uploadedFiles[file.fieldname] = file.path;
+                    console.log(`File uploaded successfully: ${file.fieldname} -> ${file.path}`);
                     
                     // Set main image URL for backward compatibility
                     if (file.fieldname === 'image') {
-                        imageUrl = result.secure_url;
+                        imageUrl = file.path;
                     }
                 } catch (error) {
-                    console.error(`Error uploading file ${file.fieldname}:`, error);
+                    console.error(`Error processing file ${file.fieldname}:`, error);
                     return res.status(500).json({
                         success: false,
-                        error: `Failed to upload file: ${file.fieldname}`
+                        error: `Failed to process file: ${file.fieldname}`
                     });
                 }
             }
@@ -495,26 +476,6 @@ exports.updateSection = async (req, res) => {
             error: process.env.NODE_ENV === 'production' 
                 ? 'An error occurred while saving changes' 
                 : error.message
-        });
-    }
-};
-
-            section = new PageContent(updateData);
-            await section.save();
-            console.log('Section created:', section);
-        }
-
-        res.json({
-            success: true,
-            section,
-            message: `${type} section updated successfully`
-        });
-
-    } catch (error) {
-        console.error('Error updating section:', error);
-        res.status(500).json({
-            success: false,
-            error: error.message || 'Failed to update section'
         });
     }
 };
