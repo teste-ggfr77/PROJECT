@@ -236,7 +236,6 @@ exports.updateSection = async (req, res) => {
             });
         }
 
-        let imageUrl;
         let uploadedFiles = {};
         
         // Handle file uploads if present
@@ -245,9 +244,29 @@ exports.updateSection = async (req, res) => {
             
             for (const file of req.files) {
                 try {
-                    const result = await cloudinary.uploader.upload(file.path);
+                    // Upload to Cloudinary with retry logic
+                    let retryCount = 0;
+                    let result;
+                    while (retryCount < 3) {
+                        try {
+                            result = await cloudinary.uploader.upload(file.path, {
+                                folder: 'page-content',
+                                resource_type: 'auto',
+                                timeout: 60000 // 60 second timeout
+                            });
+                            break;
+                        } catch (uploadError) {
+                            retryCount++;
+                            if (retryCount === 3) throw uploadError;
+                            await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+                        }
+                    }
+                    
                     uploadedFiles[file.fieldname] = result.secure_url;
-                    await unlinkFile(file.path);
+                    // Clean up the temporary file
+                    await unlinkFile(file.path).catch(err => 
+                        console.error('Error deleting temp file:', err)
+                    );
                     console.log(`File uploaded successfully: ${file.fieldname} -> ${result.secure_url}`);
                     
                     // Set main image URL for backward compatibility
@@ -456,6 +475,30 @@ exports.updateSection = async (req, res) => {
             console.log('Section updated:', section);
         } else {
             // Create new section
+            section = await PageContent.create(updateData);
+            console.log('New section created:', section);
+        }
+
+        res.json({
+            success: true,
+            message: 'Section updated successfully',
+            data: section
+        });
+
+    } catch (error) {
+        console.error('Error updating section:', error);
+        
+        // Send a properly formatted error response
+        res.status(500).json({
+            success: false,
+            message: 'Error updating section',
+            error: process.env.NODE_ENV === 'production' 
+                ? 'An error occurred while saving changes' 
+                : error.message
+        });
+    }
+};
+
             section = new PageContent(updateData);
             await section.save();
             console.log('Section created:', section);

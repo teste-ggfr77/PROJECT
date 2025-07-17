@@ -273,7 +273,9 @@
                                                     </span>
                                                     <div>
                                                         <% order.items.forEach(item => { %>
-                                                            <span class="badge bg-light text-dark"><%= item.product.name %> - <%= item.size %></span>
+                                                            <span class="badge bg-light text-dark">
+                                                                <%= item.product ? item.product.name : 'Product Removed' %><%= item.size ? ' - ' + item.size : '' %>
+                                                            </span>
                                                         <% }) %>
                                                     </div>
                                                 </div>
