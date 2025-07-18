@@ -312,7 +312,7 @@
                         <% order.items.forEach(item => { %>
                             <tr>
                                 <td>
-                                    <span class="product-name"><%= item.product.name %></span>
+                                    <span class="product-name"><%= item.product ? item.product.name : __('admin.deleted_product') %></span>
                                 </td>
                                 <td>
                                     <% if (item.color || item.size) { %>
