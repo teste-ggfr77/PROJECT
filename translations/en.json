@@ -224,7 +224,8 @@
     "promo_code": "Promo Code",
     "apply_promo": "Apply Code",
     "promo_applied": "Promo code applied",
-    "invalid_promo": "Invalid promo code"
+    "invalid_promo": "Invalid promo code",
+    "go_to_cart_page": "Go to Cart Page"
   },
   "checkout": {
     "title": "Checkout",
