@@ -498,19 +498,21 @@
 
 .nb-image-section {
     position: relative;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    background: #ffffff;
+    background-image: radial-gradient(circle at center, #ffffff 0%, #fafafa 100%);
     width: 100%;
-    aspect-ratio: 1.2/1;
+    aspect-ratio: 1/1;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     border-bottom: 2px solid #000;
+    padding: 10px;
 }
 
 .nb-image {
-    max-width: 90%;
-    max-height: 260px;
+    max-width: 100%;
+    max-height: 100%;
     width: auto;
     height: auto;
     margin: 0 auto;
@@ -1743,7 +1745,8 @@ function quickView(product) {
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #f8f9fa;
+            background: #ffffff;
+            background-image: radial-gradient(circle at center, #ffffff 0%, #fafafa 100%);
             border-radius: 8px;
             padding: 40px;
         }
