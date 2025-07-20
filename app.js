@@ -26,18 +26,7 @@ connectDB();
 app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(express.urlencoded({ extended: true }));
-// Static files middleware - handle differently for production
-if (process.env.NODE_ENV === 'production') {
-    // In production (Vercel), let Vercel handle static files
-    app.use('/css', express.static(path.join(__dirname, 'public/css')));
-    app.use('/js', express.static(path.join(__dirname, 'public/js')));
-    app.use('/images', express.static(path.join(__dirname, 'public/images')));
-    app.use('/img', express.static(path.join(__dirname, 'public/img')));
-    app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
-} else {
-    // In development, serve all static files normally
-    app.use(express.static(path.join(__dirname, 'public')));
-}
+app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 

@@ -8,26 +8,6 @@
   ],
   "routes": [
     {
-      "src": "/css/(.*)",
-      "dest": "/public/css/$1"
-    },
-    {
-      "src": "/js/(.*)",
-      "dest": "/public/js/$1"
-    },
-    {
-      "src": "/images/(.*)",
-      "dest": "/public/images/$1"
-    },
-    {
-      "src": "/img/(.*)",
-      "dest": "/public/img/$1"
-    },
-    {
-      "src": "/uploads/(.*)",
-      "dest": "/public/uploads/$1"
-    },
-    {
       "src": "/(.*)",
       "dest": "/app.js"
     }
@@ -35,10 +15,5 @@
   "env": {
     "NODE_ENV": "production",
     "MAX_FILE_SIZE": "10485760"
-  },
-  "functions": {
-    "app.js": {
-      "maxDuration": 30
-    }
   }
 }
