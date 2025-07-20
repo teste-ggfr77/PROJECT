@@ -26,7 +26,10 @@ connectDB();
 app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), {
+    maxAge: '1y',
+    etag: false
+}));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
