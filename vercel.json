@@ -3,47 +3,37 @@
   "builds": [
     {
       "src": "app.js",
-      "use": "@vercel/node",
-      "config": {
-        "maxDuration": 60,
-        "memory": 3008,
-        "build": {
-          "env": {
-            "NODE_OPTIONS": "--max-old-space-size=3008"
-          }
-        }
-      }
+      "use": "@vercel/node"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
+      "src": "/css/(.*)",
+      "dest": "/public/css/$1"
+    },
+    {
+      "src": "/js/(.*)",
+      "dest": "/public/js/$1"
+    },
+    {
+      "src": "/images/(.*)",
+      "dest": "/public/images/$1"
+    },
+    {
+      "src": "/img/(.*)",
+      "dest": "/public/img/$1"
+    },
+    {
       "src": "/uploads/(.*)",
-      "dest": "/uploads/$1",
-      "headers": {
-        "cache-control": "public, max-age=31536000, immutable"
-      }
-    },
-    {
-      "src": "/public/(.*)",
-      "dest": "/public/$1",
-      "headers": {
-        "cache-control": "public, max-age=31536000, immutable"
-      }
-    },
-    {
-      "src": "/(css|js|images|img)/(.*)",
-      "dest": "/public/$1/$2",
-      "headers": {
-        "cache-control": "public, max-age=31536000, immutable"
-      }
+      "dest": "/public/uploads/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "app.js",
-      "headers": {
-        "x-vercel-protection": "true",
-        "cache-control": "no-cache, no-store, must-revalidate"
-      }
+      "dest": "/app.js"
     }
   ],
   "env": {
