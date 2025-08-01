@@ -8,7 +8,7 @@ const pageContentCtrl = require('../controllers/pageContentController');
 const notificationCtrl = require('../controllers/notificationController');
 const contactRoutes = require('./contactRoutes');
 const adminAuth = require('../middleware/adminAuth');
-const upload = require('../middleware/upload');
+ upload = require('../middleware/upload');
 const { upload: cloudinaryUpload, uploadProductImages } = require('../middleware/cloudinaryUpload');
 const { handleAdminError } = require('../middleware/adminErrorHandler');
 
