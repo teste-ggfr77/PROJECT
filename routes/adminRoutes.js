@@ -112,6 +112,7 @@ router.get('/add-promo', adminAuth, promoCtrl.addPromoForm);
 router.post('/add-promo', adminAuth, promoCtrl.addPromo);
 router.get('/delete-promo/:id', adminAuth, promoCtrl.deletePromo);
 router.post('/orders/:id/status', adminAuth, adminCtrl.updateOrderStatus);
+router.delete('/orders/:id', adminAuth, adminCtrl.deleteOrder);
 
 // Contact Management Routes
 router.use('/contacts', adminAuth, contactRoutes);

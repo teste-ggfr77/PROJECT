@@ -113,22 +113,6 @@ body {
     color: #111;
     line-height: 1.1;
 }
-.product-rating {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 18px;
-}
-.rating-stars {
-    color: #111;
-    font-size: 18px;
-}
-.rating-count {
-    color: #666;
-    font-size: 15px;
-}
-.price {
-    font-size: 1.6rem;
     margin-bottom: 2px;
     font-weight: 600;
     color: #111;
@@ -765,10 +749,6 @@ n        <% if (product.description) { %>
             <%= product.description %>
         </div>
         <% } %>
-        <div class="product-rating">
-            <div class="rating-stars">★★★★★</div>
-            <span class="rating-count">5,495</span>
-        </div>
         <div class="price"><%= product.price.toLocaleString() %> dh</div>
         <div class="taxes-info"><%= __('products.product_details.taxes_included') %></div>
         <hr>
@@ -812,7 +792,6 @@ n        <% if (product.description) { %>
             <input type="hidden" name="size" id="selectedSize" value="">
             <button type="submit" class="add-to-cart" disabled><%= __('products.product_details.select_size') %></button>
         </form>
-        <div class="shipping-info"><%= __('products.product_details.free_shipping') %></div>
     </div>
 </div>
 

@@ -648,6 +648,39 @@ exports.updateOrderStatus = async (req, res) => {
     }
 };
 
+exports.deleteOrder = async (req, res) => {
+    try {
+        console.log('Deleting order:', {
+            orderId: req.params.id,
+            method: req.method
+        });
+        
+        const { id } = req.params;
+        
+        const Order = require('../models/Order');
+        const order = await Order.findById(id);
+        
+        if (!order) {
+            return res.status(404).json({ 
+                success: false, 
+                error: 'Order not found' 
+            });
+        }
+        
+        await Order.findByIdAndDelete(id);
+        
+        console.log('Order deleted successfully:', id);
+        
+        res.json({ success: true, message: 'Order deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting order:', error);
+        res.status(500).json({ 
+            success: false, 
+            error: 'Failed to delete order: ' + error.message 
+        });
+    }
+};
+
 exports.getContacts = async (req, res) => {
     try {
         const [contacts, newsletters] = await Promise.all([
